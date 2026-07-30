@@ -28,8 +28,9 @@ class App extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
+      debugShowMaterialGrid: false,
       title: 'Tab Settle',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       routerConfig: routerConfig,
       theme: ThemeData.from(colorScheme: lightColorScheme),
       darkTheme: ThemeData.from(colorScheme: darkColorScheme),
