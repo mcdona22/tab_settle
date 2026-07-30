@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loggy/loggy.dart';
 
 
 PreferredSizeWidget createAppBar(
@@ -15,6 +16,7 @@ PreferredSizeWidget createAppBar(
       icon: const Icon(Icons.arrow_back),
       // Or Icons.arrow_back_ios for iOS style
       onPressed: () {
+        logDebug('can pop is ${context.canPop()}');
         // Cleans up the stack and takes the user back
         if (context.canPop()) {
           context.pop();

@@ -2,11 +2,13 @@
 // import 'package:canya_mobile/features/landing/landing_screen.dart';
 // import 'package:canya_mobile/features/user/presentation/user_detail_screen.dart';
 // import 'package:canya_mobile/features/user/presentation/user_list_screen.dart';
-import 'package:tab_settle/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loggy/loggy.dart';
+import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
+import 'package:tab_settle/features/home/home_page.dart';
 
-enum AppRoute { home, group, user, userDetail }
+enum AppRoute { home, addReceipt }
 
 final routerConfig = GoRouter(
   initialLocation: '/',
@@ -16,8 +18,20 @@ final routerConfig = GoRouter(
       path: '/',
       name: AppRoute.home.name,
       pageBuilder: (_, state) =>
-          MaterialPage(child: HomePage(), key: state.pageKey),
+          MaterialPage(
+              child: HomePage(), key: state.pageKey),
     ),
+
+    GoRoute(path: '/receipt/:path',
+      name: AppRoute.addReceipt.name,
+      pageBuilder: (_, state) {
+        final pathName = state.pathParameters['path'] as
+        String;
+        logDebug('navigating to $pathName');
+        return MaterialPage(child: BillSubmissionPage
+          (imageName: pathName,),
+            key: state.pageKey);
+      },),
 
     // GoRoute(
     //   path: '/group/:id',
