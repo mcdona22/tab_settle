@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/centred_constrained_widget.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
 
-class BillSubmissionPage extends HookConsumerWidget
-    with UiLoggy {
-  const BillSubmissionPage({
-    required this.imageName,
-    super.key,
-  });
+class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
+  const BillSubmissionPage({required this.imageName, super.key});
 
   final String imageName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final responseText = useState<String>('');
     final qualifiedPath = 'assets/test_receipts/$imageName';
+    final submissionState = ref.watch(billSubmissionControllerProvider);
+
     return Scaffold(
       appBar: createAppBar(context, 'Submit Receipt'),
       body: CentredConstrainedWidget(
@@ -24,19 +27,25 @@ class BillSubmissionPage extends HookConsumerWidget
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              AsyncValueWidget<String>(
+                value: submissionState,
+                data: (text) =>
+                    text.isNotEmpty ? Text(text) : SizedBox.shrink(),
+              ),
+              // if (responseText.value.isNotEmpty)
+              //   SizedBox(
+              //     height: 75.0,
+              //     child: Text(responseText.value, textAlign: TextAlign.center),
+              //   ),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
                     ).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(
-                      16.0,
-                    ),
+                    borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.outlineVariant,
+                      color: Theme.of(context).colorScheme.outlineVariant,
                     ),
                   ),
                   clipBehavior: Clip.antiAlias,
@@ -46,24 +55,27 @@ class BillSubmissionPage extends HookConsumerWidget
                     errorBuilder: (_, __, ___) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.broken_image,
                             size: 48,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.error,
+                            color: Theme.of(context).colorScheme.error,
                           ),
-                          Text(
-                            'Unable to load $qualifiedPath',
-                          ),
+                          Text('Unable to load $qualifiedPath'),
                         ],
                       ),
                     ),
                   ),
                 ),
+              ),
+              ActionButton(
+                label: 'Analyse',
+                onPressed: submissionState.isLoading
+                    ? null
+                    : () => ref
+                          .read(billSubmissionControllerProvider.notifier)
+                          .analyseReceipt(),
               ),
             ],
           ),
