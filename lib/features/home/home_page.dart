@@ -32,7 +32,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                 size: 64,
                 color: Theme.of(
                   context,
-                ).colorScheme.secondary,
+                ).colorScheme.primary,
               ),
               Text(
                 'Welcome to Tab Settle',
