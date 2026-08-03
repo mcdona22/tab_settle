@@ -17,7 +17,7 @@ class ActionButton extends HookConsumerWidget with UiLoggy {
       child: ElevatedButton(
         onPressed: onPressed,
         // icon: Icon(Icons.receipt_long),
-        child: Text(label),
+        child: Text(label, textAlign: TextAlign.center),
       ),
     );
   }

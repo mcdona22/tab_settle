@@ -1,37 +1,92 @@
+import 'dart:convert';
+
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loggy/loggy.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
 
-class GeminiService {
-  final String _apiKey;
+part 'gemini_service.g.dart';
 
-  GeminiService({required String apiKey}) : _apiKey = apiKey;
+const geminiKey = 'AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q';
+const modelVersion = 'gemini-3.6-flash';
 
-  Future<String> fetchGreeting() async {
-    final model = GenerativeModel(
-      model:
-          'gemini-1'
-          '.5-flash',
-      apiKey: _apiKey,
-      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
-    );
+// curl "https://generativelanguage.googleapis.com/v1beta/models?key=AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q
 
-    const prompt =
-        'Provide a fresh good morning '
-        'salutation in json';
+@Riverpod(keepAlive: true)
+GeminiService geminiService(Ref ref) =>
+    GeminiService(model: ref.watch(receiptGenerativeModelProvider))..warmUp();
 
+class GeminiService with UiLoggy {
+  final GenerativeModel model;
+
+  GeminiService({required this.model});
+
+  Future<void> warmUp() async {
+    // Ultra-lightweight call just to establish HTTP Keep-Alive
+    loggy.debug('Warming up the service');
+    await model.generateContent([Content.text('ping')]);
+    loggy.debug('warmup complete');
+  }
+
+  Future<Map<String, dynamic>> analyseTextReceipt(String textReceipt) async {
+    loggy.debug('analysing using "$modelVersion"');
+    final prompt = _buildFastReceiptPrompt(textReceipt);
+    loggy.info('submitting request for');
     final response = await model.generateContent([Content.text(prompt)]);
-    return response.text ?? '{}';
+    if (response.text == null || response.text!.isEmpty) {
+      loggy.error('Gemini error occurred');
+      throw Exception('Gemini Exception');
+    }
+    final json = jsonDecode(response.text!) as Map<String, dynamic>;
+    loggy.debug("Response found", json);
+    return json;
+  }
+
+  // Future<void> listAvailableModels(String apiKey) async {
+  //   final url = Uri.parse(
+  //     'https://generativelanguage.googleapis.com/v1beta/models?key=$apiKey',
+  //   );
+  //
+  //   try {
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final models = data['models'] as List<dynamic>?;
+  //
+  //       loggy.debug('=== AVAILABLE MODELS ===');
+  //       if (models != null) {
+  //         for (final m in models) {
+  //           final name = m['name'] as String; // e.g., "models/gemini-1.5-flash"
+  //           final supportedMethods =
+  //               m['supportedGenerationMethods'] as List<dynamic>?;
+  //
+  //           // Print models that support content generation
+  //           if (supportedMethods?.contains('generateContent') ?? false) {
+  //             loggy.debug(name.replaceFirst('models/', ''));
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       loggy.debug(
+  //         'Failed to fetch models: ${response.statusCode} - ${response.body}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     loggy.error('Error listing models: $e');
+  //   }
+  // }
+
+  String _buildFastReceiptPrompt(String rawText) {
+    return '''
+Extract structured receipt data from raw text into JSON.
+
+SPEED & EXECUTION DIRECTIVE:
+- Do NOT perform internal reasoning, planning, or step-by-step thinking.
+- Output the raw JSON schema directly in a single pass.
+- Default unreadable names to "Unknown Item" and unreadable prices to 0.0 without calculating.
+
+RAW TEXT:
+$rawText
+''';
   }
 }
-
-final geminiApiKeyProvider = Provider<String>((_) => 'my key here');
-
-final geminiServiceProvider = Provider<GeminiService>((ref) {
-  final apiKey = ref.watch(geminiApiKeyProvider);
-  return GeminiService(apiKey: apiKey);
-});
-
-final greetingPromptProvider = FutureProvider.autoDispose<String>((ref) async {
-  final service = ref.watch(geminiServiceProvider);
-  return service.fetchGreeting();
-});

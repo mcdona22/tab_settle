@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/centred_constrained_widget.dart';
+import 'package:tab_settle/features/bill_analyse/data/text_receipts.dart';
+import 'package:tab_settle/features/bill_analyse/service/gemini_service.dart';
 
 import '../../core/routing/router.dart';
 
@@ -12,6 +14,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(geminiServiceProvider); // warms up the service
     loggy.info('Rendering HomePage baseline');
 
     return Scaffold(
@@ -34,20 +37,31 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
 
-              ActionButton(
-                label: 'Toby Carvery',
-                onPressed: () => context.pushNamed(
-                  AppRoute.addReceipt.name,
-                  pathParameters: {'path': 'toby.jpeg'},
-                ),
-              ),
-              ActionButton(
-                label: 'Sapore Italian',
-                onPressed: () => context.pushNamed(
-                  AppRoute.addReceipt.name,
-                  pathParameters: {'path': 'sapore.jpeg'},
-                ),
-              ),
+              ...List.generate(mockReceipts.length, (i) {
+                final receipt = mockReceipts[i];
+                return ActionButton(
+                  label: receipt['name'] ?? 'Not found',
+                  onPressed: () => context.pushNamed(
+                    AppRoute.addReceipt.name,
+                    extra: receipt['receipt'] ?? '',
+                  ),
+                );
+              }),
+
+              // ActionButton(
+              //   label: 'Toby Carvery',
+              //   onPressed: () => context.pushNamed(
+              //     AppRoute.addReceipt.name,
+              //     pathParameters: {'receiptText': 'toby.jpeg'},
+              //   ),
+              // ),
+              // ActionButton(
+              //   label: 'Sapore Italian',
+              //   onPressed: () => context.pushNamed(
+              //     AppRoute.addReceipt.name,
+              //     pathParameters: {'path': 'sapore.jpeg'},
+              //   ),
+              // ),
             ],
           ),
         ),
