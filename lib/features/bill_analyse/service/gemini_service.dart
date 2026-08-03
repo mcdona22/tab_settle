@@ -7,8 +7,8 @@ import 'package:tab_settle/features/bill_analyse/service/generative_model_provid
 
 part 'gemini_service.g.dart';
 
-const geminiKey = 'AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q';
-const modelVersion = 'gemini-3.6-flash';
+// const geminiKey = 'AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q';
+// const modelVersion = 'gemini-3.6-flash';
 
 // curl "https://generativelanguage.googleapis.com/v1beta/models?key=AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q
 
