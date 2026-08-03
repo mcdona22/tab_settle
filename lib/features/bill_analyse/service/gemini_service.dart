@@ -7,9 +7,6 @@ import 'package:tab_settle/features/bill_analyse/service/generative_model_provid
 
 part 'gemini_service.g.dart';
 
-// const geminiKey = 'AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q';
-// const modelVersion = 'gemini-3.6-flash';
-
 // curl "https://generativelanguage.googleapis.com/v1beta/models?key=AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q
 
 @Riverpod(keepAlive: true)
@@ -41,40 +38,6 @@ class GeminiService with UiLoggy {
     loggy.debug("Response found", json);
     return json;
   }
-
-  // Future<void> listAvailableModels(String apiKey) async {
-  //   final url = Uri.parse(
-  //     'https://generativelanguage.googleapis.com/v1beta/models?key=$apiKey',
-  //   );
-  //
-  //   try {
-  //     final response = await http.get(url);
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       final models = data['models'] as List<dynamic>?;
-  //
-  //       loggy.debug('=== AVAILABLE MODELS ===');
-  //       if (models != null) {
-  //         for (final m in models) {
-  //           final name = m['name'] as String; // e.g., "models/gemini-1.5-flash"
-  //           final supportedMethods =
-  //               m['supportedGenerationMethods'] as List<dynamic>?;
-  //
-  //           // Print models that support content generation
-  //           if (supportedMethods?.contains('generateContent') ?? false) {
-  //             loggy.debug(name.replaceFirst('models/', ''));
-  //           }
-  //         }
-  //       }
-  //     } else {
-  //       loggy.debug(
-  //         'Failed to fetch models: ${response.statusCode} - ${response.body}',
-  //       );
-  //     }
-  //   } catch (e) {
-  //     loggy.error('Error listing models: $e');
-  //   }
-  // }
 
   String _buildFastReceiptPrompt(String rawText) {
     return '''
