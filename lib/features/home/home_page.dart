@@ -20,7 +20,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
       ref.watch(geminiApiKeyProvider),
     );
     loggy.info('Rendering HomePage baseline');
-    final apiKey = ref.watch(geminiApiKeyProvider);
     // final json = ref.watch(geminiServiceProvider).listAvailableModels(apiKey);
 
     // loggy.debug('Available models: $json');
@@ -58,22 +57,28 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               future: modelsData,
               builder: (_, snapshot) {
                 return snapshot.hasData
-                    ? Wrap(
-                        spacing: 13.0,
-                        runSpacing: 13.0,
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Wrap(
+                          spacing: 13.0,
+                          runSpacing: 13.0,
 
-                        children: List.generate(snapshot.data!.length, (i) {
-                          return Container(
-                            padding: EdgeInsetsGeometry.all(12.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18.0),
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.onSurface,
+                          children: List.generate(snapshot.data!.length, (i) {
+                            final sorted = snapshot.data!.sort();
+                            return Container(
+                              padding: EdgeInsetsGeometry.all(12.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18.0),
+                                border: Border.all(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
                               ),
-                            ),
-                            child: Text(snapshot.data![i]),
-                          );
-                        }),
+                              child: Text(snapshot.data![i]),
+                            );
+                          }),
+                        ),
                       )
                     : CircularProgressIndicator();
               },

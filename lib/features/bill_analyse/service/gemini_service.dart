@@ -8,8 +8,6 @@ import 'package:tab_settle/features/bill_analyse/service/generative_model_provid
 
 part 'gemini_service.g.dart';
 
-// curl "https://generativelanguage.googleapis.com/v1beta/models?key=AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q
-
 @Riverpod(keepAlive: true)
 GeminiService geminiService(Ref ref) =>
     // GeminiService(model: ref.watch(receiptGenerativeModelProvider))..warmUp();

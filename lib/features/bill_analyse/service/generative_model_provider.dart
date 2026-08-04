@@ -7,9 +7,7 @@ import 'package:tab_settle/features/bill_analyse/service/receipt_schema_provider
 
 part 'generative_model_provider.g.dart';
 
-// const geminiKey = 'AQ.Ab8RN6J7ZXCc3D8OkscW8E9JIck9qj4LBNO4BtvcrnB6-DSD2Q';
-// const modelVersion = 'gemini-3.6-flash';
-const modelVersion = 'gemini-2.5-flash-lite';
+const modelVersion = 'gemini-3.5-flash-lite';
 
 @Riverpod(keepAlive: true)
 GenerativeModel receiptGenerativeModel(Ref ref) {
