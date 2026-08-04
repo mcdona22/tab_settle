@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
@@ -11,7 +12,8 @@ part 'gemini_service.g.dart';
 
 @Riverpod(keepAlive: true)
 GeminiService geminiService(Ref ref) =>
-    GeminiService(model: ref.watch(receiptGenerativeModelProvider))..warmUp();
+    // GeminiService(model: ref.watch(receiptGenerativeModelProvider))..warmUp();
+    GeminiService(model: ref.watch(receiptGenerativeModelProvider));
 
 class GeminiService with UiLoggy {
   final GenerativeModel model;
@@ -51,5 +53,49 @@ SPEED & EXECUTION DIRECTIVE:
 RAW TEXT:
 $rawText
 ''';
+  }
+
+  Future<List<String>> listAvailableModels(String apiKey) async {
+    final url = Uri.parse(
+      'https://generativelanguage.googleapis.com/v1beta/models?key=$apiKey',
+    );
+    List<dynamic> models = [];
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        // models = data['models'] as List<dynamic>?;
+        models = data['models'] as List<dynamic>;
+
+        loggy.debug('=== AVAILABLE MODELS ===');
+        // if (models != null) {
+        if (models.isNotEmpty) {
+          for (final m in models) {
+            final name = m['name'] as String; // e.g., "models/gemini-1.5-flash"
+            final supportedMethods =
+                m['supportedGenerationMethods'] as List<dynamic>?;
+
+            // Print models that support content generation
+            if (supportedMethods?.contains('generateContent') ?? false) {
+              // loggy.debug(name.replaceFirst('models/', ''));
+              null;
+            }
+          }
+        }
+      } else {
+        loggy.debug(
+          'Failed to fetch models: ${response.statusCode} - ${response.body}',
+        );
+      }
+    } catch (e) {
+      loggy.error('Error listing models: $e');
+    }
+
+    loggy.debug('we have ${models.length} models');
+    return models.map((m) {
+      final name = m['name'] as String;
+      return name.replaceFirst('models/', '');
+    }).toList();
   }
 }
