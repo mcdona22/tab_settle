@@ -13,6 +13,12 @@ Schema receiptSchema(Ref ref) {
       'currency': Schema.string(
         description: 'ISO currency symbol or code (e.g. GBP, £, USD, EUR).',
       ),
+      'subtotal': Schema.number(
+        description: 'Total before service charge or taxes, if printed.',
+      ),
+      'serviceCharge': Schema.number(
+        description: 'Explicit service charge or gratuity amount, if printed.',
+      ),
       'totalAmount': Schema.number(description: 'Total final bill amount.'),
       'items': Schema.array(
         description: 'Line items on the receipt.',
@@ -24,10 +30,15 @@ Schema receiptSchema(Ref ref) {
               description: 'Total price for this line item.',
             ),
           },
-          requiredProperties: ['name', 'price'],
+          requiredProperties: ['name', 'price', 'quantity'],
         ),
       ),
     },
-    requiredProperties: ['merchantName', 'totalAmount', 'items'],
+    requiredProperties: [
+      'merchantName',
+      'totalAmount',
+      'items',
+      'serviceCharge',
+    ],
   );
 }

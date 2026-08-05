@@ -49,6 +49,10 @@ SPEED & EXECUTION DIRECTIVE:
 - Do NOT perform internal reasoning, planning, or step-by-step thinking.
 - Output the raw JSON schema directly in a single pass.
 - If a value (like item name, price, or quantity) is unreadable, obscured, or missing, output null for that field.
+EXTRACTION DIRECTIVES:
+- Do NOT list service charges, gratuities, or discretionary tips as items in the 'items' array.
+- Extract any explicit service charge or gratuity into 'serviceCharge'.
+- Extract the subtotal before service charge into 'subtotal' if available.
 RAW TEXT:
 $rawText
 ''';
