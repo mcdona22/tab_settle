@@ -6,6 +6,7 @@ import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/centred_constrained_widget.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
 
 class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
@@ -43,7 +44,14 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   child: SingleChildScrollView(
                     child: AsyncValueWidget(
                       value: submissionState,
-                      data: (map) => Text(map.toPrettyJson()),
+                      data: (map) {
+                        final items = map['items'];
+                        for (final item in items) {
+                          final lineItem = ReceiptItemDto.fromJson(item);
+                          loggy.debug(lineItem);
+                        }
+                        return Text(map.toPrettyJson());
+                      },
                     ),
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tab_settle/core/extensions/map.extensions.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
 
 part 'gemini_service.g.dart';
@@ -35,7 +36,8 @@ class GeminiService with UiLoggy {
       throw Exception('Gemini Exception');
     }
     final json = jsonDecode(response.text!) as Map<String, dynamic>;
-    loggy.debug("Response found", json);
+    loggy.debug("Response found");
+    loggy.debug(json.toPrettyJson());
     return json;
   }
 
@@ -46,8 +48,7 @@ Extract structured receipt data from raw text into JSON.
 SPEED & EXECUTION DIRECTIVE:
 - Do NOT perform internal reasoning, planning, or step-by-step thinking.
 - Output the raw JSON schema directly in a single pass.
-- Default unreadable names to "Unknown Item" and unreadable prices to 0.0 without calculating.
-
+- If a value (like item name, price, or quantity) is unreadable, obscured, or missing, output null for that field.
 RAW TEXT:
 $rawText
 ''';

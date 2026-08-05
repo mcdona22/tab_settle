@@ -53,46 +53,47 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               );
             }),
             Text('Models'),
-            FutureBuilder(
-              future: modelsData,
-              builder: (_, snapshot) {
-                return snapshot.hasData
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Wrap(
-                          spacing: 13.0,
-                          runSpacing: 13.0,
+            if (false)
+              FutureBuilder(
+                future: modelsData,
+                builder: (_, snapshot) {
+                  return snapshot.hasData
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Wrap(
+                            spacing: 13.0,
+                            runSpacing: 13.0,
 
-                          children: List.generate(snapshot.data!.length, (i) {
-                            final sorted = snapshot.data!.sort();
-                            return Container(
-                              padding: EdgeInsetsGeometry.all(12.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18.0),
-                                border: Border.all(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                            children: List.generate(snapshot.data!.length, (i) {
+                              final sorted = snapshot.data!.sort();
+                              return Container(
+                                padding: EdgeInsetsGeometry.all(12.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  border: Border.all(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
                                 ),
-                              ),
-                              child: Text(snapshot.data![i]),
-                            );
-                          }),
-                        ),
-                      )
-                    : CircularProgressIndicator();
-              },
+                                child: Text(snapshot.data![i]),
+                              );
+                            }),
+                          ),
+                        )
+                      : CircularProgressIndicator();
+                },
 
-              //   return Wrap(
-              //     children: snapshot.hasData
-              //         // ? List.generate(snapshot.data!.length, (i) {
-              //         ? List.generate(snapshot.data!.length, (i) {
-              //             return Text(snapshot.data![i]);
-              //           })
-              //         : [Text('No Models')],
-              //   );
-              // },
-            ),
+                //   return Wrap(
+                //     children: snapshot.hasData
+                //         // ? List.generate(snapshot.data!.length, (i) {
+                //         ? List.generate(snapshot.data!.length, (i) {
+                //             return Text(snapshot.data![i]);
+                //           })
+                //         : [Text('No Models')],
+                //   );
+                // },
+              ),
           ],
         ),
       ),
