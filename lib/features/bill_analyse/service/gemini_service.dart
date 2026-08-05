@@ -4,7 +4,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/core/extensions/map.extensions.dart';
+import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
 
 part 'gemini_service.g.dart';
@@ -26,7 +26,7 @@ class GeminiService with UiLoggy {
     loggy.debug('warmup complete');
   }
 
-  Future<Map<String, dynamic>> analyseTextReceipt(String textReceipt) async {
+  Future<ReceiptDto> analyseTextReceipt(String textReceipt) async {
     loggy.debug('analysing using "$modelVersion"');
     final prompt = _buildFastReceiptPrompt(textReceipt);
     loggy.info('submitting request for');
@@ -36,9 +36,10 @@ class GeminiService with UiLoggy {
       throw Exception('Gemini Exception');
     }
     final json = jsonDecode(response.text!) as Map<String, dynamic>;
+    final dto = ReceiptDto.fromJson(json);
     loggy.debug("Response found");
-    loggy.debug(json.toPrettyJson());
-    return json;
+    loggy.debug('DTO: \n$dto');
+    return dto;
   }
 
   String _buildFastReceiptPrompt(String rawText) {

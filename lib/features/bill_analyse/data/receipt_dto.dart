@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 
 part 'receipt_dto.freezed.dart';
 
 @freezed
-abstract class ReceiptDto with _$ReceiptDto {
+abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
   const ReceiptDto._();
 
   const factory ReceiptDto({
@@ -60,7 +61,7 @@ abstract class ReceiptDto with _$ReceiptDto {
       return itemDto;
     }).toList();
 
-    return ReceiptDto(
+    final dto = ReceiptDto(
       merchantName: merchantName,
       currency: currency,
       subtotal: subtotal,
@@ -69,6 +70,8 @@ abstract class ReceiptDto with _$ReceiptDto {
       items: items,
       hasFallbackValues: defaulted,
     );
+    logDebug('ReceiptDto\n$dto');
+    return dto;
   }
 
   /// Calculated property for effective service charge percentage

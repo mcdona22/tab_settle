@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/extensions/map.extensions.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/centred_constrained_widget.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
 
 class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
@@ -16,8 +16,8 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final submissionState = ref.watch(billSubmissionControllerProvider);
-    loggy.debug('submission state: ${submissionState.value}');
+    final dtoState = ref.watch(billSubmissionControllerProvider);
+    loggy.debug('submission state: ${dtoState.value}');
 
     return Scaffold(
       appBar: createAppBar(context, 'Submit Receipt'),
@@ -29,7 +29,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
             spacing: 20.0,
             children: [
               AsyncValueWidget(
-                value: submissionState,
+                value: dtoState,
                 data: (_) => ActionButton(
                   label: 'Analyse',
                   onPressed: () => ref
@@ -39,18 +39,25 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
               ),
 
               Expanded(child: SingleChildScrollView(child: Text(receiptText))),
-              if (submissionState.value!.isNotEmpty)
+
+              if (dtoState.value != null)
+                ActionButton(
+                  label:
+                      'Check the '
+                      'Scan',
+                  onPressed: () => context.pushNamed(
+                    AppRoute.checkReceipt.name,
+                    extra: dtoState.value,
+                  ),
+                ),
+
+              if (dtoState.value != null)
                 Expanded(
                   child: SingleChildScrollView(
                     child: AsyncValueWidget(
-                      value: submissionState,
-                      data: (map) {
-                        final items = map['items'];
-                        for (final item in items) {
-                          final lineItem = ReceiptItemDto.fromJson(item);
-                          loggy.debug(lineItem);
-                        }
-                        return Text(map.toPrettyJson());
+                      value: dtoState,
+                      data: (dto) {
+                        return Text(dto.toString());
                       },
                     ),
                   ),

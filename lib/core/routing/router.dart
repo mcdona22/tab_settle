@@ -4,10 +4,12 @@
 // import 'package:canya_mobile/features/user/presentation/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
+import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 
-enum AppRoute { home, addReceipt }
+enum AppRoute { home, addReceipt, checkReceipt }
 
 final routerConfig = GoRouter(
   initialLocation: '/',
@@ -34,6 +36,15 @@ final routerConfig = GoRouter(
           ),
           key: state.pageKey,
         );
+      },
+    ),
+
+    GoRoute(
+      path: '/checkReceipt',
+      name: AppRoute.checkReceipt.name,
+      pageBuilder: (_, state) {
+        final dto = state.extra as ReceiptDto;
+        return MaterialPage(child: ScannedBillPage(dto: dto));
       },
     ),
 
