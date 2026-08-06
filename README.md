@@ -1,17 +1,37 @@
 # tab_settle
 
-A new Flutter project.
+### Commands Look up
 
-## Getting Started
+`dart run build_runner watch --delete-conflicting-outputs`
 
-This project is a starting point for a Flutter application.
+## macOS Network Setup (App Sandbox)
 
-A few resources to get you started if this is your first Flutter project:
+When building for macOS, Flutter enforces Apple's App Sandbox. By default,
+outbound network requests (HTTPS/Sockets) are blocked, which will result in
+`SocketException: Connection failed (OS Error: Operation not permitted, errno = 1)`
+when attempting to reach external APIs like Google Gemini.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Enabling Outbound Network Access
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Add the `com.apple.security.network.client` entitlement to both Debug and
+Release configurations.
+
+1. Open `macos/Runner/DebugProfile.entitlements` and
+   `macos/Runner/Release.entitlements`.
+2. Add the `<key>com.apple.security.network.client</key>` entitlement inside the
+   `<dict>` block:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "[http://www.apple.com/DTDs/PropertyList-1.0.dtd](http://www.apple.com/DTDs/PropertyList-1.0.dtd)">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+    <!-- Enable Outbound Network Access -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+</dict>
+</plist>
+
+not that a shutdown of the app is required not merely a hot restart

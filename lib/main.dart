@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
 
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
 
