@@ -19,7 +19,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     final Future<List<dynamic>> modelsData = models.listAvailableModels(
       ref.watch(geminiApiKeyProvider),
     );
-    loggy.info('Rendering HomePage baseline');
     // final json = ref.watch(geminiServiceProvider).listAvailableModels(apiKey);
 
     // loggy.debug('Available models: $json');
@@ -42,17 +41,26 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
 
-            ...List.generate(mockReceipts.length, (i) {
-              final receipt = mockReceipts[i];
+            ...List.generate(imageAssetReceipts.length, (i) {
+              final path = imageAssetReceipts[i]['path'];
+              final label = imageAssetReceipts[i]['name'];
               return ActionButton(
-                label: receipt['name'] ?? 'Not found',
-                onPressed: () => context.pushNamed(
-                  AppRoute.addReceipt.name,
-                  extra: receipt['receipt'] ?? '',
-                ),
+                label: label!,
+                onPressed: () => loggy.debug('Receipt $path'),
               );
             }),
-            Text('Models'),
+            if (false)
+              ...List.generate(mockReceipts.length, (i) {
+                final receipt = mockReceipts[i];
+                return ActionButton(
+                  label: receipt['name'] ?? 'Not found',
+                  onPressed: () => context.pushNamed(
+                    AppRoute.addReceipt.name,
+                    extra: receipt['receipt'] ?? '',
+                  ),
+                );
+              }),
+            if (false) Text('Models'),
             if (false)
               FutureBuilder(
                 future: modelsData,

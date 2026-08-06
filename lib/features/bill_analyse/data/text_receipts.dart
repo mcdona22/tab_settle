@@ -7,6 +7,11 @@ const mockReceipts = [
   {'name': 'The Mill Cafe', 'receipt': mockReceiptInkBlot},
 ];
 
+const imageAssetReceipts = [
+  {'name': 'Sapore Italiano', 'path': 'sapore.jpeg'},
+  {'name': 'Toby Carvery', 'path': 'toby.jpeg'},
+];
+
 const mockReceiptRoyalOak = '''
 THE ROYAL OAK
 12 High Street, Huddersfield
