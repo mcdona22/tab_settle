@@ -60,39 +60,45 @@ class ReceiptSummary extends HookConsumerWidget with UiLoggy {
     return SizedBox(
       width: mobileWidth,
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            spacing: colSpacingSmall,
-            children: [
-              Text(
-                dto.merchantName,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              SummaryLine(
-                fixed: Text(
-                  dto.totalAmount.toCurrency(),
-                  textAlign: TextAlign.right,
-                ),
-                remaining: Text('Total'),
-              ),
-              SummaryLine(
-                remaining: Text('Service Charge'),
-                fixed: Text(
-                  dto.serviceCharge.toCurrency(),
-                  textAlign: TextAlign.right,
-                ),
-              ),
+        child: Container(
+          decoration: dto.hasFallbackValues || true
+              ? correctionOutline(context)
+              : null,
 
-              if (dto.serviceCharge > 0.0)
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              spacing: colSpacingSmall,
+              children: [
+                Text(
+                  dto.merchantName,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 SummaryLine(
-                  remaining: Text('Service Rate'),
                   fixed: Text(
-                    '${dto.serviceChargePercentage.toString()} %',
+                    dto.totalAmount.toCurrency(),
+                    textAlign: TextAlign.right,
+                  ),
+                  remaining: Text('Total'),
+                ),
+                SummaryLine(
+                  remaining: Text('Service Charge'),
+                  fixed: Text(
+                    dto.serviceCharge.toCurrency(),
                     textAlign: TextAlign.right,
                   ),
                 ),
-            ],
+
+                if (dto.serviceCharge > 0.0)
+                  SummaryLine(
+                    remaining: Text('Service Rate'),
+                    fixed: Text(
+                      '${dto.serviceChargePercentage.toString()} %',
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -124,14 +130,20 @@ class ReceiptItem extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final style = Theme.of(context).textTheme.bodyLarge;
-    return SummaryLine(
-      fixed: Text(dto.price.toCurrency(), style: style),
-      remaining: Text('${dto.quantity}  x  ${dto.name}', style: style),
-
-      // leading: Text(dto.quantity.toString()),
-
-      // subtitle: Text(dto.price.toCurrency(), style: textTheme.bodyLarge),
+    final style = Theme.of(context).textTheme.bodyMedium;
+    return Container(
+      decoration: dto.hasFallbackValues ? correctionOutline(context) : null,
+      child: SummaryLine(
+        fixed: Text(
+          dto.price.toCurrency(),
+          style: style,
+          textAlign: TextAlign.right,
+        ),
+        remaining: SelectableText(
+          '${dto.quantity}  x  ${dto.name}',
+          style: style,
+        ),
+      ),
     );
   }
 }
@@ -150,12 +162,24 @@ class SummaryLine extends StatelessWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: kPaddingMedium,
-      children: [
-        SizedBox(width: fixedWidth, child: fixed ?? SizedBox.shrink()),
-        Expanded(child: remaining ?? SizedBox.shrink()),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
+        spacing: kPaddingMedium,
+        children: [
+          SizedBox(width: fixedWidth, child: fixed ?? SizedBox.shrink()),
+          Expanded(child: remaining ?? SizedBox.shrink()),
+        ],
+      ),
     );
   }
 }
+
+BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(
+  // color: Theme.of(context).colorScheme.secondary.withAlpha(30),
+  borderRadius: BorderRadius.circular(8.0),
+  border: Border.all(
+    color: Theme.of(context).colorScheme.secondary.withAlpha(90),
+    width: 1.0,
+  ),
+);
