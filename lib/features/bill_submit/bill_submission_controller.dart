@@ -25,15 +25,25 @@ class BillSubmissionController extends _$BillSubmissionController with UiLoggy {
   //   state = AsyncData(text);
   // }
 
-  Future<void> analyseTextReceipt(String textReceipt) async {
-    state = const AsyncValue.loading();
+  Future<void> analyseAssetReceipt(String assetPath) async {
+    state = AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final geminiService = ref.read(geminiServiceProvider);
-      final ReceiptDto dto = await geminiService.analyseTextReceipt(
-        textReceipt,
-      );
+      final ReceiptDto dto = await geminiService.analyseAssetReceipt(assetPath);
       loggy.debug(dto);
       return dto;
     });
   }
+
+  // Future<void> analyseTextReceipt(String textReceipt) async {
+  //   state = const AsyncValue.loading();
+  //   state = await AsyncValue.guard(() async {
+  //     final geminiService = ref.read(geminiServiceProvider);
+  //     final ReceiptDto dto = await geminiService.analyseTextReceipt(
+  //       textReceipt,
+  //     );
+  //     loggy.debug(dto);
+  //     return dto;
+  //   });
+  // }
 }

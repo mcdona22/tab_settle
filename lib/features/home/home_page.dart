@@ -3,11 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_analyse/data/text_receipts.dart';
 import 'package:tab_settle/features/bill_analyse/service/gemini_service.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
-
-import '../../core/routing/router.dart';
 
 class HomePage extends HookConsumerWidget with UiLoggy {
   const HomePage({super.key});
@@ -46,7 +45,10 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               final label = imageAssetReceipts[i]['name'];
               return ActionButton(
                 label: label!,
-                onPressed: () => loggy.debug('Receipt $path'),
+                onPressed: () {
+                  loggy.debug('Receipt $path');
+                  context.pushNamed(AppRoute.addReceipt.name, extra: path);
+                },
               );
             }),
             if (false)

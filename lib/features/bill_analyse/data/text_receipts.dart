@@ -9,6 +9,7 @@ const mockReceipts = [
 
 const imageAssetReceipts = [
   {'name': 'Sapore Italiano', 'path': 'sapore.jpeg'},
+  {'name': 'Sapore Italiano 2', 'path': 'sapore2.jpg'},
   {'name': 'Toby Carvery', 'path': 'toby.jpeg'},
 ];
 
