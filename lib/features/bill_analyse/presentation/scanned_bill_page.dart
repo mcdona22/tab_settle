@@ -61,9 +61,7 @@ class ReceiptSummary extends HookConsumerWidget with UiLoggy {
       width: mobileWidth,
       child: Card(
         child: Container(
-          decoration: dto.hasFallbackValues || true
-              ? correctionOutline(context)
-              : null,
+          decoration: dto.hasFallbackValues ? correctionOutline(context) : null,
 
           child: Padding(
             padding: const EdgeInsets.all(8.0),

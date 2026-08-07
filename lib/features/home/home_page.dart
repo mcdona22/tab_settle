@@ -3,11 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_analyse/data/text_receipts.dart';
 import 'package:tab_settle/features/bill_analyse/service/gemini_service.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
-
-import '../../core/routing/router.dart';
 
 class HomePage extends HookConsumerWidget with UiLoggy {
   const HomePage({super.key});
@@ -19,7 +18,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     final Future<List<dynamic>> modelsData = models.listAvailableModels(
       ref.watch(geminiApiKeyProvider),
     );
-    loggy.info('Rendering HomePage baseline');
     // final json = ref.watch(geminiServiceProvider).listAvailableModels(apiKey);
 
     // loggy.debug('Available models: $json');
@@ -42,17 +40,29 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
 
-            ...List.generate(mockReceipts.length, (i) {
-              final receipt = mockReceipts[i];
+            ...List.generate(imageAssetReceipts.length, (i) {
+              final path = imageAssetReceipts[i]['path'];
+              final label = imageAssetReceipts[i]['name'];
               return ActionButton(
-                label: receipt['name'] ?? 'Not found',
-                onPressed: () => context.pushNamed(
-                  AppRoute.addReceipt.name,
-                  extra: receipt['receipt'] ?? '',
-                ),
+                label: label!,
+                onPressed: () {
+                  loggy.debug('Receipt $path');
+                  context.pushNamed(AppRoute.addReceipt.name, extra: path);
+                },
               );
             }),
-            Text('Models'),
+            if (false)
+              ...List.generate(mockReceipts.length, (i) {
+                final receipt = mockReceipts[i];
+                return ActionButton(
+                  label: receipt['name'] ?? 'Not found',
+                  onPressed: () => context.pushNamed(
+                    AppRoute.addReceipt.name,
+                    extra: receipt['receipt'] ?? '',
+                  ),
+                );
+              }),
+            if (false) Text('Models'),
             if (false)
               FutureBuilder(
                 future: modelsData,

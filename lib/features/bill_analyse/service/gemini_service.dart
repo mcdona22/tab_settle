@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
@@ -26,15 +28,38 @@ class GeminiService with UiLoggy {
     loggy.debug('warmup complete');
   }
 
-  Future<ReceiptDto> analyseTextReceipt(String textReceipt) async {
-    loggy.debug('analysing using "$modelVersion"');
-    final prompt = _buildFastReceiptPrompt(textReceipt);
-    loggy.info('submitting request for');
-    final response = await model.generateContent([Content.text(prompt)]);
+  // Future<ReceiptDto> analyseTextReceipt(String textReceipt) async {
+  //   loggy.debug('analysing using "$modelVersion"');
+  //   final prompt = _buildFastReceiptPrompt(textReceipt);
+  //   loggy.info('submitting request for');
+  //   final response = await model.generateContent([Content.text(prompt)]);
+  //   if (response.text == null || response.text!.isEmpty) {
+  //     loggy.error('Gemini error occurred');
+  //     throw Exception('Gemini Exception');
+  //   }
+  //   final json = jsonDecode(response.text!) as Map<String, dynamic>;
+  //   final dto = ReceiptDto.fromJson(json);
+  //   loggy.debug("Response found");
+  //   loggy.debug('DTO: \n$dto');
+  //   return dto;
+  // }
+
+  Future<ReceiptDto> analyseAssetReceipt(String path) async {
+    final ByteData byteData = await rootBundle.load(path);
+    final bytes = byteData.buffer.asUint8List();
+    loggy.debug('sharpening image');
+    final sharpened = _processReceiptForOcr(bytes);
+    final String mimeType = 'image/jpeg';
+
+    final response = await model.generateContent([
+      Content.multi([TextPart(prompt), DataPart(mimeType, sharpened)]),
+    ]);
+
     if (response.text == null || response.text!.isEmpty) {
-      loggy.error('Gemini error occurred');
+      loggy.error('Gemini error occurred processing image file');
       throw Exception('Gemini Exception');
     }
+
     final json = jsonDecode(response.text!) as Map<String, dynamic>;
     final dto = ReceiptDto.fromJson(json);
     loggy.debug("Response found");
@@ -42,21 +67,19 @@ class GeminiService with UiLoggy {
     return dto;
   }
 
-  String _buildFastReceiptPrompt(String rawText) {
-    return '''
-Extract structured receipt data from raw text into JSON.
+  Uint8List _processReceiptForOcr(Uint8List rawBytes) {
+    final decodedImage = img.decodeImage(rawBytes);
+    if (decodedImage == null) {
+      loggy.debug('Decoding failed - returning original image');
+    }
+    loggy.debug('Image sharpened');
+    final greyScale = img.grayscale(decodedImage!);
+    final sharpened = img.adjustColor(greyScale, contrast: 1.5);
+    return Uint8List.fromList(img.encodeJpg(sharpened, quality: 90));
+  }
 
-SPEED & EXECUTION DIRECTIVE:
-- Do NOT perform internal reasoning, planning, or step-by-step thinking.
-- Output the raw JSON schema directly in a single pass.
-- If a value (like item name, price, or quantity) is unreadable, obscured, or missing, output null for that field.
-EXTRACTION DIRECTIVES:
-- Do NOT list service charges, gratuities, or discretionary tips as items in the 'items' array.
-- Extract any explicit service charge or gratuity into 'serviceCharge'.
-- Extract the subtotal before service charge into 'subtotal' if available.
-RAW TEXT:
-$rawText
-''';
+  String _buildFastReceiptPrompt(String rawText) {
+    return ' $prompt\nRAWTEXT: $rawText \nRAW TEXT:$rawText';
   }
 
   Future<List<String>> listAvailableModels(String apiKey) async {
@@ -103,3 +126,29 @@ $rawText
     }).toList();
   }
 }
+
+const prompt = '''
+You are a high-precision OCR system. Extract receipt data strictly from visible printed text.
+
+STRICT ACCURACY DIRECTIVES:
+- Transcribe ONLY characters that are physically visible in the image.
+- NEVER invent, guess, or synthesize items based on the restaurant name or type.
+- If item text is too faint, blurry, or unreadable, do NOT guess menu items like pizza or beer. Set the item fields to null or flag them.
+- Focus ONLY on the primary receipt in the center/foreground. Ignore secondary receipts or background paper on the left/right.
+- Check item prices carefully against the right-hand column (e.g., £11.00, £9.80, £18.00, £16.00).
+''';
+
+const prompt1 = '''
+You are an expert document OCR engine. Analyze the provided image of the receipt carefully and extract all transaction details into JSON according to the schema.
+
+VISUAL EXTRACTION RULES:
+1. Scan the receipt line by line from top to bottom.
+2. The Merchant Name is printed at the top (e.g., "Toby Carvery").
+3. For each purchase item, extract:
+   - Name (e.g., "ULSD Sugar Free", "Pineap Jce med", "Brownie Sundae", "Midweek Carvery", "King Size Upgrde")
+   - Quantity (integer listed before or next to the item name, e.g., 1)
+   - Price (the item price listed on the right column, e.g., 4.15, 3.30, 5.79, 11.29, 1.99)
+4. Do NOT include subtotal headers, tax summary lines (like "20% VAT"), or product group summaries ("Food And Drink") in the item array.
+5. Extract the grand Total printed at the bottom (£26.52).
+6. Do NOT guess or substitute values from other store templates. Extract ONLY what is visible on this physical slip.
+''';

@@ -29,7 +29,7 @@ final routerConfig = GoRouter(
         final receiptText = state.extra as String?;
         return MaterialPage(
           child: BillSubmissionPage(
-            receiptText:
+            receiptName:
                 receiptText ??
                 'None '
                     'Provided',
