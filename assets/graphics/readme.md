@@ -31,5 +31,11 @@ Homebrew:
 
 ```bash
 brew install webp
+````
 
+```bash
 for file in *.jpeg; do cwebp -q 80 "$file" -o "${file%.*}.webp"; done
+```
+
+https://www.iloveimg.com/
+https://www.pixelcut.ai/ai-image-editor?tool=removeBackground
