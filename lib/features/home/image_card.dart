@@ -32,6 +32,7 @@ class ImageCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
+              overflow: TextOverflow.fade,
               style: theme.textTheme.headlineSmall,
             ),
             SizedBox(
@@ -40,7 +41,11 @@ class ImageCard extends StatelessWidget {
               width: imageHeight,
               child: Image.asset(imagePath, fit: BoxFit.contain),
             ),
-            Text(description, textAlign: TextAlign.center),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.fade,
+            ),
           ],
         ),
       ),
