@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -7,11 +9,9 @@ import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
-import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/bill_analyse/data/text_receipts.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
-
-import '../../core/routing/router.dart';
+import 'package:tab_settle/features/home/home_page.dart';
 
 class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
   const BillSubmissionPage({super.key});
@@ -20,64 +20,79 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dtoState = ref.watch(billSubmissionControllerProvider);
-    loggy.debug('submission state: ${dtoState.value}');
+    final fileNameState = ref.watch(billSubmissionControllerProvider);
+    loggy.debug('Filename state: "${fileNameState.value}"');
     final qualifiedPathName = useState('');
     // final qualifiedPathName = 'assets/test_receipts/$receiptName';
 
     return Scaffold(
-      appBar: createAppBar(context, 'Submit Receipt'),
+      // appBar: createAppBar(context, 'Scan Receipt'),
+      appBar: AppBar(title: ScreenTitle(label: 'Get The Receipt')),
       body: MobileFirstContainer(
         child: Column(
           spacing: kPaddingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            AsyncValueWidget(
-              value: dtoState,
-              data: (dtoState) => ActionButton(
-                label: 'Analyse',
-                onPressed: qualifiedPathName.value.isNotEmpty
-                    ? () => ref
-                          .read(billSubmissionControllerProvider.notifier)
-                          .analyseAssetReceipt(qualifiedPathName.value)
-                    : null,
-              ),
+            // AsyncValueWidget(
+            //   value: dtoState,
+            //   data: (dtoState) => ActionButton(
+            //     label: 'Analyse',
+            //     onPressed: qualifiedPathName.value.isNotEmpty
+            //         ? () => ref
+            //               .read(billSubmissionControllerProvider.notifier)
+            //               .analyseAssetReceipt(qualifiedPathName.value)
+            //         : null,
+            //   ),
+            // ),
+            // if (dtoState.value != null)
+            //   ActionButton(
+            //     label: 'Review Items',
+            //     onPressed: () => context.pushNamed(
+            //       AppRoute.checkReceipt.name,
+            //       extra: dtoState.value,
+            //     ),
+            //   ),
+            ActionButton(
+              label: 'Find the Receipt',
+              onPressed: () => ref
+                  .read(billSubmissionControllerProvider.notifier)
+                  .captureImageFromGallery(),
             ),
-            if (dtoState.value != null)
+            if (fileNameState.value!.isNotEmpty)
               ActionButton(
-                label: 'Review Items',
-                onPressed: () => context.pushNamed(
+                label: 'Analyse the Receipt',
+                onPressed: () => context.goNamed(
                   AppRoute.checkReceipt.name,
-                  extra: dtoState.value,
+                  extra: fileNameState.value,
                 ),
               ),
-            ActionButton(label: 'Capture Receipt'),
-            Divider(),
-            Text('Or select from existing'),
+            AsyncValueWidget(
+              value: fileNameState,
+              data: (fileName) => fileName.isEmpty
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SizedBox(
+                        height: 400.0,
+                        width: double.infinity,
+                        child: Image.file(File(fileName), fit: BoxFit.contain),
+                      ),
+                    ),
+            ),
 
-            if (qualifiedPathName.value.isNotEmpty)
-              Expanded(
-                child: SizedBox(
-                  height: 400.0,
-                  width: double.infinity,
-                  child: Image.asset(
-                    qualifiedPathName.value,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
+            // Divider(),
+            // Text('Or select from existing'),
 
-            ...List.generate(imageAssetReceipts.length, (i) {
-              final path = imageAssetReceipts[i]['path'] ?? '';
-              final label = imageAssetReceipts[i]['name'];
-              return ActionButton(
-                label: label!,
-                onPressed: () {
-                  qualifiedPathName.value = 'assets/test_receipts/$path';
-                  loggy.debug('Receipt ${qualifiedPathName.value}');
-                },
-              );
-            }),
+            // ...List.generate(imageAssetReceipts.length, (i) {
+            //   final path = imageAssetReceipts[i]['path'] ?? '';
+            //   final label = imageAssetReceipts[i]['name'];
+            //   return ActionButton(
+            //     label: label!,
+            //     onPressed: () {
+            //       qualifiedPathName.value = 'assets/test_receipts/$path';
+            //       loggy.debug('Receipt ${qualifiedPathName.value}');
+            //     },
+            //   );
+            // }),
 
             // Expanded(
             //   flex: 4,

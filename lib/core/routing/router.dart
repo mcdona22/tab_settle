@@ -34,8 +34,8 @@ final routerConfig = GoRouter(
       path: '/checkReceipt',
       name: AppRoute.checkReceipt.name,
       pageBuilder: (_, state) {
-        final dto = state.extra as ReceiptDto;
-        return MaterialPage(child: ScannedBillPage(dto: dto));
+        final filePath = state.extra as String?;
+        return MaterialPage(child: ScannedBillPage(filePath: filePath ?? ''));
       },
     ),
 

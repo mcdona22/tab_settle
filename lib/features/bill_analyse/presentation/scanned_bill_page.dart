@@ -9,9 +9,11 @@ import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
-  const ScannedBillPage({required this.dto, super.key});
+  const ScannedBillPage({required this.filePath, super.key});
 
-  final ReceiptDto dto;
+  final String filePath;
+
+  // final ReceiptDto dto;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,15 +35,16 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                 'Please check the scan matches the receipt and correct '
                 'before sharing',
               ),
-              ReceiptSummary(dto: dto),
+              Text(filePath),
 
+              // ReceiptSummary(dto: dto),
               Divider(),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kPaddingMedium),
-                  child: ReceiptItems(items: dto.items),
-                ),
-              ),
+              // Expanded(
+              //   child: Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: kPaddingMedium),
+              //     child: ReceiptItems(items: dto.items),
+              //   ),
+              // ),
             ],
           ),
         ),

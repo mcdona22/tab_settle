@@ -35,3 +35,7 @@ Release configurations.
 </plist>
 
 not that a shutdown of the app is required not merely a hot restart
+
+
+~/Library/Android/sdk/platform-tools/adb push assets/test_receipts/aldi.png 
+/sdcard/Pictures/

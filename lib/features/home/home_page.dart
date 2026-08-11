@@ -81,27 +81,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [
-                        theme.colorScheme.primary,
-                        theme.colorScheme.tertiary,
-                        theme.colorScheme.secondary,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: Text(
-                      'Tab Settle',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.5,
-                        color:
-                            Colors.white, // Color must be white for ShaderMask
-                      ),
-                    ),
-                  ),
+                  child: ScreenTitle(label: 'Tab Settle'),
                 ),
 
                 SizedBox(
@@ -127,20 +107,9 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                   ),
                 ),
                 ActionButton(
-                  label: 'Scan a Receipt',
+                  label: 'Lets Start',
                   onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
                 ),
-                // ...List.generate(imageAssetReceipts.length, (i) {
-                //   final path = imageAssetReceipts[i]['path'];
-                //   final label = imageAssetReceipts[i]['name'];
-                //   return ActionButton(
-                //     label: label!,
-                //     onPressed: () {
-                //       loggy.debug('Receipt $path');
-                //       context.pushNamed(AppRoute.addReceipt.name, extra: path);
-                //     },
-                //   );
-                // }),
               ],
             ),
           ),
@@ -163,5 +132,36 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     }, [controller]);
 
     return controller;
+  }
+}
+
+class ScreenTitle extends StatelessWidget {
+  const ScreenTitle({required this.label, super.key});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        colors: [
+          theme.colorScheme.primary,
+          theme.colorScheme.tertiary,
+          theme.colorScheme.secondary,
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(bounds),
+      child: Text(
+        label,
+        textAlign: TextAlign.center,
+        style: theme.textTheme.headlineLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          letterSpacing: -0.5,
+          color: Colors.white, // Color must be white for ShaderMask
+        ),
+      ),
+    );
   }
 }
