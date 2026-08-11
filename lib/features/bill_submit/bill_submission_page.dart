@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
+import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/core/routing/router.dart';
+import 'package:tab_settle/features/bill_analyse/data/text_receipts.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
 
-class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
-  const BillSubmissionPage({required this.receiptName, super.key});
+import '../../core/routing/router.dart';
 
-  final String receiptName;
+class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
+  const BillSubmissionPage({super.key});
+
+  // final String receiptName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dtoState = ref.watch(billSubmissionControllerProvider);
     loggy.debug('submission state: ${dtoState.value}');
-    final qualifiedPathName = 'assets/test_receipts/$receiptName';
+    final qualifiedPathName = useState('');
+    // final qualifiedPathName = 'assets/test_receipts/$receiptName';
 
     return Scaffold(
       appBar: createAppBar(context, 'Submit Receipt'),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: MobileFirstContainer(
         child: Column(
           spacing: kPaddingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,9 +36,11 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
               value: dtoState,
               data: (dtoState) => ActionButton(
                 label: 'Analyse',
-                onPressed: () => ref
-                    .read(billSubmissionControllerProvider.notifier)
-                    .analyseAssetReceipt(qualifiedPathName),
+                onPressed: qualifiedPathName.value.isNotEmpty
+                    ? () => ref
+                          .read(billSubmissionControllerProvider.notifier)
+                          .analyseAssetReceipt(qualifiedPathName.value)
+                    : null,
               ),
             ),
             if (dtoState.value != null)
@@ -45,22 +51,49 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   extra: dtoState.value,
                 ),
               ),
+            ActionButton(label: 'Capture Receipt'),
+            Divider(),
+            Text('Or select from existing'),
 
-            Expanded(
-              flex: 4,
-              child: Container(
-                width: double.infinity,
-                child: Image.asset(qualifiedPathName, fit: BoxFit.contain),
-              ),
-            ),
-            if (dtoState.value != null)
+            if (qualifiedPathName.value.isNotEmpty)
               Expanded(
-                flex: 1,
-                child: Text(
-                  dtoState.value!.toString(),
-                  style: TextStyle(fontSize: 16.0),
+                child: SizedBox(
+                  height: 400.0,
+                  width: double.infinity,
+                  child: Image.asset(
+                    qualifiedPathName.value,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
+
+            ...List.generate(imageAssetReceipts.length, (i) {
+              final path = imageAssetReceipts[i]['path'] ?? '';
+              final label = imageAssetReceipts[i]['name'];
+              return ActionButton(
+                label: label!,
+                onPressed: () {
+                  qualifiedPathName.value = 'assets/test_receipts/$path';
+                  loggy.debug('Receipt ${qualifiedPathName.value}');
+                },
+              );
+            }),
+
+            // Expanded(
+            //   flex: 4,
+            //   child: Container(
+            //     width: double.infinity,
+            //     child: Image.asset(qualifiedPathName, fit: BoxFit.contain),
+            //   ),
+            // ),
+            // if (dtoState.value != null)
+            //   Expanded(
+            //     flex: 1,
+            //     child: Text(
+            //       dtoState.value!.toString(),
+            //       style: TextStyle(fontSize: 16.0),
+            //     ),
+            //   ),
           ],
         ),
       ),

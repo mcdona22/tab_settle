@@ -26,16 +26,7 @@ final routerConfig = GoRouter(
       path: '/receipt',
       name: AppRoute.addReceipt.name,
       pageBuilder: (_, state) {
-        final receiptText = state.extra as String?;
-        return MaterialPage(
-          child: BillSubmissionPage(
-            receiptName:
-                receiptText ??
-                'None '
-                    'Provided',
-          ),
-          key: state.pageKey,
-        );
+        return MaterialPage(child: BillSubmissionPage(), key: state.pageKey);
       },
     ),
 
