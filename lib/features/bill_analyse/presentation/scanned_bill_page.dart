@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
-import 'package:tab_settle/core/presentation/centred_constrained_widget.dart';
+import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/presentation/async_value_widget.dart';
+import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
-import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
+import 'package:tab_settle/features/bill_analyse/presentation/bill_scan_controller.dart';
+import 'package:tab_settle/features/home/home_page.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
   const ScannedBillPage({required this.filePath, super.key});
@@ -17,12 +23,16 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dtoState = ref.watch(billScanControllerProvider);
+    final file = useMemoized(() => File(filePath), [filePath]);
     return Scaffold(
-      appBar: createAppBar(context, 'Check the Bill'),
-      body: CentredConstrainedWidget(
-        maxWidth: mobileWidth,
-        minWidth: mobileWidth,
-        alignment: Alignment.topCenter,
+      // appBar: createAppBar(context, 'Check the Bill'),
+      appBar: AppBar(title: ScreenTitle(label: 'Process the Receipt')),
+
+      body: MobileFirstContainer(
+        // maxWidth: mobileWidth,
+        // minWidth: mobileWidth,
+        // alignment: Alignment.topCenter,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: kPaddingSmall,
@@ -35,10 +45,25 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                 'Please check the scan matches the receipt and correct '
                 'before sharing',
               ),
-              Text(filePath),
-
-              // ReceiptSummary(dto: dto),
+              ActionButton(
+                label: 'Process',
+                onPressed: () => ref
+                    .read(billScanControllerProvider.notifier)
+                    .analyseImageReceipt(filePath),
+              ),
+              // Text(filePath),
+              // if (file.existsSync())
+              //   Text('File is good'), // ReceiptSummary(dto: dto),
               Divider(),
+
+              AsyncValueWidget<ReceiptDto?>(
+                value: dtoState,
+                data: (dto) {
+                  return dto == null
+                      ? Text('no dto')
+                      : Expanded(child: ReceiptItems(items: dto.items));
+                },
+              ),
               // Expanded(
               //   child: Padding(
               //     padding: EdgeInsets.symmetric(horizontal: kPaddingMedium),

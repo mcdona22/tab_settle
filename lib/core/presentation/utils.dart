@@ -1,17 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loggy/loggy.dart';
 
-
-PreferredSizeWidget createAppBar(
-    BuildContext context,
-    String title,
-    ) {
+PreferredSizeWidget createAppBar(BuildContext context, String title) {
   return AppBar(
-    title: Text(
-      title,
-      style: Theme.of(context).textTheme.titleLarge,
-    ),
+    title: Text(title, style: Theme.of(context).textTheme.titleLarge),
     leading: IconButton(
       icon: const Icon(Icons.arrow_back),
       // Or Icons.arrow_back_ios for iOS style
@@ -27,9 +23,15 @@ PreferredSizeWidget createAppBar(
     centerTitle: true,
     elevation: 1.0,
     // primary: true,
-    backgroundColor: Theme.of(
-      context,
-    ).colorScheme.inversePrimary,
+    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
     actions: [],
   );
+}
+
+Image? crossPlatformPathImage(String path, {BoxFit fit = BoxFit.contain}) {
+  if (path.isEmpty) return null;
+
+  return kIsWeb
+      ? Image.network(path, fit: fit)
+      : Image.file(File(path), fit: fit);
 }

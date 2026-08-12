@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +7,7 @@ import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_controller.dart';
 import 'package:tab_settle/features/home/home_page.dart';
@@ -33,25 +32,6 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
           spacing: kPaddingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // AsyncValueWidget(
-            //   value: dtoState,
-            //   data: (dtoState) => ActionButton(
-            //     label: 'Analyse',
-            //     onPressed: qualifiedPathName.value.isNotEmpty
-            //         ? () => ref
-            //               .read(billSubmissionControllerProvider.notifier)
-            //               .analyseAssetReceipt(qualifiedPathName.value)
-            //         : null,
-            //   ),
-            // ),
-            // if (dtoState.value != null)
-            //   ActionButton(
-            //     label: 'Review Items',
-            //     onPressed: () => context.pushNamed(
-            //       AppRoute.checkReceipt.name,
-            //       extra: dtoState.value,
-            //     ),
-            //   ),
             ActionButton(
               label: 'Find the Receipt',
               onPressed: () => ref
@@ -60,8 +40,8 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
             ),
             if (fileNameState.value!.isNotEmpty)
               ActionButton(
-                label: 'Analyse the Receipt',
-                onPressed: () => context.goNamed(
+                label: 'Next',
+                onPressed: () => context.pushNamed(
                   AppRoute.checkReceipt.name,
                   extra: fileNameState.value,
                 ),
@@ -74,7 +54,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                       child: SizedBox(
                         height: 400.0,
                         width: double.infinity,
-                        child: Image.file(File(fileName), fit: BoxFit.contain),
+                        child: crossPlatformPathImage(fileName),
                       ),
                     ),
             ),

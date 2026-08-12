@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
@@ -45,7 +46,8 @@ class GeminiService with UiLoggy {
   // }
 
   Future<ReceiptDto> analyseAssetReceipt(String path) async {
-    final ByteData byteData = await rootBundle.load(path);
+    final byteData = await XFile(path).readAsBytes();
+    // final ByteData byteData = await rootBundle.load(path);
     final bytes = byteData.buffer.asUint8List();
     loggy.debug('sharpening image');
     final sharpened = _processReceiptForOcr(bytes);

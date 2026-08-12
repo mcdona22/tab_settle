@@ -35,7 +35,7 @@ class App extends HookConsumerWidget with UiLoggy {
       routerConfig: routerConfig,
       theme: ThemeData.from(colorScheme: lightColorScheme),
       darkTheme: ThemeData.from(colorScheme: darkColorScheme),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       // builder: (_, child) => Scaffold(
       //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
       // ),
