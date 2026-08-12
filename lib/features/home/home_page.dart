@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/home/image_card.dart';
 
@@ -70,6 +71,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     // loggy.debug('Available models: $json');
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: createAppBar(context, ScreenTitle(label: 'Tab Settle')),
       // appBar: AppBar(title: const Text('Tab Settle'), centerTitle: true),
       body: SafeArea(
         child: MobileFirstContainer(
@@ -79,11 +81,10 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 28.0,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: ScreenTitle(label: 'Tab Settle'),
-                ),
-
+                //       Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 20.0),
+                //   child: ScreenTitle(label: 'Tab Settle'),
+                // ),
                 SizedBox(
                   height: cardHeight,
                   child: LayoutBuilder(

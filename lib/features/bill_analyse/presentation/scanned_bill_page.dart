@@ -9,6 +9,7 @@ import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/bill_scan_controller.dart';
@@ -27,7 +28,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     final file = useMemoized(() => File(filePath), [filePath]);
     return Scaffold(
       // appBar: createAppBar(context, 'Check the Bill'),
-      appBar: AppBar(title: ScreenTitle(label: 'Process the Receipt')),
+      appBar: createAppBar(context, ScreenTitle(label: 'Process the Receipt')),
 
       body: MobileFirstContainer(
         // maxWidth: mobileWidth,

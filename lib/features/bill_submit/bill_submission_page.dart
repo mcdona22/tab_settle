@@ -26,7 +26,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
 
     return Scaffold(
       // appBar: createAppBar(context, 'Scan Receipt'),
-      appBar: AppBar(title: ScreenTitle(label: 'Get The Receipt')),
+      appBar: createAppBar(context, ScreenTitle(label: 'Get The Receipt')),
       body: MobileFirstContainer(
         child: Column(
           spacing: kPaddingSmall,
