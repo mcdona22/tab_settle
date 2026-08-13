@@ -16,6 +16,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
     required double totalAmount,
     required List<ReceiptItemDto> items,
     required bool hasFallbackValues,
+    required bool hasDiscrepancy,
   }) = _ReceiptDto;
 
   factory ReceiptDto.fromJson(Map<String, dynamic> json) {
@@ -67,8 +68,9 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
       subtotal: subtotal,
       serviceCharge: serviceCharge,
       totalAmount: totalAmount,
-      items: items,
       hasFallbackValues: defaulted,
+      hasDiscrepancy: json['hasDiscrepancy'] ?? false,
+      items: items,
     );
     logDebug('ReceiptDto\n$dto');
     return dto;

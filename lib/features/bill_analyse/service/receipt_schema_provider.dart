@@ -20,6 +20,16 @@ Schema receiptSchema(Ref ref) {
         description: 'Explicit service charge or gratuity amount, if printed.',
       ),
       'totalAmount': Schema.number(description: 'Total final bill amount.'),
+      'hasDiscrepancy': Schema.boolean(
+        description:
+            'One or more items could '
+            'not be resolved or the total doesnt match the items total',
+      ),
+      'discrepancyDescription': Schema.string(
+        description:
+            'Description of '
+            'any discrepancies encountered',
+      ),
       'items': Schema.array(
         description: 'Line items on the receipt.',
         items: Schema.object(
@@ -29,8 +39,13 @@ Schema receiptSchema(Ref ref) {
             'price': Schema.number(
               description: 'Total price for this line item.',
             ),
+            'hasDiscrepancy': Schema.boolean(
+              description:
+                  'One or more '
+                  'attributes could not be resolved accurately',
+            ),
           },
-          requiredProperties: ['name', 'price', 'quantity'],
+          requiredProperties: ['name', 'price', 'quantity', 'hasDiscrepancy'],
         ),
       ),
     },
@@ -39,6 +54,8 @@ Schema receiptSchema(Ref ref) {
       'totalAmount',
       'items',
       'serviceCharge',
+      'hasDiscrepancy',
+      'discrepancyDescription',
     ],
   );
 }

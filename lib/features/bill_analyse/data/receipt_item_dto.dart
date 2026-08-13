@@ -12,6 +12,7 @@ abstract class ReceiptItemDto with _$ReceiptItemDto {
     required int quantity,
     required double price,
     required bool hasFallbackValues,
+    required bool hasDiscprepancy,
   }) = _ReceiptItemDto;
 
   factory ReceiptItemDto.fromJson(Map<String, dynamic> json) {
@@ -36,6 +37,7 @@ abstract class ReceiptItemDto with _$ReceiptItemDto {
       quantity: quantity,
       price: price,
       hasFallbackValues: defaulted,
+      hasDiscprepancy: json['hasDiscrepancy'] ?? false,
     );
   }
 }

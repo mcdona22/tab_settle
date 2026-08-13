@@ -14,7 +14,7 @@ class MobileFirstContainer extends StatelessWidget {
     this.maxWidth = mobileWidth,
     this.minWidth = 320.0,
     this.minHeight = 480.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
   });
 
   @override

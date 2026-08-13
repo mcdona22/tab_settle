@@ -25,7 +25,6 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
     // final qualifiedPathName = 'assets/test_receipts/$receiptName';
 
     return Scaffold(
-      // appBar: createAppBar(context, 'Scan Receipt'),
       appBar: createAppBar(context, ScreenTitle(label: 'Get The Receipt')),
       body: MobileFirstContainer(
         child: Column(
@@ -38,14 +37,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   .read(billSubmissionControllerProvider.notifier)
                   .captureImageFromGallery(),
             ),
-            if (fileNameState.value!.isNotEmpty)
-              ActionButton(
-                label: 'Next',
-                onPressed: () => context.pushNamed(
-                  AppRoute.checkReceipt.name,
-                  extra: fileNameState.value,
-                ),
-              ),
+
             AsyncValueWidget(
               value: fileNameState,
               data: (fileName) => fileName.isEmpty
@@ -58,7 +50,14 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                       ),
                     ),
             ),
-
+            if (fileNameState.value!.isNotEmpty)
+              ActionButton(
+                label: 'Next',
+                onPressed: () => context.pushNamed(
+                  AppRoute.checkReceipt.name,
+                  extra: fileNameState.value,
+                ),
+              ),
             // Divider(),
             // Text('Or select from existing'),
 

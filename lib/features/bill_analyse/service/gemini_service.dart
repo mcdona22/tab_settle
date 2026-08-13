@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tab_settle/core/extensions/map.extensions.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
 
@@ -63,6 +63,7 @@ class GeminiService with UiLoggy {
     }
 
     final json = jsonDecode(response.text!) as Map<String, dynamic>;
+    loggy.debug(json.toPrettyJson);
     final dto = ReceiptDto.fromJson(json);
     loggy.debug("Response found");
     loggy.debug('DTO: \n$dto');
@@ -84,54 +85,73 @@ class GeminiService with UiLoggy {
     return ' $prompt\nRAWTEXT: $rawText \nRAW TEXT:$rawText';
   }
 
-  Future<List<String>> listAvailableModels(String apiKey) async {
-    final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models?key=$apiKey',
-    );
-    List<dynamic> models = [];
-
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        // models = data['models'] as List<dynamic>?;
-        models = data['models'] as List<dynamic>;
-
-        loggy.debug('=== AVAILABLE MODELS ===');
-        // if (models != null) {
-        if (models.isNotEmpty) {
-          for (final m in models) {
-            final name = m['name'] as String; // e.g., "models/gemini-1.5-flash"
-            final supportedMethods =
-                m['supportedGenerationMethods'] as List<dynamic>?;
-
-            // Print models that support content generation
-            if (supportedMethods?.contains('generateContent') ?? false) {
-              // loggy.debug(name.replaceFirst('models/', ''));
-              null;
-            }
-          }
-        }
-      } else {
-        loggy.debug(
-          'Failed to fetch models: ${response.statusCode} - ${response.body}',
-        );
-      }
-    } catch (e) {
-      loggy.error('Error listing models: $e');
-    }
-
-    loggy.debug('we have ${models.length} models');
-    return models.map((m) {
-      final name = m['name'] as String;
-      return name.replaceFirst('models/', '');
-    }).toList();
-  }
+  // Future<List<String>> listAvailableModels(String apiKey) async {
+  //   final url = Uri.parse(
+  //     'https://generativelanguage.googleapis.com/v1beta/models?key=$apiKey',
+  //   );
+  //   List<dynamic> models = [];
+  //
+  //   try {
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       // models = data['models'] as List<dynamic>?;
+  //       models = data['models'] as List<dynamic>;
+  //
+  //       loggy.debug('=== AVAILABLE MODELS ===');
+  //       // if (models != null) {
+  //       if (models.isNotEmpty) {
+  //         for (final m in models) {
+  //           final name = m['name'] as String; // e.g., "models/gemini-1.5-flash"
+  //           final supportedMethods =
+  //               m['supportedGenerationMethods'] as List<dynamic>?;
+  //
+  //           // Print models that support content generation
+  //           if (supportedMethods?.contains('generateContent') ?? false) {
+  //             // loggy.debug(name.replaceFirst('models/', ''));
+  //             null;
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       loggy.debug(
+  //         'Failed to fetch models: ${response.statusCode} - ${response.body}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     loggy.error('Error listing models: $e');
+  //   }
+  //
+  //   loggy.debug('we have ${models.length} models');
+  //   return models.map((m) {
+  //     final name = m['name'] as String;
+  //     return name.replaceFirst('models/', '');
+  //   }).toList();
+  // }
 }
 
 const prompt = '''
 You are a high-precision OCR system. Extract receipt data strictly from visible printed text.
 
+MATHEMATICAL INTEGRITY & DISCREPANCY DIRECTIVES:
+- Prioritize VISUAL TRUTH over MATHEMATICAL RECONCILIATION.
+- NEVER alter, invent, or adjust item prices or quantities to make the items sum up to the Grand Total.
+- If an item's price or text is blurry, truncated, or faint:
+  1. Transcribe your best literal read of the characters.
+  2. Set "hasDiscrepancy": true for that specific item.
+ - Calculate the mathematical sum of the extracted items (+ service charge)
+
+  ROOT DISCREPANCY EVALUATION:
+
+- IF (sum != totalAmount) OR (any item has "hasDiscrepancy": true):
+  Do NOT tweak the numbers to fix the math
+    Set root "hasDiscrepancy": true.
+    Set "discrepancyDescription": "Brief explanation of mismatch".
+- ELSE:
+    Set root "hasDiscrepancy": false.
+    Set "discrepancyDescription": ''.
+ 
+ 
 STRICT ACCURACY DIRECTIVES:
 - Transcribe ONLY characters that are physically visible in the image.
 - NEVER invent, guess, or synthesize items based on the restaurant name or type.
