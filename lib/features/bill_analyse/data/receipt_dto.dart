@@ -76,6 +76,8 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
     return dto;
   }
 
+  bool get isBogus => items.isEmpty;
+
   /// Calculated property for effective service charge percentage
   double get serviceChargePercentage {
     if (serviceCharge <= 0.0) return 0.0;

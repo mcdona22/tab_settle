@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
@@ -9,7 +8,6 @@ import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 
@@ -39,8 +37,11 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             children: [
               Text(
                 dtoState.hasValue
-                    ? 'Please check the scan matches the receipt and correct '
-                          'before sharing'
+                    ? dtoState.value!.isBogus
+                          ? 'This receipt has no items - are you giving me a bogus '
+                                'receipt?'
+                          : 'Please check the scan matches the receipt and correct '
+                                'before sharing'
                     : 'processing the receipt',
                 textAlign: TextAlign.center,
               ),
@@ -48,7 +49,9 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
               Expanded(
                 child: AsyncValueWidget<ReceiptDto>(
                   value: dtoState,
-                  data: (dto) => ReceiptDtoView(dto: dto),
+                  data: (dto) => dto.isBogus
+                      ? crossPlatformPathImage(filePath)!
+                      : ReceiptDtoView(dto: dto),
                 ),
               ),
 
@@ -94,12 +97,3 @@ class SummaryLine extends StatelessWidget with UiLoggy {
     );
   }
 }
-
-BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(
-  // color: Theme.of(context).colorScheme.secondary.withAlpha(30),
-  borderRadius: BorderRadius.circular(8.0),
-  border: Border.all(
-    color: Theme.of(context).colorScheme.secondary.withAlpha(90),
-    width: 1.0,
-  ),
-);

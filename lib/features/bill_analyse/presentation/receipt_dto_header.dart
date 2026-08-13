@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 
