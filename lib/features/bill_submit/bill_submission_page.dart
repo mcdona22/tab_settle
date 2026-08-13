@@ -31,6 +31,23 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
           spacing: kPaddingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            AsyncValueWidget(
+              value: fileNameState,
+              data: (fileName) => fileName.isEmpty
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SizedBox(
+                        height: 400.0,
+                        width: double.infinity,
+                        child: InteractiveViewer(
+                          minScale: 1.0,
+                          maxScale: 5.0,
+                          clipBehavior: Clip.hardEdge,
+                          child: crossPlatformPathImage(fileName)!,
+                        ),
+                      ),
+                    ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -50,153 +67,9 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   ),
               ],
             ),
-
-            AsyncValueWidget(
-              value: fileNameState,
-              data: (fileName) => fileName.isEmpty
-                  ? SizedBox.shrink()
-                  : Expanded(
-                      child: SizedBox(
-                        height: 400.0,
-                        width: double.infinity,
-                        child: crossPlatformPathImage(fileName),
-                      ),
-                    ),
-            ),
-
-            // Divider(),
-            // Text('Or select from existing'),
-
-            // ...List.generate(imageAssetReceipts.length, (i) {
-            //   final path = imageAssetReceipts[i]['path'] ?? '';
-            //   final label = imageAssetReceipts[i]['name'];
-            //   return ActionButton(
-            //     label: label!,
-            //     onPressed: () {
-            //       qualifiedPathName.value = 'assets/test_receipts/$path';
-            //       loggy.debug('Receipt ${qualifiedPathName.value}');
-            //     },
-            //   );
-            // }),
-
-            // Expanded(
-            //   flex: 4,
-            //   child: Container(
-            //     width: double.infinity,
-            //     child: Image.asset(qualifiedPathName, fit: BoxFit.contain),
-            //   ),
-            // ),
-            // if (dtoState.value != null)
-            //   Expanded(
-            //     flex: 1,
-            //     child: Text(
-            //       dtoState.value!.toString(),
-            //       style: TextStyle(fontSize: 16.0),
-            //     ),
-            //   ),
           ],
         ),
       ),
-      // : CentredConstrainedWidget(
-      //     child: Padding(
-      //       padding: EdgeInsetsGeometry.all(18.0),
-      //       child: Column(
-      //         // crossAxisAlignment: CrossAxisAlignment.stretch,
-      //         spacing: 20.0,
-      //         children: [
-      //           AsyncValueWidget(
-      //             value: dtoState,
-      //             data: (_) => ActionButton(
-      //               label: 'Analyse',
-      //               onPressed: () => ref
-      //                   .read(billSubmissionControllerProvider.notifier)
-      //                   .analyseTextReceipt(receiptName),
-      //             ),
-      //           ),
-      //
-      //           Expanded(
-      //             child: SingleChildScrollView(child: Text(receiptName)),
-      //           ),
-      //
-      //           if (dtoState.value != null)
-      //             ActionButton(
-      //               label:
-      //                   'Check the '
-      //                   'Scan',
-      //               onPressed: () => context.pushNamed(
-      //                 AppRoute.checkReceipt.name,
-      //                 extra: dtoState.value,
-      //               ),
-      //             ),
-      //
-      //           if (dtoState.value != null)
-      //             Expanded(
-      //               child: SingleChildScrollView(
-      //                 child: AsyncValueWidget(
-      //                   value: dtoState,
-      //                   data: (dto) {
-      //                     return Text(dto.toString());
-      //                   },
-      //                 ),
-      //               ),
-      //             ),
-      //
-      //           // Padding(
-      //           //   padding: const EdgeInsets.all(8.0),
-      //           //   child: AsyncValueWidget<Map<String, dynamic>>(
-      //           //     value: submissionState,
-      //           //     data: (json) => Text(
-      //           //       json.toPrettyJson(),
-      //           //       textAlign: TextAlign.center,
-      //           //       style: Theme.of(context).textTheme.bodyLarge,
-      //           //     ),
-      //           //   ),
-      //           // ),
-      //
-      //           // Expanded(
-      //           //   child: Container(
-      //           //     decoration: BoxDecoration(
-      //           //       color: Theme.of(
-      //           //         context,
-      //           //       ).colorScheme.surfaceContainerHighest,
-      //           //       borderRadius: BorderRadius.circular(16.0),
-      //           //       border: Border.all(
-      //           //         color: Theme.of(context).colorScheme.outlineVariant,
-      //           //       ),
-      //           //     ),
-      //           //     clipBehavior: Clip.antiAlias,
-      //           //     child: Image.asset(
-      //           //       qualifiedPath,
-      //           //       fit: BoxFit.contain,
-      //           //       errorBuilder: (_, __, ___) => Padding(
-      //           //         padding: const EdgeInsets.all(8.0),
-      //           //         child: Column(
-      //           //           mainAxisAlignment: MainAxisAlignment.center,
-      //           //           children: [
-      //           //             Icon(
-      //           //               Icons.broken_image,
-      //           //               size: 48,
-      //           //               color: Theme.of(context).colorScheme.error,
-      //           //             ),
-      //           //             Text('Unable to load $qualifiedPath'),
-      //           //           ],
-      //           //         ),
-      //           //       ),
-      //           //     ),
-      //           //   ),
-      //           // ),
-      //           // ActionButton(
-      //           //   label: 'Analyse',
-      //           //   onPressed: submissionState.isLoading
-      //           //       ? null
-      //           //       : () => ref
-      //           //             .read(billSubmissionControllerProvider.notifier)
-      //           //             .analyseTextReceipt(receiptText),
-      //           // ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
     );
   }
 }

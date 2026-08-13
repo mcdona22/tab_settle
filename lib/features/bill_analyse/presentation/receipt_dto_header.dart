@@ -19,13 +19,14 @@ class ReceiptDtoHeader extends StatelessWidget with UiLoggy {
           decoration: dto.hasDiscrepancy ? correctionOutline(context) : null,
 
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               spacing: colSpacingSmall,
               children: [
                 Text(
                   dto.merchantName,
                   style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
                 ),
                 SummaryLine(
                   fixed: Text(
