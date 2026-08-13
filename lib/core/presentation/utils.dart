@@ -35,3 +35,12 @@ Image? crossPlatformPathImage(String path, {BoxFit fit = BoxFit.contain}) {
       ? Image.network(path, fit: fit)
       : Image.file(File(path), fit: fit);
 }
+
+BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(
+  // color: Theme.of(context).colorScheme.secondary.withAlpha(30),
+  borderRadius: BorderRadius.circular(8.0),
+  border: Border.all(
+    color: Theme.of(context).colorScheme.secondary.withAlpha(90),
+    width: 1.0,
+  ),
+);
