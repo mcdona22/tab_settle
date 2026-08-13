@@ -31,11 +31,24 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
           spacing: kPaddingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ActionButton(
-              label: 'Find the Receipt',
-              onPressed: () => ref
-                  .read(billSubmissionControllerProvider.notifier)
-                  .captureImageFromGallery(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ActionButton(
+                  label: 'Find the Receipt',
+                  onPressed: () => ref
+                      .read(billSubmissionControllerProvider.notifier)
+                      .captureImageFromGallery(),
+                ),
+                if (fileNameState.value!.isNotEmpty)
+                  ActionButton(
+                    label: 'Next',
+                    onPressed: () => context.pushNamed(
+                      AppRoute.checkReceipt.name,
+                      extra: fileNameState.value,
+                    ),
+                  ),
+              ],
             ),
 
             AsyncValueWidget(
@@ -50,14 +63,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                       ),
                     ),
             ),
-            if (fileNameState.value!.isNotEmpty)
-              ActionButton(
-                label: 'Next',
-                onPressed: () => context.pushNamed(
-                  AppRoute.checkReceipt.name,
-                  extra: fileNameState.value,
-                ),
-              ),
+
             // Divider(),
             // Text('Or select from existing'),
 
