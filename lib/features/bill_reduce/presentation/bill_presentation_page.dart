@@ -1,16 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/extensions/double.extensions.dart';
+import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
+import 'package:tab_settle/features/bill_reduce/data/receipt.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 
 class BillPresentationPage extends HookConsumerWidget with UiLoggy {
-  const BillPresentationPage({super.key});
+  const BillPresentationPage({required this.receipt, super.key});
+
+  final Receipt receipt;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: createAppBar(context, ScreenTitle(label: 'Ready to Share')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          spacing: colSpacingSmall,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              receipt.title,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            SummaryLine(
+              remaining: Text('Total'),
+              fixed: Text(receipt.totalAmount.toCurrency()),
+            ),
+            SummaryLine(
+              remaining: Text('Claimed'),
+              fixed: Text(receipt.totalClaimed.toCurrency()),
+            ),
+
+            const Divider(),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
+import 'package:tab_settle/features/bill_reduce/data/receipt.dart';
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
@@ -42,8 +43,8 @@ final routerConfig = GoRouter(
       path: '/showReceipt',
       name: AppRoute.showReceipt.name,
       pageBuilder: (_, state) {
-        // final filePath = state.extra as String?;
-        return MaterialPage(child: BillPresentationPage());
+        final receipt = state.extra as Receipt?;
+        return MaterialPage(child: BillPresentationPage(receipt: receipt!));
       },
     ),
     // GoRoute(
