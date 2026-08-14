@@ -38,6 +38,17 @@ class BillPresentationPage extends HookConsumerWidget with UiLoggy {
             ),
 
             const Divider(),
+
+            SummaryLine(remaining: Text('Items: ${receipt.items.length}')),
+            Expanded(
+              child: ListView.builder(
+                itemCount: receipt.items.length,
+                itemBuilder: (context, index) => SummaryLine(
+                  remaining: Text(receipt.items[index].name),
+                  fixed: Text(receipt.items[index].price.toCurrency()),
+                ),
+              ),
+            ),
           ],
         ),
       ),
