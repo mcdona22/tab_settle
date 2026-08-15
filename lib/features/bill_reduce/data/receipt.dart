@@ -24,6 +24,8 @@ abstract class Receipt with _$Receipt, UiLoggy {
       title: dto.merchantName,
       totalAmount: dto.totalAmount,
       totalClaimed: 0.0,
+      // todo this is a function of items not a property
+      // fix later
       serviceCharge: dto.serviceCharge,
       items: _reduceItems(dto.items),
     );
