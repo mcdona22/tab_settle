@@ -5,10 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
-import 'package:tab_settle/features/bill_reduce/data/receipt.dart';
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
+import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 enum AppRoute { home, addReceipt, checkReceipt, showReceipt }
 

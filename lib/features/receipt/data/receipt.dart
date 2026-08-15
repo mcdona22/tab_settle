@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
-import 'package:tab_settle/features/bill_reduce/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
 
 part 'receipt.freezed.dart';
 
