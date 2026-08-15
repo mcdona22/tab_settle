@@ -7,13 +7,16 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+  logDebug('Firebase init...');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  logDebug('Firebase init... done');
 
   await dotenv.load(fileName: ".env");
-
-  Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
 
   logInfo('🚀 Launching Tab Settle');
 
