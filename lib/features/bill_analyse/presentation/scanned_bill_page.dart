@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
@@ -6,9 +7,11 @@ import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
+import 'package:tab_settle/features/bill_reduce/data/receipt.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
@@ -60,7 +63,13 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ActionButton(label: 'Edit'),
-                    ActionButton(label: 'Next'),
+                    ActionButton(
+                      label: 'Next',
+                      onPressed: () => context.pushNamed(
+                        AppRoute.showReceipt.name,
+                        extra: Receipt.fromDto(dtoState.value!),
+                      ),
+                    ),
                   ],
                 ),
             ],

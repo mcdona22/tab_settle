@@ -22,7 +22,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
   factory ReceiptDto.fromJson(Map<String, dynamic> json) {
     bool defaulted = false;
     final String? rawMerchant = json['merchantName'] as String?;
-    if (rawMerchant == null || rawMerchant.trim().isEmpty) defaulted = true;
+    defaulted = (rawMerchant == null || rawMerchant.trim().isEmpty);
     final String merchantName =
         (rawMerchant != null && rawMerchant.trim().isNotEmpty)
         ? rawMerchant.trim()
