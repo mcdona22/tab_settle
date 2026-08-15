@@ -5,6 +5,7 @@ import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
 import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
 
 part 'receipt.freezed.dart';
+part 'receipt.g.dart';
 
 @freezed
 abstract class Receipt with _$Receipt, UiLoggy {
@@ -14,7 +15,6 @@ abstract class Receipt with _$Receipt, UiLoggy {
     String? id,
     required String title,
     required double totalAmount,
-    required double totalClaimed,
     required double serviceCharge,
     required List<ReceiptLineItem> items,
   }) = _Receipt;
@@ -23,13 +23,25 @@ abstract class Receipt with _$Receipt, UiLoggy {
     return Receipt(
       title: dto.merchantName,
       totalAmount: dto.totalAmount,
-      totalClaimed: 0.0,
-      // todo this is a function of items not a property
-      // fix later
+
       serviceCharge: dto.serviceCharge,
       items: _reduceItems(dto.items),
     );
   }
+
+  factory Receipt.fromJson(Map<String, dynamic> json) =>
+      _$ReceiptFromJson(json);
+
+  // factory Receipt.fromJson(Map<String, dynamic> json) {
+  //   final receipt = Receipt(
+  //     title: json['title'],
+  //     totalAmount: json['totalAmount'],
+  //     serviceCharge: json['serviceCharge'],
+  //     items: const [],
+  //   );
+  //
+  //   return receipt;
+  // }
 
   static List<ReceiptLineItem> _reduceItems(List<ReceiptItemDto> items) {
     return items.expand((item) => _reduceItem(item)).toList();

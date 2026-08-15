@@ -33,10 +33,7 @@ class BillPresentationPage extends HookConsumerWidget with UiLoggy {
               remaining: Text('Total'),
               fixed: Text(receipt.totalAmount.toCurrency()),
             ),
-            SummaryLine(
-              remaining: Text('Claimed'),
-              fixed: Text(receipt.totalClaimed.toCurrency()),
-            ),
+            SummaryLine(remaining: Text('Claimed'), fixed: Text('0.0')),
 
             const Divider(),
 

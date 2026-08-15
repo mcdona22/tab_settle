@@ -12,6 +12,7 @@ import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
 import 'package:tab_settle/features/home/home_page.dart';
+import 'package:tab_settle/features/receipt/data/firebase_providers.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
@@ -72,6 +73,24 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                     ),
                   ],
                 ),
+              ActionButton(
+                label: 'save',
+                onPressed: () async {
+                  final receipt = Receipt.fromDto(dtoState.value!);
+                  final modReceipt = receipt.copyWith(items: []);
+                  loggy.debug(modReceipt);
+                  try {
+                    final id = await ref
+                        .read(receiptRepositoryProvider)
+                        .saveReceipt(modReceipt);
+                    loggy.debug('id is $id');
+                  } catch (e, st) {
+                    loggy.error('failed receipt save', e, st);
+                  } finally {
+                    loggy.debug('done');
+                  }
+                },
+              ),
             ],
           ),
         ),
