@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/features/receipt/data/firebase_providers.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 import 'package:tab_settle/features/receipt/data/receipt_item_repository.dart';
+import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
 import 'package:tab_settle/features/receipt/data/receipt_repository.dart';
 
 part 'receipt_service.g.dart';
@@ -46,4 +47,13 @@ Future<Receipt> receiptHeader(Ref ref, String receiptId) async {
     throw Exception('Receipt $receiptId not found.');
   }
   return receipt;
+}
+
+@riverpod
+Stream<List<ReceiptLineItem>> receiptItems(Ref ref, String receiptId) {
+  final itemsRepo = ref.watch(receiptItemRepositoryProvider);
+  final receiptRepo = ref.watch(receiptRepositoryProvider);
+  return itemsRepo.watchCollection(
+    customPath: '${receiptRepo.collectionName}/$receiptId',
+  );
 }

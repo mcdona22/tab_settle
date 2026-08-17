@@ -9,6 +9,7 @@ import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt/presentation/receipt_Items_list.dart';
 
 final options = ['Available', 'My Claims', 'Every Ones'];
 
@@ -20,6 +21,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptHeader = ref.watch(receiptHeaderProvider(receiptId));
+    final receiptItems = ref.watch(receiptItemsProvider(receiptId));
     final tabBarIndex = useState<int>(0);
 
     return Scaffold(
@@ -40,8 +42,9 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
             ),
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(200, (i) => Text('Item $i')),
+                child: AsyncValueWidget(
+                  value: receiptItems,
+                  data: (items) => ReceiptItemsList(items: items),
                 ),
               ),
             ),

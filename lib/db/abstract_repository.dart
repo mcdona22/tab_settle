@@ -45,6 +45,17 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
     return snapshot.data();
   }
 
+  Stream<List<T>> watchCollection({String? customPath}) {
+    final path = _qualifiedPath(customPath);
+    loggy.debug('watching collection $path');
+    final ref = collectionRef(path);
+    loggy.debug('Watching items list for $T at ${ref.path}');
+
+    return ref.snapshots().map(
+      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+    );
+  }
+
   CollectionReference<T> collectionRef([String? customPath]) {
     final path = customPath ?? _collectionName;
     return _firestore
@@ -60,5 +71,9 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
             return map;
           },
         );
+  }
+
+  String _qualifiedPath(String? customPath) {
+    return customPath != null ? '$customPath/$collectionName' : collectionName;
   }
 }
