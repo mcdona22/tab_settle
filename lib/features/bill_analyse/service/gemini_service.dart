@@ -81,9 +81,9 @@ class GeminiService with UiLoggy {
     return Uint8List.fromList(img.encodeJpg(sharpened, quality: 90));
   }
 
-  String _buildFastReceiptPrompt(String rawText) {
-    return ' $prompt\nRAWTEXT: $rawText \nRAW TEXT:$rawText';
-  }
+  // String _buildFastReceiptPrompt(String rawText) {
+  //   return ' $prompt\nRAWTEXT: $rawText \nRAW TEXT:$rawText';
+  // }
 
   // Future<List<String>> listAvailableModels(String apiKey) async {
   //   final url = Uri.parse(

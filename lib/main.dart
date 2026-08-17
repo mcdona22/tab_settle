@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
@@ -6,12 +7,16 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+  logDebug('Firebase init...');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  logDebug('Firebase init... done');
 
   await dotenv.load(fileName: ".env");
-
-  Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
 
   logInfo('🚀 Launching Tab Settle');
 

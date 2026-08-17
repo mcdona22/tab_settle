@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
+import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
-import 'package:tab_settle/features/bill_reduce/data/receipt.dart';
-import 'package:tab_settle/features/home/home_page.dart';
+import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 class BillPresentationPage extends HookConsumerWidget with UiLoggy {
   const BillPresentationPage({required this.receipt, super.key});
@@ -32,10 +32,7 @@ class BillPresentationPage extends HookConsumerWidget with UiLoggy {
               remaining: Text('Total'),
               fixed: Text(receipt.totalAmount.toCurrency()),
             ),
-            SummaryLine(
-              remaining: Text('Claimed'),
-              fixed: Text(receipt.totalClaimed.toCurrency()),
-            ),
+            SummaryLine(remaining: Text('Claimed'), fixed: Text('0.0')),
 
             const Divider(),
 
