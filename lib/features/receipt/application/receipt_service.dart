@@ -22,7 +22,7 @@ class ReceiptService {
       await itemRepo.writeDocument(item, batch: batch, customPath: path);
     }
     await batch.commit();
-    return '';
+    return id;
   }
 }
 

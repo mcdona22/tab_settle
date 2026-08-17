@@ -66,10 +66,8 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
     final cardHeight = 450.0;
 
-    // final json = ref.watch(geminiServiceProvider).listAvailableModels(apiKey);
-
-    // loggy.debug('Available models: $json');
     final theme = Theme.of(context);
+    final slogans = ['No sign up', 'No sign in', 'No installation', 'No fuss'];
     return Scaffold(
       appBar: createAppBar(context, ScreenTitle(label: 'Tab Settle')),
       // appBar: AppBar(title: const Text('Tab Settle'), centerTitle: true),
@@ -81,10 +79,24 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 28.0,
               children: [
-                //       Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 20.0),
-                //   child: ScreenTitle(label: 'Tab Settle'),
-                // ),
+                Wrap(
+                  spacing: 12.0,
+                  runSpacing: 18.0,
+                  alignment: WrapAlignment.center,
+                  children: List.generate(
+                    slogans.length,
+                    (i) => Slogan(
+                      children: [
+                        Icon(Icons.check, color: theme.colorScheme.primary),
+                        Text(slogans[i]),
+                      ],
+                    ),
+                  ),
+                ),
+                ActionButton(
+                  label: 'Lets Start',
+                  onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
+                ),
                 SizedBox(
                   height: cardHeight,
                   child: LayoutBuilder(
@@ -106,10 +118,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                       );
                     },
                   ),
-                ),
-                ActionButton(
-                  label: 'Lets Start',
-                  onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
                 ),
               ],
             ),
@@ -162,6 +170,25 @@ class ScreenTitle extends StatelessWidget {
           letterSpacing: -0.5,
           color: Colors.white, // Color must be white for ShaderMask
         ),
+      ),
+    );
+  }
+}
+
+class Slogan extends StatelessWidget {
+  const Slogan({this.children = const [], super.key});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: null,
+      // decoration: correctionOutline(context),
+      child: Row(
+        spacing: 4.0,
+        mainAxisSize: MainAxisSize.min,
+        children: children,
       ),
     );
   }

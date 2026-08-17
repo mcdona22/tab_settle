@@ -4,13 +4,15 @@
 // import 'package:canya_mobile/features/user/presentation/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_page.dart';
 
-enum AppRoute { home, addReceipt, checkReceipt, showReceipt }
+enum AppRoute { home, addReceipt, checkReceipt, showReceipt, receiptDashboard }
 
 final routerConfig = GoRouter(
   initialLocation: '/',
@@ -24,7 +26,7 @@ final routerConfig = GoRouter(
     ),
 
     GoRoute(
-      path: '/receipt',
+      path: '/submitReceipt',
       name: AppRoute.addReceipt.name,
       pageBuilder: (_, state) {
         return MaterialPage(child: BillSubmissionPage(), key: state.pageKey);
@@ -45,6 +47,16 @@ final routerConfig = GoRouter(
       pageBuilder: (_, state) {
         final receipt = state.extra as Receipt?;
         return MaterialPage(child: BillPresentationPage(receipt: receipt!));
+      },
+    ),
+
+    GoRoute(
+      path: '/receipt/:id',
+      name: AppRoute.receiptDashboard.name,
+      pageBuilder: (_, state) {
+        final id = state.pathParameters['id'] ?? '';
+        logDebug('navigating to dashboard with id of $id');
+        return MaterialPage(child: ReceiptDashboardPage(receiptId: id));
       },
     ),
     // GoRoute(

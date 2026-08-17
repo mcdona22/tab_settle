@@ -11,8 +11,8 @@ import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
+import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_controller.dart';
 import 'package:tab_settle/features/home/home_page.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
@@ -25,6 +25,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dtoState = ref.watch(receiptScanProvider(filePath));
+    final controllerState = ref.watch(scannedBillControllerProvider);
     // final file = useMemoized(() => File(filePath), [filePath]);
     return Scaffold(
       appBar: createAppBar(context, ScreenTitle(label: 'Process the Receipt')),
@@ -64,37 +65,55 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ActionButton(label: 'Edit'),
-                    ActionButton(
-                      label: 'Next',
-                      onPressed: () => context.pushNamed(
-                        AppRoute.showReceipt.name,
-                        extra: Receipt.fromDto(dtoState.value!),
+
+                    AsyncValueWidget(
+                      value: controllerState,
+
+                      data: (_) => ActionButton(
+                        label: 'Next',
+                        onPressed: () => _onSavePressed(
+                          context,
+                          ref,
+                          Receipt.fromDto(dtoState.value!),
+                        ),
+                        //   onPressed: () async {
+                        //     final receipt = Receipt.fromDto(dtoState.value!);
+                        //     final controller = ref.read(
+                        //       scannedBillControllerProvider.notifier,
+                        //     );
+                        //     final id = await controller.saveReceipt(receipt);
+                        //     if (id.isNotEmpty && context.mounted) {
+                        //       context.pushNamed(
+                        //         AppRoute.receiptDashboard.name,
+                        //         pathParameters: {'id': id},
+                        //       );
+                        //     }
+                        //   },
                       ),
                     ),
                   ],
                 ),
-              ActionButton(
-                label: 'save',
-                onPressed: () async {
-                  final receipt = Receipt.fromDto(dtoState.value!);
-                  // final modReceipt = receipt.copyWith(items: []);
-                  loggy.debug(receipt);
-                  try {
-                    final id = await ref
-                        .read(receiptServiceProvider)
-                        .saveReceipt(receipt);
-                    loggy.debug('id is $id');
-                  } catch (e, st) {
-                    loggy.error('failed receipt save', e, st);
-                  } finally {
-                    loggy.debug('done');
-                  }
-                },
-              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _onSavePressed(
+    BuildContext context,
+    WidgetRef ref,
+    Receipt receipt,
+  ) async {
+    final receiptId = await ref
+        .read(scannedBillControllerProvider.notifier)
+        .saveReceipt(receipt);
+
+    if (!context.mounted) return;
+
+    context.goNamed(
+      AppRoute.receiptDashboard.name,
+      pathParameters: {'id': receiptId},
     );
   }
 }

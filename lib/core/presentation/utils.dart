@@ -3,28 +3,36 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/routing/router.dart';
 
 PreferredSizeWidget createAppBar(BuildContext context, Widget? header) {
+  final isHome = GoRouterState.of(context).matchedLocation == '/';
   return AppBar(
     title: header,
-    leading: IconButton(
-      icon: const Icon(Icons.arrow_back),
-      // Or Icons.arrow_back_ios for iOS style
-      onPressed: () {
-        logDebug('can pop is ${context.canPop()}');
-        // Cleans up the stack and takes the user back
-        if (context.canPop()) {
-          context.pop();
-        }
-      },
-    ),
+    leading: context.canPop()
+        ? IconButton(
+            icon: const Icon(Icons.arrow_back),
+            // Or Icons.arrow_back_ios for iOS style
+            onPressed: () {
+              // Cleans up the stack and takes the user back
+              if (context.canPop()) {
+                context.pop();
+              }
+            },
+          )
+        : null,
     toolbarHeight: 120.0,
     centerTitle: true,
     // elevation: 1.0,
     // primary: true,
     // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-    actions: [],
+    actions: [
+      if (!isHome)
+        IconButton(
+          onPressed: () => context.goNamed(AppRoute.home.name),
+          icon: Icon(Icons.home),
+        ),
+    ],
   );
 }
 
