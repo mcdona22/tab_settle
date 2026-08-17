@@ -99,9 +99,22 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                     },
                   ),
                 ),
-                ActionButton(
-                  label: 'Lets Go',
-                  onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ActionButton(
+                      label: 'Lets Go',
+                      onPressed: () =>
+                          context.pushNamed(AppRoute.addReceipt.name),
+                    ),
+                    ActionButton(
+                      label: 'Good Receipt',
+                      onPressed: () => context.goNamed(
+                        AppRoute.receiptDashboard.name,
+                        pathParameters: {'id': 'yVtgwpXONAveEai03FWu'},
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

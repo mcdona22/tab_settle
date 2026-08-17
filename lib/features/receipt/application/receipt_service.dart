@@ -24,6 +24,10 @@ class ReceiptService {
     await batch.commit();
     return id;
   }
+
+  Future<Receipt?> getReceipt(String id) async {
+    return receiptRepo.fetchDocument(id);
+  }
 }
 
 @Riverpod()
@@ -32,4 +36,14 @@ ReceiptService receiptService(Ref ref) {
   final itemRepo = ref.watch(receiptItemRepositoryProvider);
 
   return ReceiptService(receiptRepo: receiptRepo, itemRepo: itemRepo);
+}
+
+@riverpod
+Future<Receipt> receiptHeader(Ref ref, String receiptId) async {
+  final service = ref.watch(receiptServiceProvider);
+  final receipt = await service.getReceipt(receiptId);
+  if (receipt == null) {
+    throw Exception('Receipt $receiptId not found.');
+  }
+  return receipt;
 }

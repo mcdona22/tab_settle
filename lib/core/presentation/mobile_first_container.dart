@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 
+const msg =
+    'The display is too small for the app to work.  You are most '
+    'likely on a mobile device in landscape mode';
+
 class MobileFirstContainer extends StatelessWidget {
   final Widget child;
   final double maxWidth;
@@ -27,13 +31,7 @@ class MobileFirstContainer extends StatelessWidget {
         return tooSmall
             ? Padding(
                 padding: padding,
-                child: Center(
-                  child: Text(
-                    'Your device is too small Tab Settle app to '
-                    'work',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                child: Center(child: Text(msg, textAlign: TextAlign.center)),
               )
             : Align(
                 alignment: Alignment.topCenter,

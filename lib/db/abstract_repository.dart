@@ -11,7 +11,7 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
 
   String get collectionName => _collectionName;
 
-  T _fromFirestore(DocID id, Map<String, dynamic> data);
+  T fromFirestore(DocID id, Map<String, dynamic> data);
 
   WriteBatch generateBatch() => _firestore.batch();
 
@@ -34,6 +34,17 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
     return docId;
   }
 
+  Future<T?> fetchDocument(DocID docId) async {
+    final docRef = collectionRef(_collectionName).doc(docId);
+    final snapshot = await docRef.get();
+    if (!snapshot.exists) {
+      loggy.warning('ID of $docId not found in $_collectionName');
+      return null;
+    }
+    loggy.debug('fetch was successful');
+    return snapshot.data();
+  }
+
   CollectionReference<T> collectionRef([String? customPath]) {
     final path = customPath ?? _collectionName;
     return _firestore
@@ -41,7 +52,7 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
         .withConverter<T>(
           fromFirestore: (snapshot, _) {
             final data = snapshot.data() ?? {};
-            return _fromFirestore(snapshot.id, data);
+            return fromFirestore(snapshot.id, data);
           },
           toFirestore: (document, _) {
             final map = document.toFirestoreDocument();
