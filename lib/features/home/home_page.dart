@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
+import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/home/image_card.dart';
@@ -40,11 +41,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ref.read(geminiServiceProvider); // warms up the service
-    // final models = ref.watch(geminiServiceProvider);
-    // final Future<List<dynamic>> modelsData = models.listAvailableModels(
-    //   ref.watch(geminiApiKeyProvider),
-    // );
     final carouselController = useCarouselController();
     final currentPage = useState(0);
     final stepsCount = cards.length;
@@ -66,11 +62,12 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
     final cardHeight = 450.0;
 
-    final theme = Theme.of(context);
     final slogans = ['No sign up', 'No sign in', 'No installation', 'No fuss'];
     return Scaffold(
-      appBar: createAppBar(context, ScreenTitle(label: 'Tab Settle')),
-      // appBar: AppBar(title: const Text('Tab Settle'), centerTitle: true),
+      appBar: createAppBar(
+        context,
+        ScreenTitle(label: 'Welcome to Tab Settle'),
+      ),
       body: SafeArea(
         child: MobileFirstContainer(
           child: SingleChildScrollView(
@@ -79,20 +76,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 28.0,
               children: [
-                Wrap(
-                  spacing: 12.0,
-                  runSpacing: 18.0,
-                  alignment: WrapAlignment.center,
-                  children: List.generate(
-                    slogans.length,
-                    (i) => Slogan(
-                      children: [
-                        Icon(Icons.check, color: theme.colorScheme.primary),
-                        Text(slogans[i]),
-                      ],
-                    ),
-                  ),
-                ),
+                SloganWrap(slogans: slogans),
                 ActionButton(
                   label: 'Lets Start',
                   onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
@@ -144,31 +128,24 @@ class HomePage extends HookConsumerWidget with UiLoggy {
   }
 }
 
-class ScreenTitle extends StatelessWidget {
-  const ScreenTitle({required this.label, super.key});
+class SloganWrap extends StatelessWidget {
+  const SloganWrap({super.key, required this.slogans});
 
-  final String label;
+  final List<String> slogans;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ShaderMask(
-      shaderCallback: (bounds) => LinearGradient(
-        colors: [
-          theme.colorScheme.primary,
-          theme.colorScheme.tertiary,
-          theme.colorScheme.secondary,
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ).createShader(bounds),
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-        style: theme.textTheme.headlineLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          letterSpacing: -0.5,
-          color: Colors.white, // Color must be white for ShaderMask
+    return Wrap(
+      spacing: 12.0,
+      runSpacing: 18.0,
+      alignment: WrapAlignment.center,
+      children: List.generate(
+        slogans.length,
+        (i) => Slogan(
+          children: [
+            Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+            Text(slogans[i]),
+          ],
         ),
       ),
     );
@@ -182,14 +159,10 @@ class Slogan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: null,
-      // decoration: correctionOutline(context),
-      child: Row(
-        spacing: 4.0,
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      ),
+    return Row(
+      spacing: 4.0,
+      mainAxisSize: MainAxisSize.min,
+      children: children,
     );
   }
 }

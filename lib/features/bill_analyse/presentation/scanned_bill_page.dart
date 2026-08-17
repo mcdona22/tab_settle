@@ -5,6 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
+import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
@@ -12,7 +13,6 @@ import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_controller.dart';
-import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {

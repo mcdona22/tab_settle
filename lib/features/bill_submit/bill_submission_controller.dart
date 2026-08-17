@@ -16,7 +16,7 @@ class BillSubmissionController extends _$BillSubmissionController with UiLoggy {
     final picker = ImagePicker();
     state = await AsyncValue.guard(() async {
       final response = await picker.pickImage(source: ImageSource.gallery);
-      final filePath = response!.path ?? "";
+      final filePath = response!.path;
       loggy.debug('response created : $filePath');
 
       return filePath;
