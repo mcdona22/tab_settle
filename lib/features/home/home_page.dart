@@ -32,7 +32,7 @@ final cards = [
     'title': 'Share the Items',
     'description':
         'Share  it with '
-        'your friends to claim their items',
+        'your friends to claim their items on the bill',
   },
 ];
 
@@ -46,7 +46,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     final stepsCount = cards.length;
 
     useEffect(() {
-      final timer = Timer.periodic(const Duration(milliseconds: 3000), (_) {
+      final timer = Timer.periodic(const Duration(milliseconds: 4500), (_) {
         if (!carouselController.hasClients) return;
         final nextIndex = (currentPage.value + 1) % stepsCount;
         currentPage.value = nextIndex;
@@ -77,10 +77,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               spacing: 28.0,
               children: [
                 SloganWrap(slogans: slogans),
-                ActionButton(
-                  label: 'Lets Start',
-                  onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
-                ),
                 SizedBox(
                   height: cardHeight,
                   child: LayoutBuilder(
@@ -102,6 +98,10 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                       );
                     },
                   ),
+                ),
+                ActionButton(
+                  label: 'Lets Go',
+                  onPressed: () => context.pushNamed(AppRoute.addReceipt.name),
                 ),
               ],
             ),

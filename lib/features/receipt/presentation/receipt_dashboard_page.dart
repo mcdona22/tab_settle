@@ -13,7 +13,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: createAppBar(context, ScreenTitle(label: 'Split the Bill')),
+      appBar: createAppBar(context, ScreenTitle(label: 'Claim Your Items')),
       body: MobileFirstContainer(
         child: Center(child: Text("ID is $receiptId")),
       ),
