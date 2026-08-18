@@ -11,13 +11,20 @@ class ClaimableItem extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colourScheme = Theme.of(context).colorScheme;
     return ListTile(
-      minLeadingWidth: 100.0,
+      // minLeadingWidth: 100.0,
+      onTap: () {},
       title: Text(item.name),
       subtitle: Text(item.price.toCurrency()),
       leading: item.claimant.isEmpty
-          ? Text('Swipe to claim')
-          : Text(item.claimant, overflow: TextOverflow.fade),
+          ? Icon(Icons.add_circle_outline, color: colourScheme.secondary)
+          : CircleAvatar(
+              backgroundColor: colourScheme.primaryContainer,
+              radius: 14,
+              child: Text(item.claimant[0].toUpperCase()),
+            ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt/presentation/providers.dart';
 import 'package:tab_settle/features/receipt/presentation/receipt_Items_list.dart';
 import 'package:tab_settle/features/receipt/presentation/user_handle.dart';
 
@@ -21,6 +22,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userHandle = ref.watch(userHandleControllerProvider);
     final receiptHeader = ref.watch(receiptHeaderProvider(receiptId));
     final receiptItems = ref.watch(receiptItemsProvider(receiptId));
     final tabBarIndex = useState<int>(0);
@@ -29,24 +31,31 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
       appBar: createAppBar(
         context,
         ScreenTitle(label: 'Claim Your Items'),
-        toolbarHeight: 60.0,
+        // toolbarHeight: 60.0,
       ),
 
       body: MobileFirstContainer(
         child: Column(
           children: [
             UserHandle(),
-            AsyncValueWidget(
-              value: receiptHeader,
-              data: (receipt) {
-                return ReceiptHeader(receipt: receipt);
-              },
-            ),
+            // AsyncValueWidget(
+            //   value: receiptHeader,
+            //   data: (receipt) {
+            //     return ReceiptHeader(receipt: receipt);
+            //   },
+            // ),
             Expanded(
               child: SingleChildScrollView(
                 child: AsyncValueWidget(
                   value: receiptItems,
-                  data: (items) => ReceiptItemsList(items: items),
+                  data: (items) => Column(
+                    children: [
+                      ReceiptItemsList(items: items),
+                      Divider(),
+                      Text('Claimed Items'),
+                      ReceiptItemsList(items: items, userFilter: userHandle),
+                    ],
+                  ),
                 ),
               ),
             ),
