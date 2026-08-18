@@ -10,6 +10,7 @@ import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 import 'package:tab_settle/features/receipt/presentation/receipt_Items_list.dart';
+import 'package:tab_settle/features/receipt/presentation/user_handle.dart';
 
 final options = ['Available', 'My Claims', 'Every Ones'];
 
@@ -34,6 +35,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
       body: MobileFirstContainer(
         child: Column(
           children: [
+            UserHandle(),
             AsyncValueWidget(
               value: receiptHeader,
               data: (receipt) {
