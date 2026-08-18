@@ -3,28 +3,22 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
-import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
-import 'package:tab_settle/features/receipt/presentation/providers.dart';
-import 'package:tab_settle/features/receipt/presentation/receipt_Items_list.dart';
+import 'package:tab_settle/features/receipt/presentation/dashboard_views/dashboard_claim_view.dart';
+import 'package:tab_settle/features/receipt/presentation/dashboard_views/dashboard_summary_view.dart';
 import 'package:tab_settle/features/receipt/presentation/user_handle.dart';
 
-final options = ['Available', 'My Claims', 'Every Ones'];
+final options = ['Overview', 'My Claims'];
 
 class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
-  const ReceiptDashboardPage({required this.receiptId, super.key});
-
-  final String receiptId;
+  const ReceiptDashboardPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userHandle = ref.watch(userHandleControllerProvider);
-    final receiptHeader = ref.watch(receiptHeaderProvider(receiptId));
-    final receiptItems = ref.watch(receiptItemsProvider(receiptId));
+    final views = const [DashboardSummaryView(), DashboardClaimView()];
     final tabBarIndex = useState<int>(0);
 
     return Scaffold(
@@ -38,28 +32,12 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
         child: Column(
           children: [
             UserHandle(),
-            // AsyncValueWidget(
-            //   value: receiptHeader,
-            //   data: (receipt) {
-            //     return ReceiptHeader(receipt: receipt);
-            //   },
-            // ),
+
             Expanded(
               child: SingleChildScrollView(
-                child: AsyncValueWidget(
-                  value: receiptItems,
-                  data: (items) => Column(
-                    children: [
-                      ReceiptItemsList(items: items),
-                      Divider(),
-                      Text('Claimed Items'),
-                      ReceiptItemsList(items: items, userFilter: userHandle),
-                    ],
-                  ),
-                ),
+                child: IndexedStack(index: tabBarIndex.value, children: views),
               ),
             ),
-            // DebugContainer(child: Center(child: Text('remainder'))),
           ],
         ),
       ),

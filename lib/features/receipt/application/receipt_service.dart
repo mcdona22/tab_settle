@@ -26,6 +26,13 @@ class ReceiptService {
     return id;
   }
 
+  Future<void> updateReceipt(ReceiptLineItem item, String receiptId) async {
+    await itemRepo.updateDocument(
+      item,
+      '${receiptRepo.collectionName}/$receiptId',
+    );
+  }
+
   Future<Receipt?> getReceipt(String id) async {
     return receiptRepo.fetchDocument(id);
   }
@@ -55,5 +62,12 @@ Stream<List<ReceiptLineItem>> receiptItems(Ref ref, String receiptId) {
   final receiptRepo = ref.watch(receiptRepositoryProvider);
   return itemsRepo.watchCollection(
     customPath: '${receiptRepo.collectionName}/$receiptId',
+  );
+}
+
+@riverpod
+String receiptId(Ref ref) {
+  throw UnimplementedError(
+    'receiptIdProvider must be overridden in a ProviderScope',
   );
 }

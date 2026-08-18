@@ -9,6 +9,7 @@ class UserHandleController extends _$UserHandleController with UiLoggy {
   @override
   build() {
     ref.onDispose(() => loggy.debug('disposing'));
+
     final faker = Faker();
     final adjective = faker.person.firstName();
     final name = faker.animal.name();

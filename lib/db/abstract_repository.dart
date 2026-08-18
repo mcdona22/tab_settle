@@ -56,6 +56,16 @@ abstract class AbstractRepository<T extends AbstractDocument> with UiLoggy {
     );
   }
 
+  Future<void> updateDocument(T document, String? customPath) async {
+    try {
+      final path = _qualifiedPath(customPath);
+      final docRef = collectionRef(path).doc(document.id);
+      await docRef.set(document);
+    } catch (ex) {
+      loggy.error('oops, $ex');
+    }
+  }
+
   CollectionReference<T> collectionRef([String? customPath]) {
     final path = customPath ?? _collectionName;
     return _firestore
