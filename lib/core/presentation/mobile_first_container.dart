@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 
 const msg =
     'The display is too small for the app to work.  You are most '
     'likely on a mobile device in landscape mode';
 
-class MobileFirstContainer extends StatelessWidget {
+class MobileFirstContainer extends StatelessWidget with UiLoggy {
   final Widget child;
   final double maxWidth;
   final double minWidth;
@@ -17,17 +18,19 @@ class MobileFirstContainer extends StatelessWidget {
     required this.child,
     this.maxWidth = mobileWidth,
     this.minWidth = 320.0,
-    this.minHeight = 480.0,
+    this.minHeight = 250.0,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
   });
 
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return LayoutBuilder(
       builder: (_, constraints) {
+        final effectiveHeight = constraints.maxHeight + keyboardHeight;
+
         final tooSmall =
-            constraints.maxWidth < minWidth ||
-            constraints.maxHeight < minHeight;
+            constraints.maxWidth < minWidth || effectiveHeight < minHeight;
         return tooSmall
             ? Padding(
                 padding: padding,

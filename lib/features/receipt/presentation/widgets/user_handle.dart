@@ -12,10 +12,13 @@ class UserHandle extends HookConsumerWidget with UiLoggy {
     final currentHandle = ref.watch(userHandleControllerProvider);
     final editMode = useState(false);
     final textController = useTextEditingController(text: currentHandle);
+    final focusNode = useFocusNode();
     useEffect(() {
-      textController.text = currentHandle;
+      if (!editMode.value) {
+        textController.text = currentHandle;
+      }
       return null;
-    }, [currentHandle]);
+    }, [currentHandle, editMode.value]);
 
     void handleSave() {
       final newHandle = textController.text.trim();
@@ -33,6 +36,7 @@ class UserHandle extends HookConsumerWidget with UiLoggy {
           Expanded(
             child: TextField(
               controller: textController,
+              focusNode: focusNode,
               // enabled: editMode.value,
               readOnly: !editMode.value,
               onSubmitted: (_) => handleSave(),
