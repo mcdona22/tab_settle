@@ -104,16 +104,9 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ActionButton(
-                    label: 'Lets Go',
+                    label: 'New Receipt',
                     onPressed: () =>
                         context.pushNamed(AppRoute.addReceipt.name),
-                  ),
-                  ActionButton(
-                    label: 'Good Receipt',
-                    onPressed: () => context.goNamed(
-                      AppRoute.receiptDashboard.name,
-                      pathParameters: {'id': 'yVtgwpXONAveEai03FWu'},
-                    ),
                   ),
                 ],
               ),

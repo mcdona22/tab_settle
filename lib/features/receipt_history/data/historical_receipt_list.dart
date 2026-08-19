@@ -9,6 +9,12 @@ import 'package:tab_settle/features/receipt_history/data/receipt_history_notifie
 class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
   const HistoricalReceiptList({super.key});
 
+  static const knownIds = [
+    'yVtgwpXONAveEai03FWu',
+    'ZvP0n32KHhGVoEemk4AC',
+    'PEWdVXRPpFfbvepAsXVT',
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final receipts = ref.watch(receiptHistoryProvider);
@@ -17,20 +23,36 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
 
     return SingleChildScrollView(
       child: Column(
-        children: receipts
-            .map(
-              (receipt) => SizedBox(
-                width: double.infinity,
-                child: ActionButton(
-                  label: receipt.title,
-                  onPressed: () => context.goNamed(
-                    AppRoute.receiptDashboard.name,
-                    pathParameters: {'id': receipt.id!},
-                  ),
+        children: [
+          ActionButton(
+            label: 'Clear Prefs',
+            onPressed: () async =>
+                ref.read(receiptHistoryProvider.notifier).clear(),
+          ),
+          Divider(),
+          ...knownIds.map(
+            (id) => ActionButton(
+              label: id.substring(0, 5),
+              onPressed: () => context.goNamed(
+                AppRoute.receiptDashboard.name,
+                pathParameters: {'id': id},
+              ),
+            ),
+          ),
+
+          ...receipts.map(
+            (receipt) => SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                child: Text(receipt.title),
+                onPressed: () => context.goNamed(
+                  AppRoute.receiptDashboard.name,
+                  pathParameters: {'id': receipt.id!},
                 ),
               ),
-            )
-            .toList(),
+            ),
+          ),
+        ],
       ),
     );
   }

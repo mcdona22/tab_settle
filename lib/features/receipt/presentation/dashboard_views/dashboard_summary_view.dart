@@ -20,7 +20,9 @@ class DashboardSummaryView extends HookConsumerWidget with UiLoggy {
       children: [
         AsyncValueWidget(
           value: receiptState,
-          data: (receipt) => ReceiptHeader(receipt: receipt),
+          data: (receipt) {
+            return ReceiptHeader(receipt: receipt);
+          },
         ),
         AsyncValueWidget(
           value: receiptItems,

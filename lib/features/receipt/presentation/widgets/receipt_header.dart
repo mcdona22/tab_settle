@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 
-class ReceiptHeader extends StatelessWidget {
+class ReceiptHeader extends StatelessWidget with UiLoggy {
   const ReceiptHeader({required this.receipt, super.key});
 
   final Receipt receipt;
@@ -10,6 +12,7 @@ class ReceiptHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    loggy.debug('In the header');
 
     return Card(
       child: Padding(
@@ -28,7 +31,7 @@ class ReceiptHeader extends StatelessWidget {
                 'Service: ${receipt.serviceCharge.toCurrency()}',
                 style: textTheme.titleSmall,
               ),
-              // Text(' Created: ${formatter().format(receipt.createdAt)}'),
+              Text(' Created: ${formatter().format(receipt.createdAt)}'),
             ],
           ),
         ),

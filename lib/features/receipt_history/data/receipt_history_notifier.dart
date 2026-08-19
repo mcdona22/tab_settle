@@ -23,20 +23,25 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
   }
 
   void addVisitedReceipt(Receipt receipt) {
-    final currentList = [...state];
     final exists = state.any((item) => item.id == receipt.id);
 
     if (exists) return;
+    final r = receipt.toFirestoreDocument();
 
     final newHistory = [receipt.copyWith(items: []), ...state];
     state = newHistory;
     _persist(newHistory);
   }
 
+  void clear() async {
+    await ref.read(sharedPreferencesProvider).clear();
+    loggy.debug('Shared prefs cleared');
+  }
+
   void _persist(List<Receipt> list) {
     loggy.debug('persisting history');
 
-    final prefs = ref.watch(sharedPreferencesProvider);
+    final prefs = ref.read(sharedPreferencesProvider);
     final rawJson = list
         .map((receipt) => jsonEncode(receipt.toJson()))
         .toList();
