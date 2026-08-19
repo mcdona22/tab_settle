@@ -30,11 +30,9 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
             UserHandle(),
 
             Expanded(
-              child: SingleChildScrollView(
-                child: IndexedStack(
-                  index: tabBarIndex.value,
-                  children: DashboardTab.values.map((tab) => tab.view).toList(),
-                ),
+              child: IndexedStack(
+                index: tabBarIndex.value,
+                children: DashboardTab.values.map((tab) => tab.view).toList(),
               ),
             ),
           ],
