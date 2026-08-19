@@ -5,6 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/presentation/dashboard_views/views.dart';
 import 'package:tab_settle/features/receipt/presentation/widgets/user_handle.dart';
 
@@ -13,6 +14,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final receiptId = ref.watch(receiptIdProvider);
     final tabBarIndex = useState<int>(0);
 
     return Scaffold(

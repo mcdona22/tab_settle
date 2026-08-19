@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/presentation/async_value_widget.dart';
+import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_history/data/receipt_history_notifier.dart';
 
 class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
@@ -9,19 +11,27 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(receiptHistoryProvider);
+    final receipts = ref.watch(receiptHistoryProvider);
+    loggy.debug('history');
+    loggy.debug(receipts);
 
-    return AsyncValueWidget(
-      value: history,
-      data: (receipts) {
-        return Text(
-          receipts.isEmpty
-              ? 'No History'
-              : '${receipts.length} '
-                    'historical receipts',
-        );
-      },
+    return SingleChildScrollView(
+      child: Column(
+        children: receipts
+            .map(
+              (receipt) => SizedBox(
+                width: double.infinity,
+                child: ActionButton(
+                  label: receipt.title,
+                  onPressed: () => context.goNamed(
+                    AppRoute.receiptDashboard.name,
+                    pathParameters: {'id': receipt.id!},
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
     );
-    return const Center(child: Text('Under Construction'));
   }
 }

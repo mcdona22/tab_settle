@@ -9,10 +9,10 @@ part 'receipt_history_notifier.g.dart';
 
 @riverpod
 class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
-  final _key = 'com.mcdona22.tab_settle.receipt_history';
+  static const _key = 'com.mcdona22.tab_settle.receipt_history';
 
   @override
-  FutureOr<List<Receipt>> build() async {
+  List<Receipt> build() {
     final prefs = ref.watch(sharedPreferencesProvider);
     final rawJson = prefs.getStringList(_key) ?? [];
     final currentHistory = rawJson
@@ -20,5 +20,27 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
         .toList();
     loggy.debug('Found history', currentHistory);
     return currentHistory;
+  }
+
+  void addVisitedReceipt(Receipt receipt) {
+    final currentList = [...state];
+    final exists = state.any((item) => item.id == receipt.id);
+
+    if (exists) return;
+
+    final newHistory = [receipt.copyWith(items: []), ...state];
+    state = newHistory;
+    _persist(newHistory);
+  }
+
+  void _persist(List<Receipt> list) {
+    loggy.debug('persisting history');
+
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final rawJson = list
+        .map((receipt) => jsonEncode(receipt.toJson()))
+        .toList();
+
+    prefs.setStringList(_key, rawJson).then((success) => null);
   }
 }
