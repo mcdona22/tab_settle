@@ -10,7 +10,6 @@ import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_p
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
-import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_page.dart';
 import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_shell.dart';
 
 enum AppRoute { home, addReceipt, checkReceipt, showReceipt, receiptDashboard }
