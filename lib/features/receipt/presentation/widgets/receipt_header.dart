@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt/data/receipt.dart';
 
 class ReceiptHeader extends StatelessWidget {
@@ -10,6 +11,7 @@ class ReceiptHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,6 +29,7 @@ class ReceiptHeader extends StatelessWidget {
                 'Service: ${receipt.serviceCharge.toCurrency()}',
                 style: textTheme.titleSmall,
               ),
+              Text(' Created: ${formatter().format(receipt.createdAt)}'),
             ],
           ),
         ),
