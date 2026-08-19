@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:tab_settle/core/routing/router.dart';
 
 const defaultToolbarHeight = 120.0;
@@ -58,3 +59,5 @@ BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(
     width: 1.0,
   ),
 );
+
+DateFormat formatter() => DateFormat('dd MMM yy @ HHmm');

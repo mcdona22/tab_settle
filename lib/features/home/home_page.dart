@@ -111,7 +111,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                       label: 'Good Receipt',
                       onPressed: () => context.goNamed(
                         AppRoute.receiptDashboard.name,
-                        pathParameters: {'id': 'yVtgwpXONAveEai03FWu'},
+                        pathParameters: {'id': 'ZvP0n32KHhGVoEemk4AC'},
                       ),
                     ),
                   ],

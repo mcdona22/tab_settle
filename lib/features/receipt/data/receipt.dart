@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/application/time_stamp_converter.dart';
 import 'package:tab_settle/db/abstract_document.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
@@ -17,6 +18,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     required String title,
     required double totalAmount,
     required double serviceCharge,
+    @TimeStampConverter() required DateTime createdAt,
     required List<ReceiptLineItem> items,
   }) = _Receipt;
 
@@ -31,6 +33,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     return Receipt(
       title: dto.merchantName,
       totalAmount: dto.totalAmount,
+      createdAt: DateTime.now(),
 
       serviceCharge: dto.serviceCharge,
       items: _reduceItems(dto.items),

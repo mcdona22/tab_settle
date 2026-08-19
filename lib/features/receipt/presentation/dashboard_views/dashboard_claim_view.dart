@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt/data/receipt_line_item_extensions.dart';
-import 'package:tab_settle/features/receipt/presentation/providers.dart';
 import 'package:tab_settle/features/receipt/presentation/widgets/receipt_items_list.dart';
 
 class DashboardClaimView extends HookConsumerWidget with UiLoggy {
@@ -15,21 +15,38 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptId = ref.watch(receiptIdProvider);
     final receiptItems = ref.watch(receiptItemsProvider(receiptId));
-    final userHandle = ref.watch(userHandleControllerProvider);
+    final userHandle = ref.watch(userHandleProvider);
+    final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
       child: AsyncValueWidget(
         value: receiptItems,
         data: (items) {
-          final claimed = items.claimedBy(userHandle);
-          final unClaimed = items.unclaimed;
+          final claimed = items
+              .claimedBy(userHandle.value!)
+              .sortedByPriceDescending();
+          final available = items.unclaimed.sortedByPriceDescending();
           return Column(
             children: [
-              ReceiptItemsList(items: unClaimed),
-              Divider(),
-              if (claimed.isNotEmpty)
-                Text('Claimed Items Total: ${claimed.totalPrice.toCurrency()}'),
-              if (claimed.isNotEmpty) ReceiptItemsList(items: claimed),
+              if (claimed.isNotEmpty) ...[
+                Text(
+                  'Your items total: ${claimed.totalPrice.toCurrency()}',
+                  style: textTheme.titleLarge,
+                ),
+                SizedBox(height: 12.0),
+              ],
+
+              if (available.isNotEmpty) ...[
+                Divider(),
+                Text('Available to claim'),
+                ReceiptItemsList(items: available),
+              ],
+
+              if (claimed.isNotEmpty) ...[
+                Divider(),
+                Text('Your claimed items'),
+                ReceiptItemsList(items: claimed),
+              ],
             ],
           );
         },
