@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
@@ -45,8 +44,6 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     final carouselController = useCarouselController();
     final currentPage = useState(0);
     final stepsCount = cards.length;
-    final handle = ref.watch(userHandleProvider);
-    loggy.debug('handle is ${handle.value}');
 
     useEffect(() {
       final timer = Timer.periodic(const Duration(milliseconds: 4500), (_) {
@@ -114,7 +111,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                       label: 'Good Receipt',
                       onPressed: () => context.goNamed(
                         AppRoute.receiptDashboard.name,
-                        pathParameters: {'id': 'yVtgwpXONAveEai03FWu'},
+                        pathParameters: {'id': 'ZvP0n32KHhGVoEemk4AC'},
                       ),
                     ),
                   ],
