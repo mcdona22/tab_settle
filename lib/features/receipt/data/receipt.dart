@@ -19,7 +19,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     required double totalAmount,
     required double serviceCharge,
     @TimeStampConverter() required DateTime createdAt,
-    required List<ReceiptLineItem> items,
+    @Default([]) List<ReceiptLineItem> items,
   }) = _Receipt;
 
   @override

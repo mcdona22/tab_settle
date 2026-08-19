@@ -5,10 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 part 'user_handle_notifier.g.dart';
 
-// @Riverpod(keepAlive: true)
-// Future<SharedPreferences> sharedPreferences(_) async =>
-//     await SharedPreferences.getInstance();
-
 @Riverpod(keepAlive: true)
 SharedPreferences sharedPreferences(Ref ref) {
   throw UnimplementedError(
@@ -18,18 +14,18 @@ SharedPreferences sharedPreferences(Ref ref) {
 
 @Riverpod(keepAlive: true)
 class UserHandleNotifier extends _$UserHandleNotifier with UiLoggy {
-  final _handleKey = 'com.mcdona22.tab_settle.user_handle';
+  final _key = 'com.mcdona22.tab_settle.user_handle';
 
   @override
   FutureOr<String> build() async {
     final prefs = ref.watch(sharedPreferencesProvider);
-    if (!prefs.containsKey(_handleKey)) {
+    if (!prefs.containsKey(_key)) {
       final faker = Faker();
       final createdName =
           '${faker.person.firstName()} the ${faker.animal.name()}';
-      prefs.setString(_handleKey, createdName);
+      prefs.setString(_key, createdName);
     }
-    final foundHandle = prefs.getString(_handleKey) ?? 'Set your name';
+    final foundHandle = prefs.getString(_key) ?? 'Set your name';
     loggy.debug('retrieved handle of "$foundHandle"');
 
     return foundHandle;
@@ -41,7 +37,7 @@ class UserHandleNotifier extends _$UserHandleNotifier with UiLoggy {
     if (handle.isEmpty) return;
 
     final prefs = ref.read(sharedPreferencesProvider);
-    prefs.setString(_handleKey, handle);
+    prefs.setString(_key, handle);
     state = AsyncData(handle);
   }
 }

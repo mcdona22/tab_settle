@@ -11,6 +11,7 @@ import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/home/image_card.dart';
+import 'package:tab_settle/features/receipt_history/data/historical_receipt_list.dart';
 
 final cards = [
   {
@@ -77,6 +78,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               spacing: 28.0,
               children: [
                 SloganWrap(slogans: slogans),
+                HistoricalReceiptList(),
                 SizedBox(
                   height: cardHeight,
                   child: LayoutBuilder(
