@@ -6,5 +6,16 @@ extension ReceiptLineItemListX on List<ReceiptLineItem> {
 
   List<ReceiptLineItem> get unclaimed => claimedBy('');
 
+  List<ReceiptLineItem> sortedByPriceDescending() =>
+      [...this]..sort(_compareReceiptItemByPriceDesc);
+
+  void sortByPriceDescending() {
+    sort(_compareReceiptItemByPriceDesc);
+  }
+
   double get totalPrice => fold(0.0, (sum, item) => sum + item.price);
+
+  int _compareReceiptItemByPriceDesc(ReceiptLineItem a, ReceiptLineItem b) {
+    return b.price.compareTo(a.price);
+  }
 }

@@ -22,8 +22,10 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
       child: AsyncValueWidget(
         value: receiptItems,
         data: (items) {
-          final claimed = items.claimedBy(userHandle.value!);
-          final available = items.unclaimed;
+          final claimed = items
+              .claimedBy(userHandle.value!)
+              .sortedByPriceDescending();
+          final available = items.unclaimed.sortedByPriceDescending();
           return Column(
             children: [
               if (claimed.isNotEmpty) ...[
