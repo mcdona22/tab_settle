@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
-import 'package:tab_settle/features/receipt/presentation/providers.dart';
 import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_controller.dart';
 
 class ClaimableItem extends HookConsumerWidget with UiLoggy {
@@ -15,12 +15,12 @@ class ClaimableItem extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colourScheme = Theme.of(context).colorScheme;
-    final handle = ref.watch(userHandleControllerProvider);
+    final handle = ref.watch(userHandleProvider);
 
     return ListTile(
       // minLeadingWidth: 100.0,
       onTap: () async {
-        final updatedClaimant = item.claimant.isEmpty ? handle : '';
+        final updatedClaimant = item.claimant.isEmpty ? handle.value! : '';
         final updatedItem = item.copyWith(claimant: updatedClaimant);
         await ref
             .read(receiptDashboardControllerProvider.notifier)

@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 
@@ -21,7 +23,11 @@ void main() async {
   logInfo('🚀 Launching Tab Settle');
 
   logInfo('Create Provider Container');
-  final container = ProviderContainer(overrides: []);
+  final prefs = await SharedPreferences.getInstance();
+  final container = ProviderContainer(
+    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+  );
+  await container.read(userHandleProvider);
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 
