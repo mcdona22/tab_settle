@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tab_settle/core/routing/router.dart';
 
-PreferredSizeWidget createAppBar(BuildContext context, Widget? header) {
+const defaultToolbarHeight = 120.0;
+
+PreferredSizeWidget createAppBar(
+  BuildContext context,
+  Widget? header, {
+  double toolbarHeight = defaultToolbarHeight,
+}) {
   final isHome = GoRouterState.of(context).matchedLocation == '/';
   return AppBar(
     title: header,
@@ -21,7 +27,7 @@ PreferredSizeWidget createAppBar(BuildContext context, Widget? header) {
             },
           )
         : null,
-    toolbarHeight: 120.0,
+    toolbarHeight: toolbarHeight,
     centerTitle: true,
     // elevation: 1.0,
     // primary: true,

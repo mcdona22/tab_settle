@@ -76,19 +76,6 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                           ref,
                           Receipt.fromDto(dtoState.value!),
                         ),
-                        //   onPressed: () async {
-                        //     final receipt = Receipt.fromDto(dtoState.value!);
-                        //     final controller = ref.read(
-                        //       scannedBillControllerProvider.notifier,
-                        //     );
-                        //     final id = await controller.saveReceipt(receipt);
-                        //     if (id.isNotEmpty && context.mounted) {
-                        //       context.pushNamed(
-                        //         AppRoute.receiptDashboard.name,
-                        //         pathParameters: {'id': id},
-                        //       );
-                        //     }
-                        //   },
                       ),
                     ),
                   ],
