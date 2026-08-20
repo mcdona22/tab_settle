@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:qr/qr.dart';
+
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
