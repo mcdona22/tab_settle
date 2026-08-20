@@ -4,9 +4,9 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item_extensions.dart';
-import 'package:tab_settle/features/receipt/presentation/widgets/receipt_items_list.dart';
+import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/receipt_items_list.dart';
 
 class DashboardClaimView extends HookConsumerWidget with UiLoggy {
   const DashboardClaimView({super.key});

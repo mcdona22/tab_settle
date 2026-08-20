@@ -4,7 +4,7 @@ import 'package:tab_settle/core/application/time_stamp_converter.dart';
 import 'package:tab_settle/db/abstract_document.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item.dart';
 
 part 'receipt.freezed.dart';
 part 'receipt.g.dart';

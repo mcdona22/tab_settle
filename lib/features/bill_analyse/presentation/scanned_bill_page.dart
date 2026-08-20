@@ -13,7 +13,7 @@ import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_controller.dart';
-import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
   const ScannedBillPage({required this.filePath, super.key});

@@ -1,7 +1,7 @@
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item.dart';
 
 part 'receipt_dashboard_controller.g.dart';
 

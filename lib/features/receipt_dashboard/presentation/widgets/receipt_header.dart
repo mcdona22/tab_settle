@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 class ReceiptHeader extends StatelessWidget with UiLoggy {
   const ReceiptHeader({required this.receipt, super.key});
@@ -12,7 +12,6 @@ class ReceiptHeader extends StatelessWidget with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    loggy.debug('In the header');
 
     return Card(
       child: Padding(
