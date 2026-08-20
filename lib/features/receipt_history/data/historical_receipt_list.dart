@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
@@ -37,16 +38,16 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
             //   onPressed: () async =>
             //       ref.read(receiptHistoryProvider.notifier).clear(),
             // ),
-            // Divider(),
-            // ...knownIds.map(
-            //   (id) => ActionButton(
-            //     label: id.substring(0, 5),
-            //     onPressed: () => context.goNamed(
-            //       AppRoute.receiptDashboard.name,
-            //       pathParameters: {'id': id},
-            //     ),
-            //   ),
-            // ),
+            Divider(),
+            ...knownIds.map(
+              (id) => ActionButton(
+                label: id.substring(0, 5),
+                onPressed: () => context.goNamed(
+                  AppRoute.receiptDashboard.name,
+                  pathParameters: {'id': id},
+                ),
+              ),
+            ),
             ...receipts.map(
               (receipt) => SizedBox(
                 width: double.infinity,
