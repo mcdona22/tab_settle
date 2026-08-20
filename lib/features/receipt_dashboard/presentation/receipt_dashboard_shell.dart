@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
-import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_page.dart';
+import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_page.dart';
 
 class ReceiptDashboardShell extends StatelessWidget {
   const ReceiptDashboardShell({required this.receiptId, super.key});

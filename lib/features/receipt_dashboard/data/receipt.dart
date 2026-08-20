@@ -4,7 +4,7 @@ import 'package:tab_settle/core/application/time_stamp_converter.dart';
 import 'package:tab_settle/db/abstract_document.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item.dart';
 
 part 'receipt.freezed.dart';
 part 'receipt.g.dart';
@@ -19,7 +19,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     required double totalAmount,
     required double serviceCharge,
     @TimeStampConverter() required DateTime createdAt,
-    required List<ReceiptLineItem> items,
+    @Default([]) List<ReceiptLineItem> items,
   }) = _Receipt;
 
   @override
@@ -33,8 +33,8 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     return Receipt(
       title: dto.merchantName,
       totalAmount: dto.totalAmount,
-      createdAt: DateTime.now(),
 
+      createdAt: DateTime.now(),
       serviceCharge: dto.serviceCharge,
       items: _reduceItems(dto.items),
     );

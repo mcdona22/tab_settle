@@ -3,9 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
-import 'package:tab_settle/features/receipt/application/receipt_service.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item_extensions.dart';
-import 'package:tab_settle/features/receipt/presentation/widgets/receipt_header.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/receipt_header.dart';
+
+import '../../application/receipt_service.dart';
 
 class DashboardSummaryView extends HookConsumerWidget with UiLoggy {
   const DashboardSummaryView({super.key});
@@ -20,7 +21,9 @@ class DashboardSummaryView extends HookConsumerWidget with UiLoggy {
       children: [
         AsyncValueWidget(
           value: receiptState,
-          data: (receipt) => ReceiptHeader(receipt: receipt),
+          data: (receipt) {
+            return ReceiptHeader(receipt: receipt);
+          },
         ),
         AsyncValueWidget(
           value: receiptItems,

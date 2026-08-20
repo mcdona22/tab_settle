@@ -10,7 +10,7 @@ import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
-import 'package:tab_settle/features/home/image_card.dart';
+import 'package:tab_settle/features/receipt_history/data/historical_receipt_list.dart';
 
 final cards = [
   {
@@ -70,54 +70,47 @@ class HomePage extends HookConsumerWidget with UiLoggy {
       ),
       body: SafeArea(
         child: MobileFirstContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 28.0,
-              children: [
-                SloganWrap(slogans: slogans),
-                SizedBox(
-                  height: cardHeight,
-                  child: LayoutBuilder(
-                    builder: (_, constraints) {
-                      final parentWidth = constraints.maxWidth;
-                      return CarouselView(
-                        controller: carouselController,
-                        itemExtent: parentWidth * .95,
-                        shrinkExtent: parentWidth * 0.8,
-                        children: cards
-                            .map(
-                              (card) => ImageCard(
-                                title: card['title']!,
-                                imageName: card['filename']!,
-                                description: card['description']!,
-                              ),
-                            )
-                            .toList(),
-                      );
-                    },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 28.0,
+            children: [
+              SloganWrap(slogans: slogans),
+              Expanded(child: const HistoricalReceiptList()),
+
+              // SizedBox(
+              //   height: cardHeight,
+              //   child: LayoutBuilder(
+              //     builder: (_, constraints) {
+              //       final parentWidth = constraints.maxWidth;
+              //       return CarouselView(
+              //         controller: carouselController,
+              //         itemExtent: parentWidth * .95,
+              //         shrinkExtent: parentWidth * 0.8,
+              //         children: cards
+              //             .map(
+              //               (card) => ImageCard(
+              //                 title: card['title']!,
+              //                 imageName: card['filename']!,
+              //                 description: card['description']!,
+              //               ),
+              //             )
+              //             .toList(),
+              //       );
+              //     },
+              //   ),
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ActionButton(
+                    label: 'New Receipt',
+                    onPressed: () =>
+                        context.pushNamed(AppRoute.addReceipt.name),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ActionButton(
-                      label: 'Lets Go',
-                      onPressed: () =>
-                          context.pushNamed(AppRoute.addReceipt.name),
-                    ),
-                    ActionButton(
-                      label: 'Good Receipt',
-                      onPressed: () => context.goNamed(
-                        AppRoute.receiptDashboard.name,
-                        pathParameters: {'id': 'ZvP0n32KHhGVoEemk4AC'},
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

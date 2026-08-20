@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/receipt/data/receipt.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
-class ReceiptHeader extends StatelessWidget {
+class ReceiptHeader extends StatelessWidget with UiLoggy {
   const ReceiptHeader({required this.receipt, super.key});
 
   final Receipt receipt;

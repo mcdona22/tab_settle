@@ -1,9 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/features/receipt/data/firebase_providers.dart';
-import 'package:tab_settle/features/receipt/data/receipt.dart';
-import 'package:tab_settle/features/receipt/data/receipt_item_repository.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
-import 'package:tab_settle/features/receipt/data/receipt_repository.dart';
+import 'package:tab_settle/features/receipt_history/data/receipt_history_notifier.dart';
+
+import '../data/firebase_providers.dart';
+import '../data/receipt.dart';
+import '../data/receipt_item_repository.dart';
+import '../data/receipt_line_item.dart';
+import '../data/receipt_repository.dart';
 
 part 'receipt_service.g.dart';
 
@@ -53,6 +55,7 @@ Future<Receipt> receiptHeader(Ref ref, String receiptId) async {
   if (receipt == null) {
     throw Exception('Receipt $receiptId not found.');
   }
+  ref.watch(receiptHistoryProvider.notifier).addVisitedReceipt(receipt);
   return receipt;
 }
 

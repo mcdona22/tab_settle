@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tab_settle/features/receipt/presentation/dashboard_views/dashboard_claim_view.dart';
 
+import 'dashboard_claim_view.dart';
 import 'dashboard_summary_view.dart';
 
 enum DashboardTab {

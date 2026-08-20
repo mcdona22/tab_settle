@@ -5,14 +5,17 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/receipt/presentation/dashboard_views/views.dart';
-import 'package:tab_settle/features/receipt/presentation/widgets/user_handle.dart';
+import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
+
+import 'dashboard_views/views.dart';
 
 class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
   const ReceiptDashboardPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final receiptId = ref.watch(receiptIdProvider);
     final tabBarIndex = useState<int>(0);
 
     return Scaffold(
@@ -28,11 +31,9 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
             UserHandle(),
 
             Expanded(
-              child: SingleChildScrollView(
-                child: IndexedStack(
-                  index: tabBarIndex.value,
-                  children: DashboardTab.values.map((tab) => tab.view).toList(),
-                ),
+              child: IndexedStack(
+                index: tabBarIndex.value,
+                children: DashboardTab.values.map((tab) => tab.view).toList(),
               ),
             ),
           ],

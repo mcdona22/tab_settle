@@ -1,4 +1,4 @@
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item.dart';
 
 extension ReceiptLineItemListX on List<ReceiptLineItem> {
   List<ReceiptLineItem> claimedBy(String claimant) =>

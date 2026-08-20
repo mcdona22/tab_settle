@@ -1,12 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:loggy/loggy.dart';
 
-class TimeStampConverter implements JsonConverter<DateTime, Object> {
+class TimeStampConverter
+    with UiLoggy
+    implements JsonConverter<DateTime, Object> {
   const TimeStampConverter();
 
   @override
   DateTime fromJson(Object json) {
-    if (json is Timestamp) return json.toDate();
+    loggy.debug('attempting to convert');
+    if (json is Timestamp) {
+      loggy.debug('timestamp date');
+      final when = json.toDate();
+      return when;
+    }
     if (json is String) return DateTime.parse(json);
     if (json is int) return DateTime.fromMillisecondsSinceEpoch(json);
 
@@ -14,5 +22,5 @@ class TimeStampConverter implements JsonConverter<DateTime, Object> {
   }
 
   @override
-  Object toJson(DateTime date) => Timestamp.fromDate(date);
+  Object toJson(DateTime date) => date.toIso8601String();
 }

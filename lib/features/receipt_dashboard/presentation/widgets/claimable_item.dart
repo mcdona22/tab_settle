@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
-import 'package:tab_settle/features/receipt/data/receipt_line_item.dart';
-import 'package:tab_settle/features/receipt/presentation/receipt_dashboard_controller.dart';
+import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_controller.dart';
 
 class ClaimableItem extends HookConsumerWidget with UiLoggy {
   const ClaimableItem({required this.item, required this.receiptId, super.key});
