@@ -6,7 +6,7 @@ import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
-import 'package:tab_settle/features/receipt_dashboard/presentation/dashboard_views/dashboard_summary_view.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/claimants/claimant_summary_line.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/receipt_items_list.dart';
 
 class DashboardClaimView extends HookConsumerWidget with UiLoggy {

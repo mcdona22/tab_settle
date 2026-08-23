@@ -9,11 +9,11 @@ extension ReceiptLineItemListX on List<ReceiptLineItem> {
   List<ReceiptLineItem> sortedByPriceDescending() =>
       [...this]..sort(_compareReceiptItemByPriceDesc);
 
-  Set<String> get claimants => this
+  List<String> get claimants => this
       .where((item) => item.claimant.isNotEmpty)
-      .toList()
       .map((item) => item.claimant)
-      .toSet();
+      .toSet()
+      .toList();
 
   void sortByPriceDescending() {
     sort(_compareReceiptItemByPriceDesc);
