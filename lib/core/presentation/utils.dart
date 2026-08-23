@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_settle/core/routing/router.dart';
 
-const defaultToolbarHeight = 120.0;
+const defaultToolbarHeight = 90.0;
 
 PreferredSizeWidget createAppBar(
   BuildContext context,

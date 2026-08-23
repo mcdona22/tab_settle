@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+
   logDebug('Firebase init...');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   logDebug('Firebase init... done');
@@ -46,7 +47,7 @@ class App extends HookConsumerWidget with UiLoggy {
       routerConfig: routerConfig,
       theme: ThemeData.from(colorScheme: lightColorScheme),
       darkTheme: ThemeData.from(colorScheme: darkColorScheme),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       // builder: (_, child) => Scaffold(
       //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
       // ),
