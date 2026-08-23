@@ -6,6 +6,7 @@ import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
+import 'package:tab_settle/features/receipt_dashboard/presentation/dashboard_views/dashboard_summary_view.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/receipt_items_list.dart';
 
 class DashboardClaimView extends HookConsumerWidget with UiLoggy {
@@ -28,6 +29,12 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
           final available = items.unclaimed.sortedByPriceDescending();
           return Column(
             children: [
+              if (claimed.isNotEmpty)
+                ClaimantSummaryLine(
+                  claimant: userHandle.requireValue,
+                  items: items,
+                  // claimantTitle: 'Your items',
+                ),
               if (claimed.isNotEmpty) ...[
                 Text(
                   'Your items total: ${claimed.totalPrice.toCurrency()}',
@@ -35,7 +42,6 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
                 ),
                 SizedBox(height: 12.0),
               ],
-
               if (available.isNotEmpty) ...[
                 Divider(),
                 Text('Available to claim'),
