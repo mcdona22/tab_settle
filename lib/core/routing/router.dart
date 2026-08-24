@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
@@ -37,8 +38,8 @@ final routerConfig = GoRouter(
       path: '/checkReceipt',
       name: AppRoute.checkReceipt.name,
       pageBuilder: (_, state) {
-        final filePath = state.extra as String?;
-        return MaterialPage(child: ScannedBillPage(filePath: filePath ?? ''));
+        final dto = state.extra as ReceiptDto;
+        return MaterialPage(child: ScannedBillPage(dto: dto));
       },
     ),
     GoRoute(
