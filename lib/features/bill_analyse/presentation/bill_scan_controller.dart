@@ -14,11 +14,13 @@ class BillScanController extends _$BillScanController with UiLoggy {
 
   Future<void> analyseImageReceipt(String assetPath) async {
     state = AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final newState = await AsyncValue.guard(() async {
       final geminiService = ref.read(geminiServiceProvider);
       final ReceiptDto dto = await geminiService.analyseAssetReceipt(assetPath);
       loggy.debug(dto);
       return dto;
     });
+
+    if (ref.mounted) state = newState;
   }
 }
