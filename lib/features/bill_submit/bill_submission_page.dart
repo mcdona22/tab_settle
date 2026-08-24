@@ -36,12 +36,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   ActionButton(
                     label: 'Find the Receipt',
                     onPressed: () async {
-                      bogusReceipt.value = false;
-                      fileName.value =
-                          await ref
-                              .read(billSubmissionControllerProvider.notifier)
-                              .captureImageFromGallery() ??
-                          '';
+                      await _onCaptureImage(bogusReceipt, fileName, ref);
                     },
                   ),
                   if (fileName.value.isNotEmpty)
@@ -87,6 +82,19 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
         ),
       ),
     );
+  }
+
+  Future<void> _onCaptureImage(
+    ValueNotifier<bool> bogusReceipt,
+    ValueNotifier<String> fileName,
+    WidgetRef ref,
+  ) async {
+    bogusReceipt.value = false;
+    fileName.value =
+        await ref
+            .read(billSubmissionControllerProvider.notifier)
+            .captureImageFromGallery() ??
+        '';
   }
 
   Future<void> _onAnalyseReceipt(

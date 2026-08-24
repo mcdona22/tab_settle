@@ -7,23 +7,20 @@ part 'scanned_bill_controller.g.dart';
 
 @Riverpod(keepAlive: false)
 class ScannedBillController extends _$ScannedBillController with UiLoggy {
-  ReceiptService get _receiptService => ref.read(receiptServiceProvider);
-
   @override
   FutureOr<void> build() {}
 
   Future<String> saveReceipt(Receipt receipt) async {
     state = const AsyncValue.loading();
+    final service = ref.read(receiptServiceProvider);
+    String? receiptId;
     final result = await AsyncValue.guard(() async {
-      return await _receiptService.saveReceipt(receipt);
+      receiptId = await service.saveReceipt(receipt);
     });
 
-    state = result.when(
-      data: (_) => const AsyncData(null),
-      error: (e, st) => AsyncValue.error(e, st),
-      loading: () => const AsyncValue.loading(),
-    );
+    if (ref.mounted) state = result;
+    if (result.hasError) throw result.error!;
 
-    return result.requireValue;
+    return receiptId!;
   }
 }

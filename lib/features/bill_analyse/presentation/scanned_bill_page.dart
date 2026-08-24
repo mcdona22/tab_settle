@@ -35,16 +35,6 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             spacing: colSpacingSmall,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Text(
-              //   dtoState.hasValue
-              //       ? dtoState.value!.isBogus
-              //             ? 'This receipt has no items - are you giving me a bogus '
-              //                   'receipt?'
-              //             : 'Please check the scan matches the receipt and correct '
-              //                   'before sharing'
-              //       : 'processing the receipt',
-              //   textAlign: TextAlign.center,
-              // ),
               Expanded(child: ReceiptDtoView(dto: dto)),
 
               Row(
@@ -55,7 +45,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                   ActionButton(
                     label: 'Next',
                     onPressed: () =>
-                        _onSavePressed(context, ref, Receipt.fromDto(dto)),
+                        _onNext(context, ref, Receipt.fromDto(dto)),
                   ),
                 ],
               ),
@@ -66,7 +56,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     );
   }
 
-  Future<void> _onSavePressed(
+  Future<void> _onNext(
     BuildContext context,
     WidgetRef ref,
     Receipt receipt,
@@ -74,9 +64,10 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     final receiptId = await ref
         .read(scannedBillControllerProvider.notifier)
         .saveReceipt(receipt);
+    loggy.debug('Saved the receipt $receiptId');
 
     if (!context.mounted) return;
-
+    loggy.debug('navigating');
     context.goNamed(
       AppRoute.receiptDashboard.name,
       pathParameters: {'id': receiptId},
