@@ -6,7 +6,6 @@ import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
-import 'package:tab_settle/features/receipt_dashboard/presentation/claimants/claimant_summary_line.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/receipt_items_list.dart';
 
 class DashboardClaimView extends HookConsumerWidget with UiLoggy {
@@ -28,17 +27,16 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
               .sortedByPriceDescending();
           final available = items.unclaimed.sortedByPriceDescending();
           return Column(
+            spacing: 12.0,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (claimed.isNotEmpty)
-                ClaimantSummaryLine(
-                  claimant: userHandle.requireValue,
-                  items: items,
-                  // claimantTitle: 'Your items',
-                ),
+              if (available.isEmpty)
+                _FeedbackText(text: 'no further items available'),
+
+              // if (claimed.isNotEmpty)
               if (claimed.isNotEmpty) ...[
-                Text(
-                  'Your items total: ${claimed.totalPrice.toCurrency()}',
-                  style: textTheme.titleLarge,
+                _FeedbackText(
+                  text: 'Your items total: ${claimed.totalPrice.toCurrency()}',
                 ),
                 SizedBox(height: 12.0),
               ],
@@ -57,6 +55,21 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
           );
         },
       ),
+    );
+  }
+}
+
+class _FeedbackText extends StatelessWidget {
+  const _FeedbackText({required this.text, super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleLarge,
     );
   }
 }
