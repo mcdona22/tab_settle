@@ -7,7 +7,7 @@ import 'package:tab_settle/features/gemini_service/stub/stub_gemini_service'
 part 'gemini_service_providers.g.dart';
 
 @riverpod
-bool useGeminiStub(Ref ref) => true;
+bool useGeminiStub(Ref ref) => false;
 
 @Riverpod(keepAlive: true)
 IGeminiService geminiService(Ref ref) => ref.watch(useGeminiStubProvider)
