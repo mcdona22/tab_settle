@@ -32,6 +32,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     }, const []);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: createAppBar(context, ScreenTitle(label: 'Process the Receipt')),
 
       body: MobileFirstContainer(
