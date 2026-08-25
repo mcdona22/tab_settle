@@ -10,21 +10,23 @@ import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/core/extensions/map.extensions.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
-import 'package:tab_settle/features/bill_analyse/service/generative_model_provider.dart';
+import 'package:tab_settle/features/gemini_service/generative_model_provider.dart';
 
-part 'gemini_service.g.dart';
+import 'i_gemini_service.dart';
 
-@Riverpod(keepAlive: true)
-GeminiService geminiService(Ref ref) => GeminiService(
-  ref: ref,
-  // handle: ref.watch(receiptGenerativeModelHandleProvider),
-);
+// part 'gemini_service.g.dart';
 
-class GeminiService with UiLoggy {
+// @Riverpod(keepAlive: true)
+// GeminiService geminiService(Ref ref) => GeminiService(
+//   ref: ref,
+//   // handle: ref.watch(receiptGenerativeModelHandleProvider),
+// );
+
+class GeminiService with UiLoggy implements IGeminiService {
   final Ref ref;
 
   // final GenerativeModelHandle handle;
-  static const Duration requestTimeout = Duration(milliseconds: 10000);
+  static const Duration requestTimeout = Duration(milliseconds: 30000);
 
   GeminiService({required this.ref});
 
@@ -34,7 +36,7 @@ class GeminiService with UiLoggy {
   //   await handle.model.generateContent([Content.text('ping')]);
   //   loggy.debug('warmup complete');
   // }
-
+  @override
   Future<ReceiptDto> analyseAssetReceipt(String path) async {
     final byteData = await XFile(path).readAsBytes();
     final bytes = byteData.buffer.asUint8List();
@@ -46,6 +48,7 @@ class GeminiService with UiLoggy {
     final model = modelBuilder(client);
 
     loggy.debug('analysing receipt');
+    loggy.debug('Using a timeout of ${requestTimeout.inSeconds} seconds');
     final completer = Completer<GenerateContentResponse>();
 
     model

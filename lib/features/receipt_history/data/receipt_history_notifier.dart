@@ -18,7 +18,6 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
     final currentHistory = rawJson
         .map((item) => Receipt.fromJson(jsonDecode(item)))
         .toList();
-    loggy.debug('Found history', currentHistory);
     return currentHistory;
   }
 
