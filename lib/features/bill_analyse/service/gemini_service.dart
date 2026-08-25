@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
@@ -13,61 +15,92 @@ import 'package:tab_settle/features/bill_analyse/service/generative_model_provid
 part 'gemini_service.g.dart';
 
 @Riverpod(keepAlive: true)
-GeminiService geminiService(Ref ref) =>
-    // GeminiService(model: ref.watch(receiptGenerativeModelProvider))..warmUp();
-    GeminiService(model: ref.watch(receiptGenerativeModelProvider));
+GeminiService geminiService(Ref ref) => GeminiService(
+  ref: ref,
+  // handle: ref.watch(receiptGenerativeModelHandleProvider),
+);
 
 class GeminiService with UiLoggy {
-  final GenerativeModel model;
+  final Ref ref;
 
-  GeminiService({required this.model});
+  // final GenerativeModelHandle handle;
+  static const Duration requestTimeout = Duration(milliseconds: 10000);
 
-  Future<void> warmUp() async {
-    // Ultra-lightweight call just to establish HTTP Keep-Alive
-    loggy.debug('Warming up the service');
-    await model.generateContent([Content.text('ping')]);
-    loggy.debug('warmup complete');
-  }
+  GeminiService({required this.ref});
 
-  // Future<ReceiptDto> analyseTextReceipt(String textReceipt) async {
-  //   loggy.debug('analysing using "$modelVersion"');
-  //   final prompt = _buildFastReceiptPrompt(textReceipt);
-  //   loggy.info('submitting request for');
-  //   final response = await model.generateContent([Content.text(prompt)]);
-  //   if (response.text == null || response.text!.isEmpty) {
-  //     loggy.error('Gemini error occurred');
-  //     throw Exception('Gemini Exception');
-  //   }
-  //   final json = jsonDecode(response.text!) as Map<String, dynamic>;
-  //   final dto = ReceiptDto.fromJson(json);
-  //   loggy.debug("Response found");
-  //   loggy.debug('DTO: \n$dto');
-  //   return dto;
+  // Future<void> warmUp() async {
+  //   // Ultra-lightweight call just to establish HTTP Keep-Alive
+  //   loggy.debug('Warming up the service');
+  //   await handle.model.generateContent([Content.text('ping')]);
+  //   loggy.debug('warmup complete');
   // }
 
   Future<ReceiptDto> analyseAssetReceipt(String path) async {
     final byteData = await XFile(path).readAsBytes();
-    // final ByteData byteData = await rootBundle.load(path);
     final bytes = byteData.buffer.asUint8List();
-    loggy.debug('sharpening image');
     final sharpened = _processReceiptForOcr(bytes);
     final String mimeType = 'image/jpeg';
+    final client = http.Client();
+    // final client = NonRetryingTimeoutClient(timeout: requestTimeout);
+    final modelBuilder = ref.read(receiptModelBuilderProvider);
+    final model = modelBuilder(client);
 
-    final response = await model.generateContent([
-      Content.multi([TextPart(prompt), DataPart(mimeType, sharpened)]),
-    ]);
+    loggy.debug('analysing receipt');
+    final completer = Completer<GenerateContentResponse>();
 
-    if (response.text == null || response.text!.isEmpty) {
-      loggy.error('Gemini error occurred processing image file');
-      throw Exception('Gemini Exception');
+    model
+        .generateContent([
+          Content.multi([TextPart(prompt), DataPart(mimeType, sharpened)]),
+        ])
+        .then((response) {
+          if (!completer.isCompleted) completer.complete(response);
+        })
+        .catchError((e, st) {
+          if (!completer.isCompleted) {
+            completer.completeError(e, st);
+          }
+        });
+
+    // final operation = CancelableOperation.fromFuture(
+    //   model.generateContent([
+    //     Content.multi([TextPart(prompt), DataPart(mimeType, sharpened)]),
+    //   ]),
+    // );
+
+    final timeoutCompleter = Completer<Never>();
+    final timer = Timer(requestTimeout, () {
+      loggy.error(
+        'Receipt service timed out after ${requestTimeout.inMilliseconds}',
+      );
+      // operation.cancel();
+      client.close();
+      if (!completer.isCompleted) {
+        completer.completeError(
+          TimeoutException('We havent completed before the timer expired'),
+        );
+      }
+    });
+
+    try {
+      // final response = await operation.valueOrCancellation();
+      final response = await completer.future;
+
+      if (response.text == null || response.text!.isEmpty) {
+        loggy.error('Receipt analysis error occurred processing image file');
+        throw Exception('Receipt Analysis');
+      }
+      final json = jsonDecode(response.text!) as Map<String, dynamic>;
+      loggy.debug(json.toPrettyJson);
+      final dto = ReceiptDto.fromJson(json);
+      loggy.debug("Response found");
+      loggy.debug('DTO: \n$dto');
+      return dto;
+    } on http.ClientException {
+      throw TimeoutException('Analysis took too long');
+    } finally {
+      timer.cancel();
+      client.close();
     }
-
-    final json = jsonDecode(response.text!) as Map<String, dynamic>;
-    loggy.debug(json.toPrettyJson);
-    final dto = ReceiptDto.fromJson(json);
-    loggy.debug("Response found");
-    loggy.debug('DTO: \n$dto');
-    return dto;
   }
 
   Uint8List _processReceiptForOcr(Uint8List rawBytes) {
@@ -75,7 +108,6 @@ class GeminiService with UiLoggy {
     if (decodedImage == null) {
       loggy.debug('Decoding failed - returning original image');
     }
-    loggy.debug('Image sharpened');
     final greyScale = img.grayscale(decodedImage!);
     final sharpened = img.adjustColor(greyScale, contrast: 1.5);
     return Uint8List.fromList(img.encodeJpg(sharpened, quality: 90));

@@ -3,30 +3,25 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
-import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
-import 'package:tab_settle/features/bill_analyse/application/bill_scan_provider.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_controller.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
-  const ScannedBillPage({required this.filePath, super.key});
+  const ScannedBillPage({required this.dto, super.key});
 
-  final String filePath;
+  final ReceiptDto dto;
 
   // final ReceiptDto dto;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dtoState = ref.watch(receiptScanProvider(filePath));
-    final controllerState = ref.watch(scannedBillControllerProvider);
-    // final file = useMemoized(() => File(filePath), [filePath]);
     return Scaffold(
       appBar: createAppBar(context, ScreenTitle(label: 'Process the Receipt')),
 
@@ -40,46 +35,20 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             spacing: colSpacingSmall,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                dtoState.hasValue
-                    ? dtoState.value!.isBogus
-                          ? 'This receipt has no items - are you giving me a bogus '
-                                'receipt?'
-                          : 'Please check the scan matches the receipt and correct '
-                                'before sharing'
-                    : 'processing the receipt',
-                textAlign: TextAlign.center,
+              Expanded(child: ReceiptDtoView(dto: dto)),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ActionButton(label: 'Edit'),
+
+                  ActionButton(
+                    label: 'Next',
+                    onPressed: () =>
+                        _onNext(context, ref, Receipt.fromDto(dto)),
+                  ),
+                ],
               ),
-
-              Expanded(
-                child: AsyncValueWidget<ReceiptDto>(
-                  value: dtoState,
-                  data: (dto) => dto.isBogus
-                      ? crossPlatformPathImage(filePath)!
-                      : ReceiptDtoView(dto: dto),
-                ),
-              ),
-
-              if (dtoState.value != null)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ActionButton(label: 'Edit'),
-
-                    AsyncValueWidget(
-                      value: controllerState,
-
-                      data: (_) => ActionButton(
-                        label: 'Next',
-                        onPressed: () => _onSavePressed(
-                          context,
-                          ref,
-                          Receipt.fromDto(dtoState.value!),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),
@@ -87,7 +56,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     );
   }
 
-  Future<void> _onSavePressed(
+  Future<void> _onNext(
     BuildContext context,
     WidgetRef ref,
     Receipt receipt,
@@ -95,9 +64,10 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     final receiptId = await ref
         .read(scannedBillControllerProvider.notifier)
         .saveReceipt(receipt);
+    loggy.debug('Saved the receipt $receiptId');
 
     if (!context.mounted) return;
-
+    loggy.debug('navigating');
     context.goNamed(
       AppRoute.receiptDashboard.name,
       pathParameters: {'id': receiptId},

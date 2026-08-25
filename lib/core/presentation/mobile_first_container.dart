@@ -18,7 +18,7 @@ class MobileFirstContainer extends StatelessWidget with UiLoggy {
     required this.child,
     this.maxWidth = mobileWidth,
     this.minWidth = 320.0,
-    this.minHeight = 250.0,
+    this.minHeight = 200.0,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
   });
 

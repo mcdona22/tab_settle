@@ -14,7 +14,7 @@ class DashboardShareView extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptId = ref.watch(receiptIdProvider);
     final receiptState = ref.watch(receiptHeaderProvider(receiptId));
-    final url = 'google.com';
+    final url = 'https://bill-share-mcdona22.web.app/#/receipt/$receiptId';
     final theme = Theme.of(context);
 
     void onSharePressed() {

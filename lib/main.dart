@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
+
   logDebug('Firebase init...');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   logDebug('Firebase init... done');

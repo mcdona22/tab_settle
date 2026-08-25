@@ -27,15 +27,19 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
               .sortedByPriceDescending();
           final available = items.unclaimed.sortedByPriceDescending();
           return Column(
+            spacing: 12.0,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (available.isEmpty)
+                _FeedbackText(text: 'no further items available'),
+
+              // if (claimed.isNotEmpty)
               if (claimed.isNotEmpty) ...[
-                Text(
-                  'Your items total: ${claimed.totalPrice.toCurrency()}',
-                  style: textTheme.titleLarge,
+                _FeedbackText(
+                  text: 'Your items total: ${claimed.totalPrice.toCurrency()}',
                 ),
                 SizedBox(height: 12.0),
               ],
-
               if (available.isNotEmpty) ...[
                 Divider(),
                 Text('Available to claim'),
@@ -51,6 +55,21 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
           );
         },
       ),
+    );
+  }
+}
+
+class _FeedbackText extends StatelessWidget {
+  const _FeedbackText({required this.text, super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleLarge,
     );
   }
 }
