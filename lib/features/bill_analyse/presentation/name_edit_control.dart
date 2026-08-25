@@ -24,10 +24,13 @@ class NameEditControl extends HookConsumerWidget with UiLoggy {
     }, [merchantName, editMode.value]);
 
     onSave() {
-      loggy.debug("title is '${textEditController.text}");
-      ref
-          .read(receiptDtoEditControllerProvider.notifier)
-          .saveName(textEditController.text);
+      if (textEditController.text.trim().isEmpty) {
+        loggy.debug("refusing edit because the new value is empty string");
+      } else {
+        ref
+            .read(receiptDtoEditControllerProvider.notifier)
+            .saveName(textEditController.text);
+      }
 
       editMode.value = false;
     }
