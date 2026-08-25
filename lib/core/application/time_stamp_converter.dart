@@ -9,7 +9,6 @@ class TimeStampConverter
 
   @override
   DateTime fromJson(Object json) {
-    loggy.debug('attempting to convert');
     if (json is Timestamp) {
       loggy.debug('timestamp date');
       final when = json.toDate();

@@ -58,7 +58,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                         ref.watch(receiptDtoEditControllerProvider)!,
                       );
                       loggy.debug('Saving receipt to db', receipt.title);
-                      // _onNext(context, ref, receipt);
+                      _onNext(context, ref, receipt);
                     },
                   ),
                 ],
