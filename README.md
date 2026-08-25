@@ -1,6 +1,12 @@
-# tab_settle
+# Bill Share App Notes
 
 ## Deployment
+
+````
+flutter build web --release
+firebase deploy --only hosting
+````
+
 ---
 
 ### Commands Look up

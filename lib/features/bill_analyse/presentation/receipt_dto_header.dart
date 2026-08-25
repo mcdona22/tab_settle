@@ -4,6 +4,7 @@ import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
+import 'package:tab_settle/features/bill_analyse/presentation/name_edit_control.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 
 class ReceiptDtoHeader extends StatelessWidget with UiLoggy {
@@ -24,11 +25,12 @@ class ReceiptDtoHeader extends StatelessWidget with UiLoggy {
             child: Column(
               spacing: colSpacingSmall,
               children: [
-                Text(
-                  dto.merchantName,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
+                // Text(
+                //   dto.merchantName,
+                //   style: Theme.of(context).textTheme.titleLarge,
+                //   textAlign: TextAlign.center,
+                // ),
+                NameEditControl(),
                 SummaryLine(
                   fixed: Text(
                     dto.totalAmount.toCurrency(),

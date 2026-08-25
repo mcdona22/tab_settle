@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/features/bill_analyse/service/receipt_schema_provider.dart';
+import 'package:tab_settle/features/gemini_service/receipt_schema_provider.dart';
 
 part 'generative_model_provider.g.dart';
 
