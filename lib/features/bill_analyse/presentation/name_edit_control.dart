@@ -25,7 +25,7 @@ class NameEditControl extends HookConsumerWidget with UiLoggy {
     }, [merchantName, editMode.value]);
 
     onSave() {
-      final feedbackService = ref.read(feedbackServiceProvider);
+      final feedbackService = ref.read(feedbackServiceProvider.notifier);
       if (textEditController.text.trim().isEmpty) {
         loggy.debug("refusing edit because the new value is empty string");
         feedbackService.showWarning(

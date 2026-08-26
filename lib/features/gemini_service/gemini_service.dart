@@ -14,14 +14,6 @@ import 'package:tab_settle/features/gemini_service/generative_model_provider.dar
 
 import 'i_gemini_service.dart';
 
-// part 'gemini_service.g.dart';
-
-// @Riverpod(keepAlive: true)
-// GeminiService geminiService(Ref ref) => GeminiService(
-//   ref: ref,
-//   // handle: ref.watch(receiptGenerativeModelHandleProvider),
-// );
-
 class GeminiService with UiLoggy implements IGeminiService {
   final Ref ref;
 

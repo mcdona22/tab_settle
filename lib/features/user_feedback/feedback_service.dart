@@ -6,13 +6,12 @@ import 'package:toastification/toastification.dart';
 
 part 'feedback_service.g.dart';
 
-@riverpod
-FeedbackService feedbackService(_) => FeedbackService();
-
-class FeedbackService with UiLoggy {
+@Riverpod(keepAlive: false)
+class FeedbackService extends _$FeedbackService with UiLoggy {
   static const showDuration = 3500;
 
-  const FeedbackService();
+  @override
+  void build() => null;
 
   BuildContext? get _context => rootNavigatorKey.currentContext;
 
@@ -70,12 +69,13 @@ class FeedbackService with UiLoggy {
       description: description != null
           ? Text(description, style: textTheme!.titleSmall)
           : null,
-      alignment: Alignment.topCenter,
+      alignment: Alignment.topLeft,
       autoCloseDuration: const Duration(milliseconds: showDuration),
       animationDuration: Duration(milliseconds: (showDuration / 4).toInt()),
-      // showProgressBar: true,
+      showProgressBar: true,
       dragToClose: true,
       backgroundColor: colorScheme!.surfaceContainerLow,
+      foregroundColor: colorScheme.onSurface,
       pauseOnHover: true,
       applyBlurEffect: true,
     );
