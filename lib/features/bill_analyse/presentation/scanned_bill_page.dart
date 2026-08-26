@@ -58,7 +58,6 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                       final receipt = Receipt.fromDto(
                         ref.watch(receiptDtoEditControllerProvider)!,
                       );
-                      loggy.debug('Saving receipt to db', receipt.title);
                       _onNext(context, ref, receipt);
                     },
                   ),
@@ -82,7 +81,6 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     loggy.debug('Saved the receipt $receiptId');
 
     if (!context.mounted) return;
-    loggy.debug('navigating');
     context.goNamed(
       AppRoute.receiptDashboard.name,
       pathParameters: {'id': receiptId},
