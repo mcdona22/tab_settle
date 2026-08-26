@@ -12,12 +12,14 @@ import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_shell.dart';
+import 'package:tab_settle/main.dart';
 
 enum AppRoute { home, addReceipt, checkReceipt, showReceipt, receiptDashboard }
 
 final routerConfig = GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
+  navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
       path: '/',

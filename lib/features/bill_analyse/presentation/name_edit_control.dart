@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/receiptdto_edit_controller.dart';
+import 'package:tab_settle/features/user_feedback/feedback_service.dart';
 
 class NameEditControl extends HookConsumerWidget with UiLoggy {
   const NameEditControl({super.key});
@@ -24,8 +25,13 @@ class NameEditControl extends HookConsumerWidget with UiLoggy {
     }, [merchantName, editMode.value]);
 
     onSave() {
+      final feedbackService = ref.read(feedbackServiceProvider);
       if (textEditController.text.trim().isEmpty) {
         loggy.debug("refusing edit because the new value is empty string");
+        feedbackService.showWarning(
+          'Title not saved',
+          description: 'The title cannot be blank',
+        );
       } else {
         ref
             .read(receiptDtoEditControllerProvider.notifier)
