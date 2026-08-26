@@ -8,8 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
+import 'package:toastification/toastification.dart';
 
 import 'firebase_options.dart';
+
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +31,7 @@ void main() async {
   final container = ProviderContainer(
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
-  await container.read(userHandleProvider);
+  container.read(userHandleProvider);
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 
@@ -40,17 +43,20 @@ class App extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      debugShowMaterialGrid: false,
-      title: 'Tab Settle',
-      debugShowCheckedModeBanner: true,
-      routerConfig: routerConfig,
-      theme: ThemeData.from(colorScheme: lightColorScheme),
-      darkTheme: ThemeData.from(colorScheme: darkColorScheme),
-      themeMode: ThemeMode.dark,
-      // builder: (_, child) => Scaffold(
-      //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
-      // ),
+    return ToastificationWrapper(
+      config: const ToastificationConfig(),
+      child: MaterialApp.router(
+        debugShowMaterialGrid: false,
+        title: 'Tab Settle',
+        debugShowCheckedModeBanner: true,
+        routerConfig: routerConfig,
+        theme: ThemeData.from(colorScheme: lightColorScheme),
+        darkTheme: ThemeData.from(colorScheme: darkColorScheme),
+        themeMode: ThemeMode.dark,
+        // builder: (_, child) => Scaffold(
+        //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
+        // ),
+      ),
     );
   }
 }
