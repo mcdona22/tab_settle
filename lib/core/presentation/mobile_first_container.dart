@@ -18,7 +18,7 @@ class MobileFirstContainer extends StatelessWidget with UiLoggy {
     required this.child,
     this.maxWidth = mobileWidth,
     this.minWidth = 320.0,
-    this.minHeight = 400.0,
+    this.minHeight = 500.0,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
   });
 
@@ -31,6 +31,7 @@ class MobileFirstContainer extends StatelessWidget with UiLoggy {
 
         final tooSmall =
             constraints.maxWidth < minWidth || effectiveHeight < minHeight;
+        if (tooSmall) loggy.debug('We are too small');
         return tooSmall
             ? Padding(
                 padding: padding,

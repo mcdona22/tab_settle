@@ -10,14 +10,22 @@ import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
+import 'package:tab_settle/features/intro_screens/introductory_page.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_shell.dart';
 import 'package:tab_settle/main.dart';
 
-enum AppRoute { home, addReceipt, checkReceipt, showReceipt, receiptDashboard }
+enum AppRoute {
+  home,
+  addReceipt,
+  checkReceipt,
+  showReceipt,
+  receiptDashboard,
+  introScreen,
+}
 
 final routerConfig = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/intro',
   debugLogDiagnostics: true,
   navigatorKey: rootNavigatorKey,
   routes: [
@@ -26,6 +34,19 @@ final routerConfig = GoRouter(
       name: AppRoute.home.name,
       pageBuilder: (_, state) =>
           MaterialPage(child: HomePage(), key: state.pageKey),
+    ),
+
+    GoRoute(
+      path: '/intro',
+      name: AppRoute.introScreen.name,
+      pageBuilder: (_, state) {
+        final receiptId = state.extra as String?;
+
+        return MaterialPage(
+          child: IntroductoryPage(receiptId: receiptId),
+          key: state.pageKey,
+        );
+      },
     ),
 
     GoRoute(
