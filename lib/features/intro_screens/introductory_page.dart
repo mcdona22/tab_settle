@@ -11,8 +11,8 @@ import 'package:tab_settle/features/intro_screens/intro_page_view.dart';
 
 import 'page_definition.dart';
 
-class IntroViewsPage extends HookConsumerWidget with UiLoggy {
-  const IntroViewsPage({super.key});
+class IntroductoryPage extends HookConsumerWidget with UiLoggy {
+  const IntroductoryPage({super.key});
 
   static const initialPage = 0;
   static const dotSize = 8.0;

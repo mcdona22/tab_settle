@@ -10,7 +10,7 @@ import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.
 import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
 import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
-import 'package:tab_settle/features/intro_screens/intro_views_page.dart';
+import 'package:tab_settle/features/intro_screens/introductory_page.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_shell.dart';
 import 'package:tab_settle/main.dart';
@@ -40,7 +40,7 @@ final routerConfig = GoRouter(
       path: '/intro',
       name: AppRoute.introScreen.name,
       pageBuilder: (_, state) =>
-          MaterialPage(child: IntroViewsPage(), key: state.pageKey),
+          MaterialPage(child: IntroductoryPage(), key: state.pageKey),
     ),
 
     GoRoute(
