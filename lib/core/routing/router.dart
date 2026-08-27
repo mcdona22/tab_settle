@@ -39,8 +39,14 @@ final routerConfig = GoRouter(
     GoRoute(
       path: '/intro',
       name: AppRoute.introScreen.name,
-      pageBuilder: (_, state) =>
-          MaterialPage(child: IntroductoryPage(), key: state.pageKey),
+      pageBuilder: (_, state) {
+        final receiptId = state.extra as String?;
+
+        return MaterialPage(
+          child: IntroductoryPage(receiptId: receiptId),
+          key: state.pageKey,
+        );
+      },
     ),
 
     GoRoute(
