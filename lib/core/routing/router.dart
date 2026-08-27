@@ -40,13 +40,23 @@ final routerConfig = GoRouter(
       path: '/intro',
       name: AppRoute.introScreen.name,
       pageBuilder: (_, state) {
-        final receiptId = state.extra as String?;
-
         return MaterialPage(
-          child: IntroductoryPage(receiptId: receiptId),
+          child: IntroductoryPage(receiptId: ''),
           key: state.pageKey,
         );
       },
+      routes: [
+        GoRoute(
+          path: ':id',
+          pageBuilder: (_, state) {
+            final id = state.pathParameters['id'] ?? '';
+            return MaterialPage(
+              child: IntroductoryPage(receiptId: id),
+              key: state.pageKey,
+            );
+          },
+        ),
+      ],
     ),
 
     GoRoute(

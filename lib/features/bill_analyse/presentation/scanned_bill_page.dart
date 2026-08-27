@@ -81,7 +81,10 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     loggy.debug('Saved the receipt $receiptId');
 
     if (!context.mounted) return;
-    context.goNamed(AppRoute.introScreen.name, extra: receiptId);
+    context.goNamed(
+      AppRoute.introScreen.name,
+      pathParameters: {'id': receiptId},
+    );
   }
 }
 

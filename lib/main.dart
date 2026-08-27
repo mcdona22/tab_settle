@@ -9,6 +9,7 @@ import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 import 'package:toastification/toastification.dart';
+import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 
 import 'firebase_options.dart';
 
@@ -17,7 +18,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
-
+  usePathUrlStrategy();
   logDebug('Firebase init...');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   logDebug('Firebase init... done');
@@ -52,7 +53,7 @@ class App extends HookConsumerWidget with UiLoggy {
         routerConfig: routerConfig,
         theme: ThemeData.from(colorScheme: lightColorScheme),
         darkTheme: ThemeData.from(colorScheme: darkColorScheme),
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         // builder: (_, child) => Scaffold(
         //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
         // ),

@@ -14,9 +14,9 @@ import 'package:tab_settle/features/intro_screens/intro_page_view.dart';
 import 'page_definition.dart';
 
 class IntroductoryPage extends HookConsumerWidget with UiLoggy {
-  const IntroductoryPage({this.receiptId, super.key});
+  const IntroductoryPage({required this.receiptId, super.key});
 
-  final String? receiptId;
+  final String receiptId;
 
   static const initialPage = 0;
   static const dotSize = 8.0;
@@ -28,22 +28,26 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
       // viewportFraction: 0.75,
     );
     final currentPage = useState(initialPage);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     List<IntroPageView> pageList = _createPageList(controller);
     loggy.debug('Current Page: ${currentPage.value}');
 
-    void _back() => controller.animateToPage(
-      currentPage.value - 1,
-      duration: Duration(milliseconds: 450),
-      curve: Curves.decelerate,
-    );
+    void _back() =>
+        controller.animateToPage(
+          currentPage.value - 1,
+          duration: Duration(milliseconds: 450),
+          curve: Curves.decelerate,
+        );
 
-    void _forward() => controller.animateToPage(
-      currentPage.value + 1,
-      duration: Duration(milliseconds: 450),
-      curve: Curves.decelerate,
-    );
+    void _forward() =>
+        controller.animateToPage(
+          currentPage.value + 1,
+          duration: Duration(milliseconds: 450),
+          curve: Curves.decelerate,
+        );
 
     loggy.debug('intro receipt id is ${receiptId ?? "Not provided"}');
     return Scaffold(
@@ -108,22 +112,23 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
   List<IntroPageView> _createPageList(PageController controller) {
     final pageList = pages
         .map(
-          (page) => IntroPageView(
+          (page) =>
+          IntroPageView(
             assetImageFileName: page.filename,
             text: page.text,
             controller: controller,
           ),
-        )
+    )
         .toList();
     return pageList;
   }
 
   void _navigate(BuildContext context) {
-    receiptId == null
+    receiptId.isEmpty
         ? context.goNamed(AppRoute.home.name)
         : context.goNamed(
-            AppRoute.receiptDashboard.name,
-            pathParameters: {'id': receiptId!},
-          );
+      AppRoute.receiptDashboard.name,
+      pathParameters: {'id': receiptId},
+    );
   }
 }

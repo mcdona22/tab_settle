@@ -14,10 +14,11 @@ class DashboardShareView extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptId = ref.watch(receiptIdProvider);
     final receiptState = ref.watch(receiptHeaderProvider(receiptId));
-    final url = 'https://bill-share-mcdona22.web.app/#/receipt/$receiptId';
+    final url = 'https://bill-share-mcdona22.web.app/receipt/$receiptId';
     final theme = Theme.of(context);
 
     void onSharePressed() {
+      loggy.debug('About to share $url');
       Share.share(
         'Join my receipt on Tabshare: $url',
         subject:
@@ -35,16 +36,11 @@ class DashboardShareView extends HookConsumerWidget with UiLoggy {
             data: (receipt) => ReceiptHeader(receipt: receipt),
           ),
           Text('Share with your peeps', style: theme.textTheme.displaySmall),
-          QRCode(
-            data: url,
-            size: 180.0,
-            padding: EdgeInsets.all(12.0),
-            backgroundColor: theme.colorScheme.secondaryFixedDim,
+          _buildQrCode(url, theme),
+          SelectableText(
+            'www.tabshare/receipt/$receiptId',
+            style: theme.textTheme.titleLarge,
           ),
-          // SelectableText(
-          //   'www.tabshare/receipt/$receiptId',
-          //   style: theme.textTheme.titleLarge,
-          // ),
           IconButton.filledTonal(
             onPressed: onSharePressed,
             icon: const Icon(Icons.share, size: 30.0),
@@ -53,6 +49,16 @@ class DashboardShareView extends HookConsumerWidget with UiLoggy {
           // child: const Text('Share Link')
         ],
       ),
+    );
+  }
+
+  QRCode _buildQrCode(String url, ThemeData theme) {
+    loggy.debug('building qr code.  URL is $url');
+    return QRCode(
+      data: url,
+      size: 180.0,
+      padding: EdgeInsets.all(12.0),
+      backgroundColor: theme.colorScheme.secondaryFixedDim,
     );
   }
 }

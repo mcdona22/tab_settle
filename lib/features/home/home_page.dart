@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -78,35 +79,14 @@ class HomePage extends HookConsumerWidget with UiLoggy {
               SloganWrap(slogans: slogans),
               Expanded(child: const HistoricalReceiptList()),
 
-              // SizedBox(
-              //   height: cardHeight,
-              //   child: LayoutBuilder(
-              //     builder: (_, constraints) {
-              //       final parentWidth = constraints.maxWidth;
-              //       return CarouselView(
-              //         controller: carouselController,
-              //         itemExtent: parentWidth * .95,
-              //         shrinkExtent: parentWidth * 0.8,
-              //         children: cards
-              //             .map(
-              //               (card) => ImageCard(
-              //                 title: card['title']!,
-              //                 imageName: card['filename']!,
-              //                 description: card['description']!,
-              //               ),
-              //             )
-              //             .toList(),
-              //       );
-              //     },
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ActionButton(
                     label: 'New Receipt',
-                    onPressed: () =>
-                        context.pushNamed(AppRoute.addReceipt.name),
+                    onPressed: kIsWeb
+                        ? null
+                        : () => context.pushNamed(AppRoute.addReceipt.name),
                   ),
                 ],
               ),
