@@ -49,7 +49,10 @@ class SimpleReceiptItemDisplay extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: Text(item.name)),
-        SizedBox(width: 80.0, child: Text(item.price.toCurrency())),
+        SizedBox(
+          width: 80.0,
+          child: Text(item.price.toCurrency(), textAlign: TextAlign.right),
+        ),
       ],
     );
   }
