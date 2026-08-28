@@ -2,14 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
+import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tab_settle/core/application/user_handle_notifier.dart';
+import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 import 'package:toastification/toastification.dart';
-import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 
 import 'firebase_options.dart';
 
@@ -53,7 +54,10 @@ class App extends HookConsumerWidget with UiLoggy {
         routerConfig: routerConfig,
         theme: ThemeData.from(colorScheme: lightColorScheme),
         darkTheme: ThemeData.from(colorScheme: darkColorScheme),
-        themeMode: ThemeMode.dark,
+        themeMode: ref.watch(preferenceProvider).useDarkMode
+            ? ThemeMode.dark
+            : ThemeMode.light,
+        themeAnimationDuration: Duration(milliseconds: 750),
         // builder: (_, child) => Scaffold(
         //   body: MobileFirstContainer(child: child ?? SizedBox.shrink()),
         // ),

@@ -69,8 +69,10 @@ class ToggleIntroScreensControl extends HookConsumerWidget with UiLoggy {
       children: [
         Switch(
           value: preferences.showIntro,
-          onChanged: (_) =>
-              ref.read(preferenceProvider.notifier).toggleShowIntroScreens(),
+          onChanged: (_) {
+            ref.read(preferenceProvider.notifier).toggleShowIntroScreens();
+            Navigator.pop(context);
+          },
         ),
         Text('Show Intro Screens'),
       ],
@@ -89,8 +91,11 @@ class ToggleThemeMode extends HookConsumerWidget with UiLoggy {
       children: [
         Switch(
           value: preferences.useDarkMode,
-          onChanged: (_) =>
-              ref.read(preferenceProvider.notifier).toggleDarkMode(),
+          onChanged: (_) {
+            ref.read(preferenceProvider.notifier).toggleDarkMode();
+
+            Navigator.pop(context);
+          },
         ),
         Text('Use Dark Theme'),
       ],
