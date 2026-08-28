@@ -9,6 +9,7 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
+import 'package:tab_settle/core/presentation/side_drawer.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_history/data/historical_receipt_list.dart';
@@ -69,6 +70,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
         context,
         ScreenTitle(label: 'Welcome to Tab Settle'),
       ),
+      endDrawer: SideDrawer(),
       body: SafeArea(
         child: MobileFirstContainer(
           child: Column(
