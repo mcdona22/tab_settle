@@ -51,6 +51,12 @@ class PreferenceNotifier extends _$PreferenceNotifier with UiLoggy {
   void toggleShowIntroScreens() =>
       _writePreferences(state.copyWith(showIntro: !state.showIntro));
 
+  void setHandle(String handle) {
+    if (handle.trim().isEmpty) loggy.debug('Not saving empty handle');
+
+    _writePreferences(state.copyWith(handle: handle));
+  }
+
   void _writePreferences(Preferences preference, {bool assignState = true}) {
     loggy.debug('writing preferences', preference);
     if (assignState) state = preference;
