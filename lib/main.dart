@@ -6,7 +6,6 @@ import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
@@ -33,7 +32,7 @@ void main() async {
   final container = ProviderContainer(
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
-  container.read(userHandleProvider);
+  container.read(sharedPreferencesProvider);
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 
