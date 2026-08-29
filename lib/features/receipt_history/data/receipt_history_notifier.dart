@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/core/preference_notifier.dart';
+import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 part 'receipt_history_notifier.g.dart';

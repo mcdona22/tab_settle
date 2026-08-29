@@ -22,7 +22,6 @@ enum AppRoute {
   showReceipt,
   receiptDashboard,
   introScreen,
-  introScreenWithParam,
 }
 
 final routerConfig = GoRouter(
@@ -41,7 +40,6 @@ final routerConfig = GoRouter(
       path: '/intro',
       name: AppRoute.introScreen.name,
       pageBuilder: (_, state) {
-        logDebug('router using the /intro path');
         return MaterialPage(
           child: IntroductoryPage(receiptId: ''),
           key: state.pageKey,
@@ -50,11 +48,8 @@ final routerConfig = GoRouter(
       routes: [
         GoRoute(
           path: ':id',
-          name: AppRoute.introScreenWithParam.name,
           pageBuilder: (_, state) {
             final id = state.pathParameters['id'] ?? '';
-            logDebug('the id found is "$id"');
-
             return MaterialPage(
               child: IntroductoryPage(receiptId: id),
               key: state.pageKey,

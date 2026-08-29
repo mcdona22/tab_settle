@@ -3,17 +3,10 @@ import 'dart:convert';
 import 'package:faker/faker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/preferences.dart';
 
 part 'preference_notifier.g.dart';
-
-@Riverpod(keepAlive: true)
-SharedPreferences sharedPreferences(Ref ref) {
-  throw UnimplementedError(
-    'sharedPreferencesProvider must be overridden in main',
-  );
-}
 
 @riverpod
 class PreferenceNotifier extends _$PreferenceNotifier with UiLoggy {

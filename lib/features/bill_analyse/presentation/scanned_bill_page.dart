@@ -82,7 +82,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
 
     if (!context.mounted) return;
     context.goNamed(
-      AppRoute.introScreenWithParam.name,
+      AppRoute.introScreen.name,
       pathParameters: {'id': receiptId},
     );
   }

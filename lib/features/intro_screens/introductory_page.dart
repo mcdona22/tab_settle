@@ -28,22 +28,26 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
       // viewportFraction: 0.75,
     );
     final currentPage = useState(initialPage);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     List<IntroPageView> pageList = _createPageList(controller);
     loggy.debug('Current Page: ${currentPage.value}');
 
-    void back() => controller.animateToPage(
-      currentPage.value - 1,
-      duration: Duration(milliseconds: 450),
-      curve: Curves.decelerate,
-    );
+    void _back() =>
+        controller.animateToPage(
+          currentPage.value - 1,
+          duration: Duration(milliseconds: 450),
+          curve: Curves.decelerate,
+        );
 
-    void forward() => controller.animateToPage(
-      currentPage.value + 1,
-      duration: Duration(milliseconds: 450),
-      curve: Curves.decelerate,
-    );
+    void _forward() =>
+        controller.animateToPage(
+          currentPage.value + 1,
+          duration: Duration(milliseconds: 450),
+          curve: Curves.decelerate,
+        );
 
     loggy.debug('intro receipt id is ${receiptId ?? "Not provided"}');
     return Scaffold(
@@ -84,7 +88,7 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
                 children: [
                   IconButton(
                     icon: Icon(Icons.arrow_left, size: 40.0),
-                    onPressed: currentPage.value == 0 ? null : back,
+                    onPressed: currentPage.value == 0 ? null : _back,
                   ),
                   ActionButton(
                     label: 'Skip',
@@ -94,7 +98,7 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
                     icon: Icon(Icons.arrow_right, size: 40.0),
                     onPressed: currentPage.value == pages.length - 1
                         ? null
-                        : forward,
+                        : _forward,
                   ),
                 ],
               ),
@@ -108,12 +112,13 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
   List<IntroPageView> _createPageList(PageController controller) {
     final pageList = pages
         .map(
-          (page) => IntroPageView(
+          (page) =>
+          IntroPageView(
             assetImageFileName: page.filename,
             text: page.text,
             controller: controller,
           ),
-        )
+    )
         .toList();
     return pageList;
   }
@@ -122,8 +127,8 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
     receiptId.isEmpty
         ? context.goNamed(AppRoute.home.name)
         : context.goNamed(
-            AppRoute.receiptDashboard.name,
-            pathParameters: {'id': receiptId},
-          );
+      AppRoute.receiptDashboard.name,
+      pathParameters: {'id': receiptId},
+    );
   }
 }
