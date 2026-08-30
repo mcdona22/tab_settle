@@ -51,7 +51,7 @@ class App extends HookConsumerWidget with UiLoggy {
         debugShowMaterialGrid: false,
         title: 'Tab Settle',
         debugShowCheckedModeBanner: true,
-        routerConfig: ref.watch(routerProvider),
+        routerConfig: routerConfig,
         theme: ThemeData.from(colorScheme: lightColorScheme),
         darkTheme: ThemeData.from(colorScheme: darkColorScheme),
         themeMode: ref.watch(preferenceProvider).useDarkMode

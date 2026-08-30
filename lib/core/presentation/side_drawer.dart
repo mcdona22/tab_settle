@@ -45,7 +45,7 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
             Expanded(
               child: ListView(
                 children: [
-                  DrawerItemWrapper(child: ToggleIntroScreensControl()),
+                  // DrawerItemWrapper(child: ToggleIntroScreensControl()),
                   DrawerItemWrapper(child: ToggleThemeMode()),
                 ],
               ),
@@ -70,8 +70,13 @@ class ToggleIntroScreensControl extends HookConsumerWidget with UiLoggy {
         Switch(
           value: preferences.showIntro,
           onChanged: (_) {
-            ref.read(preferenceProvider.notifier).toggleShowIntroScreens();
+            // 1. Pop the drawer immediately
             Navigator.pop(context);
+
+            // 2. Delay the provider modification until after the frame/animation completes
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ref.read(preferenceProvider.notifier).toggleShowIntroScreens();
+            });
           },
         ),
         Text('Show Intro Screens'),
