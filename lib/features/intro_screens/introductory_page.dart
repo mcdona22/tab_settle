@@ -99,7 +99,7 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
                     icon: Icon(Icons.arrow_left, size: 40.0),
                     onPressed: currentPage.value == 0 ? null : _back,
                   ),
-                  ActionButton(label: 'Skip', onPressed: navigate),
+                  ActionButton(label: 'Skip', onPressed: () => context.pop()),
                   IconButton(
                     icon: Icon(Icons.arrow_right, size: 40.0),
                     onPressed: currentPage.value == pages.length - 1
