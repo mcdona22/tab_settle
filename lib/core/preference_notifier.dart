@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:faker/faker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/core/preferences.dart';
+giimport 'package:tab_settle/core/preferences.dart';
 
 import 'shared_preferences_provider.dart';
 
