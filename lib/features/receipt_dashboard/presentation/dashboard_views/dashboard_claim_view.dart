@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
+import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt_line_item_extensions.dart';
@@ -15,16 +15,15 @@ class DashboardClaimView extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptId = ref.watch(receiptIdProvider);
     final receiptItems = ref.watch(receiptItemsProvider(receiptId));
-    final userHandle = ref.watch(userHandleProvider);
+    // final userHandle = ref.watch(userHandleProvider);
+    final userHandle = ref.watch(preferenceProvider).handle;
     final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
       child: AsyncValueWidget(
         value: receiptItems,
         data: (items) {
-          final claimed = items
-              .claimedBy(userHandle.value!)
-              .sortedByPriceDescending();
+          final claimed = items.claimedBy(userHandle).sortedByPriceDescending();
           final available = items.unclaimed.sortedByPriceDescending();
           return Column(
             spacing: 12.0,

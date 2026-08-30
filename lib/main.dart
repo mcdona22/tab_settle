@@ -6,9 +6,9 @@ import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tab_settle/core/application/user_handle_notifier.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
+import 'package:tab_settle/core/shared_preferences_provider.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 import 'package:toastification/toastification.dart';
 
@@ -33,7 +33,7 @@ void main() async {
   final container = ProviderContainer(
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
-  container.read(userHandleProvider);
+  container.read(sharedPreferencesProvider);
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 
@@ -51,7 +51,7 @@ class App extends HookConsumerWidget with UiLoggy {
         debugShowMaterialGrid: false,
         title: 'Tab Settle',
         debugShowCheckedModeBanner: true,
-        routerConfig: routerConfig,
+        routerConfig: ref.watch(routerProvider),
         theme: ThemeData.from(colorScheme: lightColorScheme),
         darkTheme: ThemeData.from(colorScheme: darkColorScheme),
         themeMode: ref.watch(preferenceProvider).useDarkMode
