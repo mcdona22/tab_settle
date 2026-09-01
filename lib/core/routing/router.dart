@@ -1,7 +1,3 @@
-// import 'package:canya_mobile/features/group/presentation/group_screen.dart';
-// import 'package:canya_mobile/features/landing/landing_screen.dart';
-// import 'package:canya_mobile/features/user/presentation/user_detail_screen.dart';
-// import 'package:canya_mobile/features/user/presentation/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loggy/loggy.dart';
@@ -24,8 +20,8 @@ enum AppRoute {
   introScreen,
 }
 
-final routerConfig = GoRouter(
-  initialLocation: '/intro',
+GoRouter routerConfig = GoRouter(
+  initialLocation: '/',
   debugLogDiagnostics: true,
   navigatorKey: rootNavigatorKey,
   routes: [

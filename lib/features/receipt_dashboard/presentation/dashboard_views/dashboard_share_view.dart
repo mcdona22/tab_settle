@@ -37,10 +37,7 @@ class DashboardShareView extends HookConsumerWidget with UiLoggy {
           ),
           Text('Share with your peeps', style: theme.textTheme.displaySmall),
           _buildQrCode(url, theme),
-          SelectableText(
-            'www.tabshare/receipt/$receiptId',
-            style: theme.textTheme.titleLarge,
-          ),
+ 
           IconButton.filledTonal(
             onPressed: onSharePressed,
             icon: const Icon(Icons.share, size: 30.0),

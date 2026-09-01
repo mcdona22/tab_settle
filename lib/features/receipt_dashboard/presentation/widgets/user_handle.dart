@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/core/application/user_handle_notifier.dart';
+import 'package:tab_settle/core/preference_notifier.dart';
 
 class UserHandle extends HookConsumerWidget with UiLoggy {
   const UserHandle({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentHandle = ref.watch(userHandleProvider).value ?? 'Not Set';
+    // final currentHandle = ref.watch(userHandleProvider).value ?? 'Not Set';
+    final handle = ref.watch(preferenceProvider).handle;
     final editMode = useState(false);
-    final textController = useTextEditingController(text: currentHandle);
+    final textController = useTextEditingController(text: handle);
     final focusNode = useFocusNode();
     useEffect(() {
       if (!editMode.value) {
-        textController.text = currentHandle;
+        textController.text = handle;
       }
       return null;
-    }, [currentHandle, editMode.value]);
+    }, [handle, editMode.value]);
 
     void handleSave() {
       final newHandle = textController.text.trim();
       loggy.debug('saving $newHandle');
       if (newHandle.isNotEmpty) {
-        ref.read(userHandleProvider.notifier).setHandle(newHandle);
-        // ref.read(userHandleControllerProvider.notifier).updateHandle(newHandle);
+        ref.read(preferenceProvider.notifier).setHandle(newHandle);
         editMode.value = false;
       }
     }

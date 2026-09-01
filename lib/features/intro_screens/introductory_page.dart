@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
+import 'package:tab_settle/core/presentation/side_drawer.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/intro_screens/intro_page_view.dart';
@@ -28,26 +30,33 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
       // viewportFraction: 0.75,
     );
     final currentPage = useState(initialPage);
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     List<IntroPageView> pageList = _createPageList(controller);
     loggy.debug('Current Page: ${currentPage.value}');
 
-    void _back() =>
-        controller.animateToPage(
-          currentPage.value - 1,
-          duration: Duration(milliseconds: 450),
-          curve: Curves.decelerate,
-        );
+    void _back() => controller.animateToPage(
+      currentPage.value - 1,
+      duration: Duration(milliseconds: 450),
+      curve: Curves.decelerate,
+    );
 
-    void _forward() =>
-        controller.animateToPage(
-          currentPage.value + 1,
-          duration: Duration(milliseconds: 450),
-          curve: Curves.decelerate,
-        );
+    void _forward() => controller.animateToPage(
+      currentPage.value + 1,
+      duration: Duration(milliseconds: 450),
+      curve: Curves.decelerate,
+    );
+
+    void navigate() {
+      // if we reached here we dont want to return
+      ref.read(preferenceProvider.notifier).toggleShowIntroScreens();
+      receiptId.isEmpty
+          ? context.goNamed(AppRoute.home.name)
+          : context.goNamed(
+              AppRoute.receiptDashboard.name,
+              pathParameters: {'id': receiptId},
+            );
+    }
 
     loggy.debug('intro receipt id is ${receiptId ?? "Not provided"}');
     return Scaffold(
@@ -90,10 +99,7 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
                     icon: Icon(Icons.arrow_left, size: 40.0),
                     onPressed: currentPage.value == 0 ? null : _back,
                   ),
-                  ActionButton(
-                    label: 'Skip',
-                    onPressed: () => _navigate(context),
-                  ),
+                  ActionButton(label: 'Skip', onPressed: () => context.pop()),
                   IconButton(
                     icon: Icon(Icons.arrow_right, size: 40.0),
                     onPressed: currentPage.value == pages.length - 1
@@ -106,29 +112,20 @@ class IntroductoryPage extends HookConsumerWidget with UiLoggy {
           ],
         ),
       ),
+      endDrawer: SideDrawer(),
     );
   }
 
   List<IntroPageView> _createPageList(PageController controller) {
     final pageList = pages
         .map(
-          (page) =>
-          IntroPageView(
+          (page) => IntroPageView(
             assetImageFileName: page.filename,
             text: page.text,
             controller: controller,
           ),
-    )
+        )
         .toList();
     return pageList;
-  }
-
-  void _navigate(BuildContext context) {
-    receiptId.isEmpty
-        ? context.goNamed(AppRoute.home.name)
-        : context.goNamed(
-      AppRoute.receiptDashboard.name,
-      pathParameters: {'id': receiptId},
-    );
   }
 }
