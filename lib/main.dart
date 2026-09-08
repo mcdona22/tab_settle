@@ -12,12 +12,15 @@ import 'package:tab_settle/core/shared_preferences_provider.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 import 'package:toastification/toastification.dart';
 
+import 'core/web_cache_stub.dart';
 import 'firebase_options.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  killServiceWorkers();
+
   Loggy.initLoggy(logPrinter: const PrettyDeveloperPrinter());
   usePathUrlStrategy();
   logDebug('Firebase init...');

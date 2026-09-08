@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
@@ -18,7 +19,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(billSubmissionControllerProvider);
-    final fileName = useState('');
+    final xFile = useState<XFile?>(null);
     final ValueNotifier<bool> bogusReceipt = useState(false);
 
     return Scaffold(
@@ -36,16 +37,16 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                   ActionButton(
                     label: 'Find the Receipt',
                     onPressed: () async {
-                      await _onCaptureImage(bogusReceipt, fileName, ref);
+                      await _onCaptureImage(bogusReceipt, xFile, ref);
                     },
                   ),
-                  if (fileName.value.isNotEmpty)
+                  if (xFile.value != null)
                     ActionButton(
                       label: 'Next',
                       onPressed: () => _onAnalyseReceipt(
                         context,
                         ref,
-                        fileName.value,
+                        xFile.value!,
                         bogusReceipt,
                       ),
                     ),
@@ -53,7 +54,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
               ),
             ),
 
-            if (fileName.value.isNotEmpty)
+            if (xFile.value != null)
               Expanded(
                 child: SizedBox(
                   height: 400.0,
@@ -62,7 +63,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
                     minScale: 1.0,
                     maxScale: 4.0,
                     clipBehavior: Clip.hardEdge,
-                    child: crossPlatformPathImage(fileName.value)!,
+                    child: crossPlatformPathImage(xFile.value)!,
                   ),
                 ),
               ),
@@ -86,28 +87,26 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
 
   Future<void> _onCaptureImage(
     ValueNotifier<bool> bogusReceipt,
-    ValueNotifier<String> fileName,
+    ValueNotifier<XFile?> xFile,
     WidgetRef ref,
   ) async {
     bogusReceipt.value = false;
-    fileName.value =
-        await ref
-            .read(billSubmissionControllerProvider.notifier)
-            .captureImageFromGallery() ??
-        '';
+    xFile.value = await ref
+        .read(billSubmissionControllerProvider.notifier)
+        .captureImageFromGallery();
   }
 
   Future<void> _onAnalyseReceipt(
     BuildContext context,
     WidgetRef ref,
-    String path,
+    XFile xFile,
     ValueNotifier<bool> bogus,
   ) async {
     loggy.debug('Analysing receipt image');
     try {
       final dto = await ref
           .read(billSubmissionControllerProvider.notifier)
-          .analyseImage(path);
+          .analyseImage(xFile);
       loggy.debug('dto is $dto');
       if (dto == null) {
         loggy.debug('null value for dto');
@@ -119,7 +118,7 @@ class BillSubmissionPage extends HookConsumerWidget with UiLoggy {
       if (!context.mounted) return;
       context.pushNamed(AppRoute.checkReceipt.name, extra: dto);
     } catch (e, st) {
-      loggy.error('failed to process image from $path');
+      loggy.error('failed to process image from ${xFile.name}');
       loggy.error(e, st);
     }
   }

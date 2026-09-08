@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -79,6 +78,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
             spacing: 28.0,
             children: [
               SloganWrap(slogans: slogans),
+
               Expanded(child: const HistoricalReceiptList()),
 
               Row(
@@ -86,9 +86,10 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                 children: [
                   ActionButton(
                     label: 'New Receipt',
-                    onPressed: kIsWeb
-                        ? null
-                        : () => context.pushNamed(AppRoute.addReceipt.name),
+                    // onPressed: kIsWeb || false
+                    //     ? null
+                    onPressed: () =>
+                        context.pushNamed(AppRoute.addReceipt.name),
                   ),
                 ],
               ),

@@ -3,7 +3,7 @@
 ## Deployment
 
 ````
-flutter build web --release
+flutter build web --release --pwa-strategy=none --dart-define=APP_VERSION="$(date +%s)"
 firebase deploy --only hosting
 ````
 

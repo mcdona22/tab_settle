@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
@@ -21,8 +22,11 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final receipts = ref.watch(receiptHistoryProvider);
-    loggy.debug('history');
-    loggy.debug(receipts);
+    final handle = ref.watch(preferenceProvider).handle;
+
+    loggy.debug('handle "$handle"');
+
+    final storedIds = handle == 'He Dad' ? knownIds : [];
 
     return SingleChildScrollView(
       child: Padding(
@@ -40,7 +44,7 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
             //       ref.read(receiptHistoryProvider.notifier).clear(),
             // ),
             Divider(),
-            ...knownIds.map(
+            ...storedIds.map(
               (id) => ActionButton(
                 label: id.substring(0, 5),
                 onPressed: () => context.goNamed(

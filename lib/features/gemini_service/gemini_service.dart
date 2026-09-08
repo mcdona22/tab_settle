@@ -29,9 +29,10 @@ class GeminiService with UiLoggy implements IGeminiService {
   //   loggy.debug('warmup complete');
   // }
   @override
-  Future<ReceiptDto> analyseAssetReceipt(String path) async {
-    final byteData = await XFile(path).readAsBytes();
-    final bytes = byteData.buffer.asUint8List();
+  Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
+    final fileName = xFile.name;
+    final bytes = await xFile.readAsBytes();
+    // final bytes = byteData.buffer.asUint8List();
     final sharpened = _processReceiptForOcr(bytes);
     final String mimeType = 'image/jpeg';
     final client = http.Client();

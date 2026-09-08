@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/app_config.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
@@ -59,10 +60,26 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                 ],
               ),
             ),
+            _VersionEasterEgg(),
           ],
         ),
       ),
     );
+  }
+}
+
+class _VersionEasterEgg extends HookConsumerWidget with UiLoggy {
+  const _VersionEasterEgg({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final handle = ref.watch(preferenceProvider).handle;
+    return handle != 'He Dad'
+        ? SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Text('Version: ${AppConfig.version}'),
+          );
   }
 }
 
