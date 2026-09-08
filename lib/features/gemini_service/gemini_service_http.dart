@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
@@ -14,23 +14,29 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
     : _client = client ?? http.Client();
 
   @override
-  Future<ReceiptDto> analyseAssetReceipt(String path) async {
-    loggy.debug('analysing receipt via http for asset: $path');
+  Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
+    final fileName = xFile.name;
+    loggy.debug('analysing receipt via http for asset: $fileName');
+    loggy.debug('Using the endpoint $baseUrl');
     final uri = Uri.parse('$baseUrl/receipt/analyse');
     final request = http.MultipartRequest('POST', uri);
-    final file = File(path);
-    if (!await file.exists()) {
-      loggy.error('File does not exist at path: $path');
-      throw FileSystemException('Receipt image file not found', path);
-    }
+    // final file = File(path);
+    // if (!await file.exists()) {
+    //   loggy.error('File does not exist at path: $fileName');
+    //   throw FileSystemException('Receipt image file not found', fileName);
+    // } else {
+    //   loggy.debug('File "$path" is not reachable');
+    // }
 
     try {
-      final filename = file.path.split(Platform.pathSeparator).last;
-      final extension = filename.split('.').last.toLowerCase();
-      final multipartFile = await http.MultipartFile.fromPath(
+      final bytes = await xFile.readAsBytes();
+
+      // final filename = fileName.split(Platform.pathSeparator).last;
+      final extension = fileName.split('.').last.toLowerCase();
+      final multipartFile = await http.MultipartFile.fromBytes(
         'file',
-        file.path,
-        filename: filename,
+        bytes,
+        filename: fileName,
         contentType: http.MediaType('image', _getMediaTypeSubtype(extension)),
       );
 

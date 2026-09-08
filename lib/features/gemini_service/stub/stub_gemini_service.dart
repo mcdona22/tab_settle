@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/stub/stub_receipt_dtos.dart';
@@ -11,7 +12,7 @@ class StubGeminiService with UiLoggy implements IGeminiService {
   final Random _random = Random();
 
   @override
-  Future<ReceiptDto> analyseAssetReceipt(String path) async {
+  Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
     loggy.debug('Using StubGeminiService - returning canned DTO');
 
     // Simulate a slight network delay (300ms) for realistic UX testing

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_settle/core/routing/router.dart';
 
@@ -43,12 +44,12 @@ PreferredSizeWidget createAppBar(
   );
 }
 
-Image? crossPlatformPathImage(String path, {BoxFit fit = BoxFit.contain}) {
-  if (path.isEmpty) return null;
+Image? crossPlatformPathImage(XFile? xFile, {BoxFit fit = BoxFit.contain}) {
+  if (xFile == null) return null;
 
   return kIsWeb
-      ? Image.network(path, fit: fit)
-      : Image.file(File(path), fit: fit);
+      ? Image.network(xFile.path, fit: fit)
+      : Image.file(File(xFile.path), fit: fit);
 }
 
 BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(

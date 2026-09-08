@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
@@ -12,11 +13,11 @@ class BillScanController extends _$BillScanController with UiLoggy {
     return null;
   }
 
-  Future<void> analyseImageReceipt(String assetPath) async {
+  Future<void> analyseImageReceipt(XFile xFile) async {
     state = AsyncValue.loading();
     final newState = await AsyncValue.guard(() async {
       final geminiService = ref.read(geminiServiceProvider);
-      final ReceiptDto dto = await geminiService.analyseAssetReceipt(assetPath);
+      final ReceiptDto dto = await geminiService.analyseAssetReceipt(xFile);
       loggy.debug(dto);
       return dto;
     });
