@@ -60,14 +60,26 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text('Version: ${AppConfig.version}'),
-            ),
+            _VersionEasterEgg(),
           ],
         ),
       ),
     );
+  }
+}
+
+class _VersionEasterEgg extends HookConsumerWidget with UiLoggy {
+  const _VersionEasterEgg({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final handle = ref.watch(preferenceProvider).handle;
+    return handle != 'He Dad'
+        ? SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Text('Version: ${AppConfig.version}'),
+          );
   }
 }
 
