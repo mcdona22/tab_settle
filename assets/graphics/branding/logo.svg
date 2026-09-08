@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Rounded Background Container -->
+  <rect width="512" height="512" rx="112" fill="#0D5C5B"/>
+  
+  <!-- Stylized Monogram TS / Receipt Tab Mark -->
+  <g fill="#FFFFFF">
+    <!-- Top Bar of 'T' / Tab Header -->
+    <path d="M 128 140 C 128 126.7 138.7 116 152 116 L 360 116 C 373.3 116 384 126.7 384 140 L 384 172 C 384 185.3 373.3 196 360 196 L 312 196 L 312 236 L 360 236 C 373.3 236 384 246.7 384 260 L 384 356 C 384 382.5 362.5 404 336 404 L 176 404 C 149.5 404 128 382.5 128 356 L 128 324 C 128 310.7 138.7 300 152 300 L 280 300 C 293.3 300 304 310.7 304 324 L 304 340 L 320 340 C 328.8 340 336 332.8 336 324 L 336 284 L 200 284 C 173.5 284 152 262.5 152 236 L 152 196 L 152 140 Z"/>
+    
+    <!-- Central S-Curve Accent / Cut -->
+    <path d="M 200 196 L 264 196 L 264 300 L 200 300 Z" fill="#0D5C5B"/>
+    <path d="M 216 172 L 296 172 C 304.8 172 312 179.2 312 188 L 312 212 L 216 212 Z" fill="#00D283"/>
+  </g>
+</svg>
