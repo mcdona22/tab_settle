@@ -22,7 +22,7 @@ final pages = [
 
   IntroPageData(
     filename: 'check.webp',
-    title: 'Check My Conversion',
+    title: 'Check My Work',
     text: [
       "I'm usually pretty accurate with this but sometimes its a challenge.  "
           "Some receipts are damaged. On occasions the merchant will  "

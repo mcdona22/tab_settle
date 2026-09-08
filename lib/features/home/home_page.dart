@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/app_config.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
@@ -67,7 +68,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     return Scaffold(
       appBar: createAppBar(
         context,
-        ScreenTitle(label: 'Welcome to Tab Settle'),
+        ScreenTitle(label: 'Welcome to ${AppConfig.appTitle}'),
       ),
       endDrawer: SideDrawer(),
       body: SafeArea(

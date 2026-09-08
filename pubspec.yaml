@@ -1,12 +1,14 @@
 name: tab_settle
-description: "A new Flutter project initialized with custom starter architecture."
+description: "An app to let you settle items on a receipt quickly and 
+accurately"
 publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.12.0
-
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.27.0'
+  
 dependencies:
   flutter:
     sdk: flutter
@@ -47,6 +49,7 @@ dependencies:
   toastification: ^3.2.0
   smooth_page_indicator: ^3.0.0
   web: ^1.1.1
+  flutter_launcher_icons: ^0.14.4
 
 
 
