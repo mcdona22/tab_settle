@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
@@ -8,6 +9,7 @@ import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/side_drawer.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
+import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/home/receipt_capture_controller.dart';
 import 'package:tab_settle/features/home/receipt_capture_view.dart';
 import 'package:tab_settle/features/receipt_history/data/historical_receipt_list.dart';
@@ -43,6 +45,13 @@ class HomePage extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receiptCaptureController =
         ref.watch(receiptCaptureControllerProvider);
+
+    ref.listen(receiptCaptureControllerProvider, (prev, next) {
+      next.whenData((xFile) {
+        loggy.debug('The file has changed: ${xFile?.name ?? "Its empty"}');
+        context.pushNamed(AppRoute.reviewReceipt.name, extra: xFile);
+      });
+    });
     // final carouselController = useCarouselController();
     // final currentPage = useState(0);
     // final stepsCount = cards.length;
