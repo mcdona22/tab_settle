@@ -3,9 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
 class ActionButton extends HookConsumerWidget with UiLoggy {
-  const ActionButton({required this.label, this.onPressed, super.key});
+  const ActionButton(
+      {required this.label, this.onPressed, this.icon, super.key});
 
   final String label;
+  final Icon? icon;
   final VoidCallback? onPressed;
 
   @override
@@ -14,11 +16,17 @@ class ActionButton extends HookConsumerWidget with UiLoggy {
 
     return SizedBox(
       width: buttonWidth,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        // icon: Icon(Icons.receipt_long),
-        child: Text(label, textAlign: TextAlign.center),
-      ),
+      child: icon == null
+          ? ElevatedButton(
+              onPressed: onPressed,
+              // icon: Icon(Icons.receipt_long),
+              child: Text(label, textAlign: TextAlign.center),
+            )
+          : ElevatedButton.icon(
+              onPressed: onPressed,
+              icon: icon!,
+              label: Text(label, textAlign: TextAlign.center),
+            ),
     );
   }
 }
