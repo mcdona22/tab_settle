@@ -33,7 +33,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: createAppBar(context, ScreenTitle(label: 'Process the Receipt')),
+      appBar: createAppBar(context, ScreenTitle(label: 'Final Check')),
 
       body: MobileFirstContainer(
         child: Padding(
