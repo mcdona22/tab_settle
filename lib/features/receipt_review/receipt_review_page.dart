@@ -56,7 +56,7 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
             // ),
 
             Expanded(
-              child: SizedBox(
+              child: Container(
                 height: 400.0,
                 width: double.infinity,
                 child: InteractiveViewer(

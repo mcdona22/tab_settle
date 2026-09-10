@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/core/shared_preferences_provider.dart';
+import 'package:tab_settle/core/providers/shared_preferences_provider.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 part 'receipt_history_notifier.g.dart';
@@ -15,9 +15,8 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
   List<Receipt> build() {
     final prefs = ref.watch(sharedPreferencesProvider);
     final rawJson = prefs.getStringList(_key) ?? [];
-    final currentHistory = rawJson
-        .map((item) => Receipt.fromJson(jsonDecode(item)))
-        .toList();
+    final currentHistory =
+        rawJson.map((item) => Receipt.fromJson(jsonDecode(item))).toList();
     return currentHistory;
   }
 
@@ -41,9 +40,8 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
     loggy.debug('persisting history');
 
     final prefs = ref.read(sharedPreferencesProvider);
-    final rawJson = list
-        .map((receipt) => jsonEncode(receipt.toJson()))
-        .toList();
+    final rawJson =
+        list.map((receipt) => jsonEncode(receipt.toJson())).toList();
 
     prefs.setStringList(_key, rawJson).then((success) => null);
   }

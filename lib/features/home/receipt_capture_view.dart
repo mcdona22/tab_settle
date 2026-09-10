@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
+import 'package:tab_settle/core/providers/camera_availability_provider.dart';
 import 'package:tab_settle/features/home/receipt_capture_controller.dart';
 
 class ReceiptCaptureView extends HookConsumerWidget with UiLoggy {
@@ -10,6 +11,8 @@ class ReceiptCaptureView extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final hasCamera = ref.watch(hasCameraProvider);
+
     final controller = ref.read(receiptCaptureControllerProvider.notifier);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -19,11 +22,12 @@ class ReceiptCaptureView extends HookConsumerWidget with UiLoggy {
           icon: Icon(Icons.photo_library),
           onPressed: () => controller.captureImage(ImageSource.gallery),
         ),
-        ActionButton(
-          label: 'Snap Receipt',
-          icon: Icon(Icons.camera),
-          onPressed: () => controller.captureImage(ImageSource.camera),
-        ),
+        if (hasCamera)
+          ActionButton(
+            label: 'Snap Receipt',
+            icon: Icon(Icons.camera),
+            onPressed: () => controller.captureImage(ImageSource.camera),
+          ),
       ],
     );
   }

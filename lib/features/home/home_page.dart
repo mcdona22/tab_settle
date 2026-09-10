@@ -14,30 +14,6 @@ import 'package:tab_settle/features/home/receipt_capture_controller.dart';
 import 'package:tab_settle/features/home/receipt_capture_view.dart';
 import 'package:tab_settle/features/receipt_history/data/historical_receipt_list.dart';
 
-// final cards = [
-//   {
-//     'filename': 'scan.webp',
-//     'title': 'Scan Receipt',
-//     'description':
-//         'Take a '
-//         'pic of the receipt and let me break it down for you',
-//   },
-//   {
-//     'filename': 'check.webp',
-//     'title': 'Check and Correct',
-//     'description':
-//         "i'm usually pretty good at this but check "
-//         'that its right and correct if required',
-//   },
-//   {
-//     'filename': 'share-bill.webp',
-//     'title': 'Share the Items',
-//     'description':
-//         'Share  it with '
-//         'your friends to claim their items on the bill',
-//   },
-// ];
-
 class HomePage extends HookConsumerWidget with UiLoggy {
   const HomePage({super.key});
 
@@ -49,29 +25,11 @@ class HomePage extends HookConsumerWidget with UiLoggy {
     ref.listen(receiptCaptureControllerProvider, (prev, next) {
       next.whenData((xFile) {
         loggy.debug('The file has changed: ${xFile?.name ?? "Its empty"}');
-        context.pushNamed(AppRoute.reviewReceipt.name, extra: xFile);
+        if (xFile != null) {
+          context.pushNamed(AppRoute.reviewReceipt.name, extra: xFile);
+        }
       });
     });
-    // final carouselController = useCarouselController();
-    // final currentPage = useState(0);
-    // final stepsCount = cards.length;
-    //
-    // useEffect(() {
-    //   final timer = Timer.periodic(const Duration(milliseconds: 4500), (_) {
-    //     if (!carouselController.hasClients) return;
-    //     final nextIndex = (currentPage.value + 1) % stepsCount;
-    //     currentPage.value = nextIndex;
-    //     carouselController.animateToItem(
-    //       curve: Curves.easeInOutQuad,
-    //       nextIndex,
-    //       duration: const Duration(milliseconds: 1000),
-    //     );
-    //   });
-    //
-    //   return () => timer.cancel();
-    // }, [carouselController, stepsCount]);
-    //
-    // final cardHeight = 450.0;
 
     final slogans = ['No sign up', 'No sign in', 'No installation', 'No fuss'];
     return Scaffold(
@@ -95,47 +53,12 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                     value: receiptCaptureController,
                     data: (_) => ReceiptCaptureView()),
               )
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     ActionButton(
-              //       label: 'Find Receipt',
-              //       icon: Icon(Icons.photo_library),
-              //       onPressed: () =>
-              //           context.pushNamed(AppRoute.addReceipt.name),
-              //     ),
-              //     ActionButton(
-              //       label: 'Snap Receipt',
-              //       icon: Icon(Icons.camera),
-              //       // onPressed: kIsWeb || false
-              //       //     ? null
-              //       onPressed: () =>
-              //           context.pushNamed(AppRoute.addReceipt.name),
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ),
       ),
     );
   }
-
-// CarouselController useCarouselController({
-//   int initialItem = 0,
-//   List<Object>? keys,
-// }) {
-//   final controller = useMemoized(
-//     () => CarouselController(initialItem: initialItem),
-//     keys ?? [],
-//   );
-//
-//   useEffect(() {
-//     return () => controller.dispose();
-//   }, [controller]);
-//
-//   return controller;
-// }
 }
 
 class _SloganWrap extends StatelessWidget {

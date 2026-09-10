@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,8 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
+import 'package:tab_settle/core/providers/camera_availability_provider.dart';
+import 'package:tab_settle/core/providers/shared_preferences_provider.dart';
 import 'package:tab_settle/core/routing/router.dart';
-import 'package:tab_settle/core/shared_preferences_provider.dart';
 import 'package:tab_settle/core/theme/themes.dart';
 import 'package:toastification/toastification.dart';
 
@@ -32,9 +34,21 @@ void main() async {
   logInfo('🚀 Launching Tab Settle');
 
   logInfo('Create Provider Container');
+  bool hasCamera = false;
+  try {
+    final cameras = await availableCameras();
+    hasCamera = cameras.isNotEmpty;
+    logDebug('Camera availability: $hasCamera');
+  } catch (e) {
+    logDebug('No camera available on platform: $e');
+  }
+
   final prefs = await SharedPreferences.getInstance();
   final container = ProviderContainer(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      hasCameraProvider.overrideWithValue(hasCamera),
+    ],
   );
   container.read(sharedPreferencesProvider);
 
