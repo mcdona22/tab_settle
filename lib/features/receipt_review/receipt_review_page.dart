@@ -11,7 +11,6 @@ import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
-import 'package:tab_settle/features/receipt_review/bill_submission_controller.dart';
 import 'package:tab_settle/features/receipt_review/receipt_review_controller.dart';
 
 final bogusText =
@@ -108,59 +107,9 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
                   ),
                 ),
               ),
-
-            // if (bogusReceipt.value)
-            //   Card(
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(20.0),
-            //       child: Text(
-            //         "I cant read any line items in this image - are you sure "
-            //         "its a receipt?",
-            //         style: Theme.of(context).textTheme.titleLarge,
-            //       ),
-            //     ),
-            //   ),
           ],
         ),
       ),
     );
-  }
-
-  // Future<void> _onCaptureImage(
-  //   ValueNotifier<bool> bogusReceipt,
-  //   ValueNotifier<XFile?> xFile,
-  //   WidgetRef ref,
-  // ) async {
-  //   bogusReceipt.value = false;
-  //   xFile.value = await ref
-  //       .read(billSubmissionControllerProvider.notifier)
-  //       .captureImageFromGallery();
-  // }
-
-  Future<void> _onAnalyseReceipt(
-    BuildContext context,
-    WidgetRef ref,
-    XFile xFile,
-    ValueNotifier<bool> bogus,
-  ) async {
-    loggy.debug('Analysing receipt image');
-    try {
-      final dto = await ref
-          .read(billSubmissionControllerProvider.notifier)
-          .analyseImage(xFile);
-      loggy.debug('dto is $dto');
-      if (dto == null) {
-        loggy.debug('null value for dto');
-        return;
-      }
-      bogus.value = dto.isBogus;
-      if (dto.isBogus) return;
-
-      if (!context.mounted) return;
-      context.pushNamed(AppRoute.checkReceipt.name, extra: dto);
-    } catch (e, st) {
-      loggy.error('failed to process image from ${xFile.name}');
-      loggy.error(e, st);
-    }
   }
 }

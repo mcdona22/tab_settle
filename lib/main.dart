@@ -7,6 +7,7 @@ import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tab_settle/app_config.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/providers/camera_availability_provider.dart';
 import 'package:tab_settle/core/providers/shared_preferences_provider.dart';
@@ -31,7 +32,7 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
 
-  logInfo('🚀 Launching Tab Settle');
+  logInfo('🚀 Launching ${AppConfig.appTitle}');
 
   logInfo('Create Provider Container');
   bool hasCamera = false;
@@ -54,7 +55,7 @@ void main() async {
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 
-  logInfo('🥳 Tab Settle up and running');
+  logInfo('🥳 ${AppConfig.appTitle} up and running');
 }
 
 class App extends HookConsumerWidget with UiLoggy {
@@ -66,7 +67,7 @@ class App extends HookConsumerWidget with UiLoggy {
       config: const ToastificationConfig(),
       child: MaterialApp.router(
         debugShowMaterialGrid: false,
-        title: 'Tab Settle',
+        title: AppConfig.appTitle,
         debugShowCheckedModeBanner: true,
         routerConfig: routerConfig,
         theme: ThemeData.from(colorScheme: lightColorScheme),
