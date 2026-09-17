@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/app_config.dart';
+import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/gemini_service/gemini_service_http.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
 import 'package:tab_settle/features/gemini_service/stub/stub_gemini_service'
@@ -13,5 +14,8 @@ bool useGeminiStub(Ref ref) => false;
 @Riverpod(keepAlive: true)
 IGeminiService geminiService(Ref ref) => ref.watch(useGeminiStubProvider)
     ? StubGeminiService()
-    : GeminiServiceHttp(baseUrl: AppConfig.apiBaseUrl);
+    : GeminiServiceHttp(
+        baseUrl: AppConfig.apiBaseUrl,
+        authService: ref.watch(authServiceProvider),
+      );
 // : GeminiService(ref: ref);
