@@ -28,20 +28,12 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
     final uri = Uri.parse('$baseUrl/receipt/analyse');
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $authToken';
-    // final file = File(path);
-    // if (!await file.exists()) {
-    //   loggy.error('File does not exist at path: $fileName');
-    //   throw FileSystemException('Receipt image file not found', fileName);
-    // } else {
-    //   loggy.debug('File "$path" is not reachable');
-    // }
 
     try {
       final bytes = await xFile.readAsBytes();
 
-      // final filename = fileName.split(Platform.pathSeparator).last;
       final extension = fileName.split('.').last.toLowerCase();
-      final multipartFile = await http.MultipartFile.fromBytes(
+      final multipartFile = http.MultipartFile.fromBytes(
         'file',
         bytes,
         filename: fileName,
