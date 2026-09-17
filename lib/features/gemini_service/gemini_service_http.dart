@@ -3,23 +3,31 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
 
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
   final String baseUrl;
   final http.Client _client;
+  final AuthService authService;
 
-  GeminiServiceHttp({required this.baseUrl, http.Client? client})
-    : _client = client ?? http.Client();
+  GeminiServiceHttp({
+    required this.baseUrl,
+    http.Client? client,
+    required this.authService,
+  }) : _client = client ?? http.Client();
 
   @override
   Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
+    final authToken = await authService.getIdToken();
     final fileName = xFile.name;
     loggy.debug('analysing receipt via http for asset: $fileName');
     loggy.debug('Using the endpoint $baseUrl');
+    loggy.debug('adding auth token "$authToken"');
     final uri = Uri.parse('$baseUrl/receipt/analyse');
-    final request = http.MultipartRequest('POST', uri);
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $authToken';
     // final file = File(path);
     // if (!await file.exists()) {
     //   loggy.error('File does not exist at path: $fileName');
