@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tab_settle/core/preferences.dart';
 
-import 'shared_preferences_provider.dart';
+import 'providers/shared_preferences_provider.dart';
 
 part 'preference_notifier.g.dart';
 

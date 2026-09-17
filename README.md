@@ -13,6 +13,17 @@ firebase deploy --only hosting
 
 `dart run build_runner watch --delete-conflicting-outputs`
 
+### Using Local API Server
+
+to use the locally running API Server the following argument must be supplied
+
+````
+--dart-define=API_BASE_URL=http://localhost:3000/api/v1
+````
+
+in the absence of this the default configuration will be used. This covers both
+the endpoint and the version path
+
 ## macOS Network Setup (App Sandbox)
 
 When building for macOS, Flutter enforces Apple's App Sandbox. By default,

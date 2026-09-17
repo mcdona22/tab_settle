@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
-import 'package:tab_settle/features/bill_reduce/presentation/bill_presentation_page.dart';
-import 'package:tab_settle/features/bill_submit/bill_submission_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/intro_screens/introductory_page.dart';
-import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_shell.dart';
+import 'package:tab_settle/features/receipt_review/receipt_review_page.dart';
 import 'package:tab_settle/main.dart';
 
 enum AppRoute {
   home,
-  addReceipt,
+  reviewReceipt,
   checkReceipt,
   showReceipt,
   receiptDashboard,
@@ -56,29 +55,32 @@ GoRouter routerConfig = GoRouter(
     ),
 
     GoRoute(
-      path: '/submitReceipt',
-      name: AppRoute.addReceipt.name,
+      path: '/review_receipt',
+      name: AppRoute.reviewReceipt.name,
       pageBuilder: (_, state) {
-        return MaterialPage(child: BillSubmissionPage(), key: state.pageKey);
+        final xFile = state.extra as XFile;
+
+        return MaterialPage(
+            child: ReceiptReviewPage(receiptImage: xFile), key: state.pageKey);
       },
     ),
 
     GoRoute(
-      path: '/checkReceipt',
+      path: '/check_receipt',
       name: AppRoute.checkReceipt.name,
       pageBuilder: (_, state) {
         final dto = state.extra as ReceiptDto;
         return MaterialPage(child: ScannedBillPage(dto: dto));
       },
     ),
-    GoRoute(
-      path: '/showReceipt',
-      name: AppRoute.showReceipt.name,
-      pageBuilder: (_, state) {
-        final receipt = state.extra as Receipt?;
-        return MaterialPage(child: BillPresentationPage(receipt: receipt!));
-      },
-    ),
+    // GoRoute(
+    //   path: '/showReceipt',
+    //   name: AppRoute.showReceipt.name,
+    //   pageBuilder: (_, state) {
+    //     final receipt = state.extra as XFile?;
+    //     return MaterialPage(child: BillPresentationPage(receipt: receipt!));
+    //   },
+    // ),
 
     GoRoute(
       path: '/receipt/:id',
