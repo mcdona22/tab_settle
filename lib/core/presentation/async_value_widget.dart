@@ -3,10 +3,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
 class AsyncValueWidget<T> extends StatelessWidget with UiLoggy {
-  const AsyncValueWidget({required this.value, required this.data, super.key});
+  AsyncValueWidget({
+    required this.value,
+    required this.data,
+    this.errorBuilder,
+    super.key,
+  });
 
   final AsyncValue<T> value;
   final Widget Function(T) data;
+  final Widget? Function(Object error, StackTrace stackTrace)? errorBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,8 @@ class AsyncValueWidget<T> extends StatelessWidget with UiLoggy {
       data: data,
       error: (e, st) {
         loggy.debug(e.toString());
-        return Center(child: SelectableText(e.toString()));
+        final customErrorWidget = errorBuilder?.call(e, st);
+        return customErrorWidget ?? Center(child: SelectableText(e.toString()));
       },
       loading: () => const Center(child: CircularProgressIndicator()),
     );

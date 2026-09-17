@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
+import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
 
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
@@ -58,7 +59,7 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
       }
     } catch (e, st) {
       loggy.error('Error analysing receipt file', e, st);
-      rethrow;
+      throw GeminiUnknownException(e);
     }
   }
 

@@ -6,11 +6,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
+import 'package:tab_settle/core/presentation/custom_error_view.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
+import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/receipt_review/receipt_review_controller.dart';
 
 final bogusText =
@@ -47,31 +49,6 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
           spacing: kPaddingLarge,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // AsyncValueWidget(
-            //   value: controller,
-            //   data: (_) => Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     children: [
-            //       ActionButton(
-            //         label: 'Find the Receipt',
-            //         onPressed: () async {
-            //           await _onCaptureImage(bogusReceipt, xFile, ref);
-            //         },
-            //       ),
-            //       if (xFile.value != null)
-            //         ActionButton(
-            //           label: 'Next',
-            //           onPressed: () => _onAnalyseReceipt(
-            //             context,
-            //             ref,
-            //             xFile.value!,
-            //             bogusReceipt,
-            //           ),
-            //         ),
-            //     ],
-            //   ),
-            // ),
-
             Expanded(
               flex: 3,
               child: SizedBox(
@@ -106,6 +83,24 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
                         .analyseImage(receiptImage),
                   ),
                 ),
+                errorBuilder: (e, st) {
+                  return e is GeminiException
+                      ? CustomErrorView(
+                          title: e.kind.title,
+                          description:
+                              '${e.kind.description} ${e.kind.isRetryable ? ''
+                                        '\n\nPlease try again momentarily' : ""
+                                        ""}',
+                        )
+                      : CustomErrorView(
+                          title: 'Service error has occurred',
+                          description:
+                              'There has been a failure in '
+                              'fulfilling this request.  Please try again '
+                              'later'
+                              '',
+                        );
+                },
               ),
           ],
         ),
