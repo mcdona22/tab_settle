@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +48,10 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
       final streamedResponse = await _client.send(request);
       final response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode != HttpStatus.created) {
+        throwGeminiException(response);
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> jsonMap = jsonDecode(response.body);
         loggy.debug('201 from the service');
@@ -57,6 +62,8 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
         loggy.warning('Server return error - $errorString');
         throw Exception('Failed to analyse receipt - $errorString');
       }
+    } on GeminiException catch (_) {
+      rethrow;
     } catch (e, st) {
       loggy.error('Error analysing receipt file', e, st);
       throw GeminiUnknownException(e);
@@ -73,6 +80,20 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
         return 'webp';
       default:
         return 'jpeg';
+    }
+  }
+
+  void throwGeminiException(http.Response response) {
+    loggy.debug('processing bad code (${response.statusCode})');
+    loggy.debug(response.body);
+    final json = jsonDecode(response.body);
+    loggy.debug('json', json);
+    switch (response.statusCode) {
+      case 503:
+        throw GeminiServiceOverloadException();
+
+      default:
+        throw GeminiUnknownException(response);
     }
   }
 }
