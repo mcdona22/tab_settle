@@ -17,7 +17,6 @@ class ReceiptReviewController extends _$ReceiptReviewController with UiLoggy {
     loggy.debug('Analysing the image in ${xFile.name}');
     state = await AsyncValue.guard(() async {
       final dto = ref.read(geminiServiceProvider).analyseAssetReceipt(xFile);
-      loggy.debug('dto:', dto);
       return dto;
     });
     if (state.hasError) throw state.error!;
