@@ -81,4 +81,17 @@ void main() {
       verify(mockHttpClient.send(any)).called(1);
     });
   });
+
+  group('Test bandwidth before request submission', () {
+    test(
+      'should request as normal for good bandwidth',
+      () async {},
+      skip: true,
+    );
+    test(
+      'should not make request with insufficient bandwidth',
+      () async {},
+      skip: true,
+    );
+  });
 }

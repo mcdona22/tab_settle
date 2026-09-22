@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,6 +9,8 @@ import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
+
+enum NetworkQuality { strong, poor, offline }
 
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
   final String baseUrl;
@@ -68,6 +71,33 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
       loggy.error('Error analysing receipt file', e, st);
       throw GeminiUnknownException(e);
     }
+  }
+
+  Future<NetworkQuality> getNetworkQuality() async {
+    const timeoutDuration = Duration(milliseconds: 3500);
+    const strongThresholdMs = 1000;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final url = Uri.parse('https://www.google.com/generate_204?_=$timestamp');
+    final stopwatch = Stopwatch()..start();
+    try {
+      final response = await _client.head(url).timeout(timeoutDuration);
+      stopwatch.stop();
+      if (response.statusCode == 204 &&
+          stopwatch.elapsedMilliseconds < strongThresholdMs) {
+        return NetworkQuality.strong;
+        // Connection is fast and responsive
+      }
+      //between strong threshold and the timeout Duration
+      return NetworkQuality.poor;
+    } on TimeoutException {
+      return NetworkQuality.poor;
+    } on SocketException {
+      return NetworkQuality.offline;
+    } catch (_) {
+      return NetworkQuality.offline;
+    }
+
+    return NetworkQuality.poor;
   }
 
   String _getMediaTypeSubtype(String extension) {
