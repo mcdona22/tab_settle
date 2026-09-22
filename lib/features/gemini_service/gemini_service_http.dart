@@ -26,6 +26,14 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
 
   @override
   Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
+    final networkPerformance = await getNetworkQuality();
+    loggy.debug('Network', networkPerformance);
+    if (networkPerformance != NetworkQuality.strong) {
+      throw networkPerformance == NetworkQuality.offline
+          ? GeminiOfflineException()
+          : GeminiNetworkException();
+    }
+
     final authToken = await authService.getIdToken();
     final fileName = xFile.name;
     loggy.debug('analysing receipt via http for asset: $fileName');
@@ -94,7 +102,8 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
       return NetworkQuality.poor;
     } on SocketException {
       return NetworkQuality.offline;
-    } catch (_) {
+    } catch (e) {
+      loggy.debug('Error $e');
       return NetworkQuality.offline;
     }
   }

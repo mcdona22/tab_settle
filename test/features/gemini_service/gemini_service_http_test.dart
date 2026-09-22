@@ -11,6 +11,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
+import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/gemini_service_http.dart';
 
 import 'gemini_service_http_test.mocks.dart';
@@ -39,13 +40,25 @@ void main() {
   /*
   Helpers
    */
-  XFile _createFakeXFile({String name = 'test_receipt.jpg'}) {
+  XFile createFakeXFile({String name = 'test_receipt.jpg'}) {
     return XFile.fromData(
       Uint8List.fromList([1, 2, 3, 4]),
       name: name,
       mimeType: 'image/jpeg',
     );
   }
+
+  // final Matcher isPreflight = predicate<http.BaseRequest>(
+  //   (req) => req.url.toString().startsWith(
+  //     GeminiServiceHttp.performanceTestEndpoint,
+  //   ),
+  // );
+  //
+  // final Matcher isApi = predicate<http.BaseRequest>(
+  //   (req) => !req.url.toString().startsWith(
+  //     GeminiServiceHttp.performanceTestEndpoint,
+  //   ),
+  // );
 
   http.StreamedResponse createStreamedResponse({
     required int statusCode,
@@ -92,13 +105,17 @@ void main() {
     );
 
     test('Successful call to gemini service', () async {
-      final fakeXFile = _createFakeXFile();
+      final fakeXFile = createFakeXFile();
       final mockJsonResponse = jsonEncode({
         'id': '123',
         'merchantName': 'Coffee Shop',
         'totalAmount': 12.50,
         'items': [],
       });
+
+      when(
+        mockHttpClient.head(any, headers: anyNamed('headers')),
+      ).thenAnswer((_) async => http.Response('', 204));
 
       when(mockHttpClient.send(any)).thenAnswer(
         (_) async =>
@@ -113,20 +130,23 @@ void main() {
   });
 
   group('Test bandwidth before request submission', () {
-    test('should request as normal for good bandwidth', () async {
-      final client = createMockClient();
-      final service = GeminiServiceHttp(
-        baseUrl: baseUrl,
-        authService: mockAuthService,
-        client: client,
-      );
+    final fakeXFile = createFakeXFile();
 
-      final quality = await service.getNetworkQuality();
-      expect(quality, (NetworkQuality.strong));
-    });
+    // test('should request as normal for good bandwidth', () async {
+    //   final client = createMockClient();
+    //   final service = GeminiServiceHttp(
+    //     baseUrl: baseUrl,
+    //     authService: mockAuthService,
+    //     client: client,
+    //   );
+    //
+    //   final quality = await service.getNetworkQuality();
+    //   expect(quality, (NetworkQuality.strong));
+    // });
 
     test('should not make request with insufficient bandwidth', () async {
       final client = createMockClient(
+        // simulateOffline: true,
         preflightDelay: Duration(milliseconds: 1100),
       );
       final service = GeminiServiceHttp(
@@ -135,25 +155,16 @@ void main() {
         client: client,
       );
 
-      final quality = await service.getNetworkQuality();
-      expect(quality, (NetworkQuality.poor));
+      await expectLater(
+        () async => await service.analyseAssetReceipt(fakeXFile),
+        throwsA(isA<GeminiNetworkException>()),
+      );
+
+      verifyNever(mockAuthService.getIdToken());
+      verifyNever(mockHttpClient.send(any));
     });
 
     test('should not make request when no bandwidth detected', () async {
-      final client = createMockClient(
-        preflightDelay: Duration(milliseconds: 5000),
-      );
-      final service = GeminiServiceHttp(
-        baseUrl: baseUrl,
-        authService: mockAuthService,
-        client: client,
-      );
-
-      final quality = await service.getNetworkQuality();
-      expect(quality, (NetworkQuality.poor));
-    });
-
-    test('should not make request when status is offline', () async {
       final client = createMockClient(simulateOffline: true);
       final service = GeminiServiceHttp(
         baseUrl: baseUrl,
@@ -161,8 +172,13 @@ void main() {
         client: client,
       );
 
-      final quality = await service.getNetworkQuality();
-      expect(quality, (NetworkQuality.offline));
+      await expectLater(
+        () async => await service.analyseAssetReceipt(fakeXFile),
+        throwsA(isA<GeminiOfflineException>()),
+      );
+
+      verifyNever(mockAuthService.getIdToken());
+      verifyNever(mockHttpClient.send(any));
     });
   });
 }

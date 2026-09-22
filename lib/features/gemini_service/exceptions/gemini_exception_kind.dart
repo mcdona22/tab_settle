@@ -13,7 +13,12 @@ enum GeminiErrorKind {
   networkSlow(
     title: 'Internet Connection Issue',
     description: "Your internet connection appears too slow",
-    isRetryable: true,
+    isRetryable: false,
+  ),
+  networkOffline(
+    title: 'No Internet Available',
+    description: "You appear to be offline so we cant perform this operation",
+    isRetryable: false,
   );
 
   const GeminiErrorKind({

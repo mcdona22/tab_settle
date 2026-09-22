@@ -20,6 +20,11 @@ class GeminiNetworkException extends GeminiException {
     : super(GeminiErrorKind.networkSlow, cause);
 }
 
+class GeminiOfflineException extends GeminiException {
+  const GeminiOfflineException([Object? cause])
+    : super(GeminiErrorKind.networkOffline, cause);
+}
+
 class GeminiUnknownException extends GeminiException {
   const GeminiUnknownException([Object? cause])
     : super(GeminiErrorKind.unknown, cause);
