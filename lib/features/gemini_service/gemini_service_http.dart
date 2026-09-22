@@ -13,6 +13,7 @@ import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
 enum NetworkQuality { strong, poor, offline }
 
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
+  static final performanceTestEndpoint = 'https://www.google.com/generate_204';
   final String baseUrl;
   final http.Client _client;
   final AuthService authService;
@@ -74,10 +75,11 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
   }
 
   Future<NetworkQuality> getNetworkQuality() async {
+    loggy.debug('getting network quality');
     const timeoutDuration = Duration(milliseconds: 3500);
     const strongThresholdMs = 1000;
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final url = Uri.parse('https://www.google.com/generate_204?_=$timestamp');
+    final url = Uri.parse('$performanceTestEndpoint?_=$timestamp');
     final stopwatch = Stopwatch()..start();
     try {
       final response = await _client.head(url).timeout(timeoutDuration);

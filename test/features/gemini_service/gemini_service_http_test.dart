@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart' as http_testing;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tab_settle/features/auth_service.dart';
@@ -44,12 +45,31 @@ void main() {
     );
   }
 
-  http.StreamedResponse _createStreamedResponse({
+  http.StreamedResponse createStreamedResponse({
     required int statusCode,
     required String body,
   }) {
     final stream = Stream.value(utf8.encode(body));
     return http.StreamedResponse(stream, statusCode);
+  }
+
+  http.Client createMockClient({
+    Duration preflightDelay = Duration.zero,
+    int preflightStatus = 204,
+    http.Response? apiResponse,
+  }) {
+    return http_testing.MockClient((request) async {
+      if (request.url.toString().startsWith(
+        GeminiServiceHttp.performanceTestEndpoint,
+      )) {
+        if (preflightDelay > Duration.zero) {
+          await Future.delayed(preflightDelay);
+        }
+        return http.Response('', preflightStatus);
+      }
+
+      return apiResponse ?? http.Response('{"status": "ok"}', 200);
+    });
   }
 
   /*
@@ -72,7 +92,7 @@ void main() {
 
       when(mockHttpClient.send(any)).thenAnswer(
         (_) async =>
-            _createStreamedResponse(statusCode: 201, body: mockJsonResponse),
+            createStreamedResponse(statusCode: 201, body: mockJsonResponse),
       );
 
       final result = await geminiService.analyseAssetReceipt(fakeXFile);
@@ -83,13 +103,26 @@ void main() {
   });
 
   group('Test bandwidth before request submission', () {
+    test('should request as normal for good bandwidth', () async {
+      final client = createMockClient();
+      final service = GeminiServiceHttp(
+        baseUrl: baseUrl,
+        authService: mockAuthService,
+        client: client,
+      );
+
+      final quality = await service.getNetworkQuality();
+      expect(quality, (NetworkQuality.strong));
+    });
+
     test(
-      'should request as normal for good bandwidth',
+      'should not make request with insufficient bandwidth',
       () async {},
       skip: true,
     );
+
     test(
-      'should not make request with insufficient bandwidth',
+      'should not make request when no bandwidth detected',
       () async {},
       skip: true,
     );
