@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
@@ -57,11 +59,19 @@ void main() {
     Duration preflightDelay = Duration.zero,
     int preflightStatus = 204,
     http.Response? apiResponse,
+    bool simulateOffline = false,
   }) {
     return http_testing.MockClient((request) async {
       if (request.url.toString().startsWith(
         GeminiServiceHttp.performanceTestEndpoint,
       )) {
+        if (simulateOffline) {
+          throw const SocketException('mocked no network');
+        }
+
+        if (preflightDelay.inMilliseconds > 3500) {
+          throw TimeoutException('mocked timeout exception');
+        }
         if (preflightDelay > Duration.zero) {
           await Future.delayed(preflightDelay);
         }
@@ -115,16 +125,44 @@ void main() {
       expect(quality, (NetworkQuality.strong));
     });
 
-    test(
-      'should not make request with insufficient bandwidth',
-      () async {},
-      skip: true,
-    );
+    test('should not make request with insufficient bandwidth', () async {
+      final client = createMockClient(
+        preflightDelay: Duration(milliseconds: 1100),
+      );
+      final service = GeminiServiceHttp(
+        baseUrl: baseUrl,
+        authService: mockAuthService,
+        client: client,
+      );
 
-    test(
-      'should not make request when no bandwidth detected',
-      () async {},
-      skip: true,
-    );
+      final quality = await service.getNetworkQuality();
+      expect(quality, (NetworkQuality.poor));
+    });
+
+    test('should not make request when no bandwidth detected', () async {
+      final client = createMockClient(
+        preflightDelay: Duration(milliseconds: 5000),
+      );
+      final service = GeminiServiceHttp(
+        baseUrl: baseUrl,
+        authService: mockAuthService,
+        client: client,
+      );
+
+      final quality = await service.getNetworkQuality();
+      expect(quality, (NetworkQuality.poor));
+    });
+
+    test('should not make request when status is offline', () async {
+      final client = createMockClient(simulateOffline: true);
+      final service = GeminiServiceHttp(
+        baseUrl: baseUrl,
+        authService: mockAuthService,
+        client: client,
+      );
+
+      final quality = await service.getNetworkQuality();
+      expect(quality, (NetworkQuality.offline));
+    });
   });
 }

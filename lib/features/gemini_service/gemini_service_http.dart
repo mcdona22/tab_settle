@@ -75,7 +75,6 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
   }
 
   Future<NetworkQuality> getNetworkQuality() async {
-    loggy.debug('getting network quality');
     const timeoutDuration = Duration(milliseconds: 3500);
     const strongThresholdMs = 1000;
     final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -98,8 +97,6 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
     } catch (_) {
       return NetworkQuality.offline;
     }
-
-    return NetworkQuality.poor;
   }
 
   String _getMediaTypeSubtype(String extension) {
