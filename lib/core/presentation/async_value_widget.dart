@@ -18,13 +18,36 @@ class AsyncValueWidget<T> extends StatelessWidget with UiLoggy {
   Widget build(BuildContext context) {
     return value.when(
       data: data,
+      // added this so that I can optionally control the error in the UI more
+      // specifically
       error: (e, st) {
         loggy.debug(e.toString());
         final customErrorWidget = error?.call(e, st);
         return customErrorWidget ?? Center(child: SelectableText(e.toString()));
       },
 
-      loading: () => const Center(child: CircularProgressIndicator()),
+      // adjusted this so that the spinner will fit in the footprint of the
+      // usual widget.
+      loading: () {
+        final T? currentData = value.asData?.value;
+
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Opacity(
+              opacity: 0.50,
+              child: IgnorePointer(child: data(currentData as T)),
+            ),
+            Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

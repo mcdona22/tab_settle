@@ -86,15 +86,19 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
 class BogusReceipt extends HookConsumerWidget with UiLoggy {
   final bogusText =
       "I've analysed this image and it has nothing I can "
-      "recognise as a receipt.  Are you having  a little joke with me?";
+      "recognise as a receipt.\n\n  Are you having  a little joke with me?";
 
   const BogusReceipt({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18.0),
-      child: Text(bogusText, style: Theme.of(context).textTheme.bodyLarge),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+      child: Text(
+        bogusText,
+        style: Theme.of(context).textTheme.titleLarge,
+        textAlign: TextAlign.left,
+      ),
     );
   }
 }
