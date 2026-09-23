@@ -6,13 +6,13 @@ class AsyncValueWidget<T> extends StatelessWidget with UiLoggy {
   AsyncValueWidget({
     required this.value,
     required this.data,
-    this.errorBuilder,
+    this.error,
     super.key,
   });
 
   final AsyncValue<T> value;
   final Widget Function(T) data;
-  final Widget? Function(Object error, StackTrace stackTrace)? errorBuilder;
+  final Widget? Function(Object error, StackTrace stackTrace)? error;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,10 @@ class AsyncValueWidget<T> extends StatelessWidget with UiLoggy {
       data: data,
       error: (e, st) {
         loggy.debug(e.toString());
-        final customErrorWidget = errorBuilder?.call(e, st);
+        final customErrorWidget = error?.call(e, st);
         return customErrorWidget ?? Center(child: SelectableText(e.toString()));
       },
+
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }

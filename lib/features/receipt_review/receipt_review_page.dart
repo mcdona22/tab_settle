@@ -15,10 +15,6 @@ import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/receipt_review/receipt_review_controller.dart';
 
-final bogusText =
-    "I've analysed this image and it has nothing I can "
-    "recognise as a receipt.  Are you having  a little joke with me?";
-
 class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
   final XFile receiptImage;
 
@@ -44,76 +40,96 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
 
     return Scaffold(
       appBar: createAppBar(context, ScreenTitle(label: 'Check The Receipt')),
-      body: MobileFirstContainer(
-        child: Column(
-          spacing: kPaddingLarge,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 3,
-              child: SizedBox(
-                height: 400.0,
-                width: double.infinity,
-                child: InteractiveViewer(
-                  minScale: 1.0,
-                  maxScale: 4.0,
-                  clipBehavior: Clip.hardEdge,
-                  child: crossPlatformPathImage(receiptImage)!,
-                ),
+      body: Column(
+        spacing: kPaddingLarge,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 400.0,
+              width: double.infinity,
+              child: InteractiveViewer(
+                minScale: 1.0,
+                maxScale: 4.0,
+                // clipBehavior: Clip.hardEdge,
+                child: crossPlatformPathImage(receiptImage, fit: BoxFit.cover)!,
               ),
             ),
-            if (bogusReceipt.value)
-              Expanded(
-                flex: 1,
-                child: Text(
-                  bogusText,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-
-            if (!bogusReceipt.value)
-              AsyncValueWidget(
-                value: controller,
-                data: (_) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: buildActionButton(ref),
-                ),
-                errorBuilder: (e, st) {
-                  return e is GeminiException
-                      ? Column(
-                          children: [
-                            CustomErrorView(
-                              title: e.kind.title,
-                              description:
-                                  '${e.kind.description} ${e.kind.isRetryable ? ''
-                                            '\n\nPlease try again momentarily' : ""
-                                            ""}',
-                            ),
-                            if (e.kind.isRetryable) buildActionButton(ref),
-                          ],
-                        )
-                      : CustomErrorView(
-                          title: 'Service error has occurred',
-                          description:
-                              'There has been a failure in '
-                              'fulfilling this request.  Please try again '
-                              'later'
-                              '',
-                        );
-                },
-              ),
-          ],
-        ),
+          ),
+          MobileFirstContainer(
+            child: bogusReceipt.value
+                ? BogusReceipt()
+                : AsyncValueWidget(
+                    value: controller,
+                    data: (_) => analyseActionButton(ref),
+                    error: (e, st) => AnalysisErrorView(
+                      error: e,
+                      actionButton: analyseActionButton(ref),
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }
 
-  ActionButton buildActionButton(WidgetRef ref) {
+  ActionButton analyseActionButton(WidgetRef ref) {
     return ActionButton(
       label: 'Analyse',
       onPressed: () => ref
           .read(receiptReviewControllerProvider.notifier)
           .analyseImage(receiptImage),
     );
+  }
+}
+
+class BogusReceipt extends HookConsumerWidget with UiLoggy {
+  final bogusText =
+      "I've analysed this image and it has nothing I can "
+      "recognise as a receipt.  Are you having  a little joke with me?";
+
+  const BogusReceipt({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 18.0),
+      child: Text(bogusText, style: Theme.of(context).textTheme.bodyLarge),
+    );
+  }
+}
+
+class AnalysisErrorView extends StatelessWidget {
+  const AnalysisErrorView({
+    required this.error,
+    required this.actionButton,
+    super.key,
+  });
+
+  final Object error;
+  final ActionButton actionButton;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget errorWidget;
+    bool retry = false;
+    if (error is GeminiException) {
+      final ex = error as GeminiException;
+      retry = ex.kind.isRetryable;
+      final descriptionText =
+          '${ex.kind.description} ${ex.kind.isRetryable ? "\n\nPlease Try again in a moment" : ""}';
+      errorWidget = CustomErrorView(
+        title: ex.kind.title,
+        description: descriptionText,
+      );
+    } else {
+      errorWidget = CustomErrorView(
+        title: 'Service error has occurred',
+        description:
+            'There has been a failure in fulfilling this request.  Please try '
+            'again  later',
+      );
+    }
+    return Column(children: [errorWidget, if (retry) actionButton]);
   }
 }
