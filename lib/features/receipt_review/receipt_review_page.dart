@@ -76,21 +76,21 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
                 value: controller,
                 data: (_) => Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ActionButton(
-                    label: 'Analyse',
-                    onPressed: () => ref
-                        .read(receiptReviewControllerProvider.notifier)
-                        .analyseImage(receiptImage),
-                  ),
+                  child: buildActionButton(ref),
                 ),
                 errorBuilder: (e, st) {
                   return e is GeminiException
-                      ? CustomErrorView(
-                          title: e.kind.title,
-                          description:
-                              '${e.kind.description} ${e.kind.isRetryable ? ''
-                                        '\n\nPlease try again momentarily' : ""
-                                        ""}',
+                      ? Column(
+                          children: [
+                            CustomErrorView(
+                              title: e.kind.title,
+                              description:
+                                  '${e.kind.description} ${e.kind.isRetryable ? ''
+                                            '\n\nPlease try again momentarily' : ""
+                                            ""}',
+                            ),
+                            if (e.kind.isRetryable) buildActionButton(ref),
+                          ],
                         )
                       : CustomErrorView(
                           title: 'Service error has occurred',
@@ -105,6 +105,15 @@ class ReceiptReviewPage extends HookConsumerWidget with UiLoggy {
           ],
         ),
       ),
+    );
+  }
+
+  ActionButton buildActionButton(WidgetRef ref) {
+    return ActionButton(
+      label: 'Analyse',
+      onPressed: () => ref
+          .read(receiptReviewControllerProvider.notifier)
+          .analyseImage(receiptImage),
     );
   }
 }

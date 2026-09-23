@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,7 +10,10 @@ import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
 
+enum NetworkQuality { strong, poor, offline }
+
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
+  static final performanceTestEndpoint = 'https://www.google.com/generate_204';
   final String baseUrl;
   final http.Client _client;
   final AuthService authService;
@@ -22,6 +26,14 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
 
   @override
   Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
+    final networkPerformance = await getNetworkQuality();
+    loggy.debug('Network', networkPerformance);
+    if (networkPerformance != NetworkQuality.strong) {
+      throw networkPerformance == NetworkQuality.offline
+          ? GeminiOfflineException()
+          : GeminiNetworkException();
+    }
+
     final authToken = await authService.getIdToken();
     final fileName = xFile.name;
     loggy.debug('analysing receipt via http for asset: $fileName');
@@ -67,6 +79,32 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
     } catch (e, st) {
       loggy.error('Error analysing receipt file', e, st);
       throw GeminiUnknownException(e);
+    }
+  }
+
+  Future<NetworkQuality> getNetworkQuality() async {
+    const timeoutDuration = Duration(milliseconds: 3500);
+    const strongThresholdMs = 1000;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final url = Uri.parse('$performanceTestEndpoint?_=$timestamp');
+    final stopwatch = Stopwatch()..start();
+    try {
+      final response = await _client.head(url).timeout(timeoutDuration);
+      stopwatch.stop();
+      if (response.statusCode == 204 &&
+          stopwatch.elapsedMilliseconds < strongThresholdMs) {
+        return NetworkQuality.strong;
+        // Connection is fast and responsive
+      }
+      //between strong threshold and the timeout Duration
+      return NetworkQuality.poor;
+    } on TimeoutException {
+      return NetworkQuality.poor;
+    } on SocketException {
+      return NetworkQuality.offline;
+    } catch (e) {
+      loggy.debug('Error $e');
+      return NetworkQuality.offline;
     }
   }
 

@@ -1,6 +1,6 @@
 abstract class AppConfig {
   static const String appTitle = 'Tab Share';
-  static const String version = '1.0.2 - explicit service messages';
+  static const String version = '1.0.3 - check network bandwidth';
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue:
