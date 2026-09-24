@@ -16,6 +16,7 @@ class ReceiptItem extends StatelessWidget with UiLoggy {
     return Container(
       decoration: dto.hasFallbackValues ? correctionOutline(context) : null,
       child: SummaryLine(
+        fixedWidth: 50.0,
         fixed: Text(
           dto.price.toCurrency(),
           style: style,
