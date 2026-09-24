@@ -1,5 +1,5 @@
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_item_dto.dart';
 
 final stubReceiptDtos = <ReceiptDto>[
   // 1. Standard Pub Meal (UK)

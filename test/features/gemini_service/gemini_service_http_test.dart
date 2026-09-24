@@ -10,9 +10,9 @@ import 'package:http/testing.dart' as http_testing;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tab_settle/features/auth_service.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/gemini_service_http.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 
 import 'gemini_service_http_test.mocks.dart';
 

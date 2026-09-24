@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/double.extensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_item_dto.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/scanned_bill_page.dart';
 
 class ReceiptItem extends StatelessWidget with UiLoggy {
   const ReceiptItem({required this.dto, super.key});

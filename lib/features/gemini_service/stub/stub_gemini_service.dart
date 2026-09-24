@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/stub/stub_receipt_dtos.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 
 import '../i_gemini_service.dart';
 

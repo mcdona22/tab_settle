@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/features/auth_service.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/exceptions/gemini_exception.dart';
 import 'package:tab_settle/features/gemini_service/i_gemini_service.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 
 enum NetworkQuality { strong, poor, offline }
 

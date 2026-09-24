@@ -1,6 +1,6 @@
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 
 part 'receiptdto_edit_controller.g.dart';
 
