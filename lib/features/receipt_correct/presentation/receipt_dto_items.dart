@@ -49,10 +49,8 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
                     IconButton(
                       icon: Icon(Icons.delete, color: colorScheme.error),
                       onPressed: () {
-                        controller.deleteReceiptItemByIndex(i);
-                        ref
-                            .read(feedbackServiceProvider.notifier)
-                            .showInfo('Item deleted');
+                        editIndex.value = _unSelectedIndex;
+                        _removeItemAtIndex(i, items, ref);
                       },
                     ),
                 ],
@@ -68,6 +66,24 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
         ),
       ),
     );
+  }
+
+  void _removeItemAtIndex(
+    int index,
+    List<ReceiptItemDto> items,
+    WidgetRef ref,
+  ) {
+    final itemName = items[index].name;
+    final controller = ref.read(receiptDtoEditControllerProvider.notifier);
+    controller.deleteReceiptItemByIndex(index);
+    ref
+        .read(feedbackServiceProvider.notifier)
+        .showInfo(
+          'Item deleted',
+          description:
+              '$itemName '
+              'has been successfully removed',
+        );
   }
 }
 

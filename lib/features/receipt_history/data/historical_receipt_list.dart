@@ -23,9 +23,6 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
   Widget build(BuildContext context, WidgetRef ref) {
     final receipts = ref.watch(receiptHistoryProvider);
     final handle = ref.watch(preferenceProvider).handle;
-
-    loggy.debug('handle "$handle"');
-
     final storedIds = handle == 'He Dad' ? knownIds : [];
 
     return SingleChildScrollView(

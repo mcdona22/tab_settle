@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 // const Color kSeedColor = Color(0xFF3772FF);
-// const Color kSeedColor = Color(0xFF00120B);
-const Color kSeedColor = Color(0xFFC2B2B4);
+const Color kSeedColor = Color(0xFF00120B);
+// const Color kSeedColor = Color(0xFFC2B2B4);
 // const Color kSeedColor = Color(0x8332AC);
 const Color kAccentColor = Color(0xFFFF8800);
 
