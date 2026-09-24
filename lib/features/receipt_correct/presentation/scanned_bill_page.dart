@@ -45,12 +45,16 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             spacing: colSpacingSmall,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child: ReceiptDtoView(dto: dto)),
+              Expanded(
+                child: ReceiptDtoView(
+                  dto: ref.watch(receiptDtoEditControllerProvider)!,
+                ),
+              ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ActionButton(label: 'Edit'),
+                  // ActionButton(label: 'Edit'),
 
                   ActionButton(
                     label: 'Next',
