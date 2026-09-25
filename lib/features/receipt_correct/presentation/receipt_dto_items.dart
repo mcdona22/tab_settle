@@ -5,6 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/features/receipt_correct/data/receipt_item_dto.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_item.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_item_form.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/receiptdto_edit_controller.dart';
 import 'package:tab_settle/features/user_feedback/feedback_service.dart';
 
@@ -39,13 +40,18 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
             children: [
               Column(
                 children: [
-                  IconButton(
-                    onPressed: () => editIndex.value == i
-                        ? editIndex.value = _unSelectedIndex
-                        : editIndex.value = i,
-                    icon: Icon(editIndex.value == i ? Icons.save : Icons.edit),
-                  ),
-                  if (editIndex.value == i)
+                  if (editIndex.value != i)
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () => editIndex.value = i,
+                    ),
+                  // IconButton(
+                  //   onPressed: () => editIndex.value == i
+                  //       ? editIndex.value = _unSelectedIndex
+                  //       : editIndex.value = i,
+                  //   icon: Icon(editIndex.value == i ? Icons.save : Icons.edit),
+                  // ),
+                  if (editIndex.value == i && false)
                     IconButton(
                       icon: Icon(Icons.delete, color: colorScheme.error),
                       onPressed: () {
@@ -58,7 +64,11 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
 
               Expanded(
                 child: editIndex.value == i
-                    ? ReceiptItemForm(dto: items[i])
+                    ? ReceiptItemForm(
+                        dto: items[i],
+                        index: i,
+                        onDone: () => editIndex.value = _unSelectedIndex,
+                      )
                     : ReceiptItem(dto: items[i]),
               ),
             ],
@@ -85,56 +95,4 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
               'has been successfully removed',
         );
   }
-}
-
-class ReceiptItemForm extends HookConsumerWidget with UiLoggy {
-  const ReceiptItemForm({required this.dto, super.key});
-
-  final ReceiptItemDto dto;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nameController = useTextEditingController()..text = dto.name;
-    final qtyController = useTextEditingController()
-      ..text = dto.quantity.toString();
-    final priceController = useTextEditingController()
-      ..text = dto.price.toString();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          spacing: 12.0,
-          children: [
-            // Divider(),
-            TextField(
-              controller: nameController,
-              decoration: _inputDecoration('Name'),
-            ),
-            Row(
-              spacing: 8.0,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: priceController,
-                    decoration: _inputDecoration('Price'),
-                  ),
-                ),
-
-                Expanded(
-                  child: TextField(
-                    controller: qtyController,
-                    decoration: _inputDecoration('Quantity'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String label) =>
-      InputDecoration(labelText: label, border: OutlineInputBorder());
 }

@@ -87,4 +87,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
 
     return (serviceCharge / baseAmount) * 100;
   }
+
+  double get totalAmountCalculated =>
+      items.fold<double>(0.0, (double sum, item) => sum + item.price);
 }
