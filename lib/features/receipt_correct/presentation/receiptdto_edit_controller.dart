@@ -22,7 +22,7 @@ class ReceiptDtoEditController extends _$ReceiptDtoEditController with UiLoggy {
       loggy.error('Cant perform operation with null dto');
       return;
     }
-    if (i >= 0 && i < state!.items.length) {
+    if (_checkIndex(i)) {
       // loggy.debug('about to delete item at position $i', state!.items[i].name);
       final updatedItems = List<ReceiptItemDto>.from(state!.items);
       final deletedItem = updatedItems.removeAt(i);
@@ -40,4 +40,22 @@ class ReceiptDtoEditController extends _$ReceiptDtoEditController with UiLoggy {
       }
     }
   }
+
+  void replaceReceiptItemByIndex(ReceiptItemDto dto, int i) {
+    loggy.debug('replacing dto at index $i with $dto');
+    if (_checkIndex(i)) {
+      final listToUpdate = List<ReceiptItemDto>.from(state!.items);
+      listToUpdate[i] = dto;
+      if (state == null) {
+        loggy.error('The state for the receipt is null');
+      } else {
+        final revisedDto = state!.copyWith(items: listToUpdate);
+        final updatedCost = revisedDto.totalAmountCalculated;
+
+        state = revisedDto.copyWith(totalAmount: updatedCost);
+      }
+    }
+  }
+
+  bool _checkIndex(int i) => i >= 0 && i < state!.items.length;
 }

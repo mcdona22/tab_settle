@@ -61,7 +61,22 @@ class ReceiptItemDtoFormNotifier extends _$ReceiptItemDtoFormNotifier
     if (!(state.formKey.currentState?.validate() ?? false)) {
       return;
     }
-    ref.read(feedbackServiceProvider.notifier).showInfo('Item Saved');
+
+    final dto = ReceiptItemDto(
+      name: state.nameController.text.trim(),
+      quantity: int.parse(state.qtyController.text.trim()),
+      price: double.parse(state.priceController.text.trim()),
+      hasDiscrepancy: false,
+      hasFallbackValues: false,
+    );
+
+    ref
+        .read(receiptDtoEditControllerProvider.notifier)
+        .replaceReceiptItemByIndex(dto, index);
+
+    ref
+        .read(feedbackServiceProvider.notifier)
+        .showInfo('Item ${dto.name} Saved');
     onDone();
   }
 }
