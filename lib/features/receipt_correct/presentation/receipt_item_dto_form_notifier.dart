@@ -56,7 +56,11 @@ class ReceiptItemDtoFormNotifier extends _$ReceiptItemDtoFormNotifier
   }
 
   void onSave(VoidCallback onDone) {
+    loggy.debug('Saving the dto');
     loggy.debug('Saving ${state.nameController.text}');
+    if (!(state.formKey.currentState?.validate() ?? false)) {
+      return;
+    }
     ref.read(feedbackServiceProvider.notifier).showInfo('Item Saved');
     onDone();
   }
