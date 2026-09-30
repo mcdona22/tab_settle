@@ -19,8 +19,9 @@ class HomePage extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final receiptCaptureController =
-        ref.watch(receiptCaptureControllerProvider);
+    final receiptCaptureController = ref.watch(
+      receiptCaptureControllerProvider,
+    );
 
     ref.listen(receiptCaptureControllerProvider, (prev, next) {
       next.whenData((xFile) {
@@ -36,6 +37,7 @@ class HomePage extends HookConsumerWidget with UiLoggy {
       appBar: createAppBar(
         context,
         ScreenTitle(label: 'Welcome to ${AppConfig.appTitle}'),
+        // actions: [ThemeToggleActionButton()],
       ),
       endDrawer: SideDrawer(),
       body: SafeArea(
@@ -46,13 +48,21 @@ class HomePage extends HookConsumerWidget with UiLoggy {
             spacing: 28.0,
             children: [
               _SloganWrap(slogans: slogans),
+              SizedBox(
+                height: 200.0,
+                child: Image.asset(
+                  'assets/graphics/splash-cool.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
               Expanded(child: const HistoricalReceiptList()),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AsyncValueWidget<XFile?>(
-                    value: receiptCaptureController,
-                    data: (_) => ReceiptCaptureView()),
-              )
+                  value: receiptCaptureController,
+                  data: (_) => ReceiptCaptureView(),
+                ),
+              ),
             ],
           ),
         ),

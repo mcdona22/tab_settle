@@ -13,10 +13,12 @@ PreferredSizeWidget createAppBar(
   BuildContext context,
   Widget? header, {
   double toolbarHeight = defaultToolbarHeight,
+  List<Widget> actions = const [],
 }) {
   final isHome = GoRouterState.of(context).matchedLocation == '/';
   return AppBar(
     title: header,
+
     leading: context.canPop()
         ? IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -34,6 +36,7 @@ PreferredSizeWidget createAppBar(
     // elevation: 1.0,
     // primary: true,
     // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    // actions: actions,
     actions: [
       if (!isHome)
         IconButton(
