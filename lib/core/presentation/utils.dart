@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:tab_settle/core/routing/router.dart';
 
 const defaultToolbarHeight = 90.0;
 
@@ -16,17 +15,20 @@ PreferredSizeWidget createAppBar(
   List<Widget> actions = const [],
 }) {
   final isHome = GoRouterState.of(context).matchedLocation == '/';
+  final canPop = context.canPop();
   return AppBar(
     title: header,
 
-    leading: context.canPop()
+    leading: (canPop || !isHome)
         ? IconButton(
             icon: const Icon(Icons.arrow_back),
             // Or Icons.arrow_back_ios for iOS style
             onPressed: () {
               // Cleans up the stack and takes the user back
-              if (context.canPop()) {
+              if (canPop) {
                 context.pop();
+              } else {
+                context.go('/');
               }
             },
           )
@@ -38,11 +40,11 @@ PreferredSizeWidget createAppBar(
     // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
     // actions: actions,
     actions: [
-      if (!isHome)
-        IconButton(
-          onPressed: () => context.goNamed(AppRoute.home.name),
-          icon: Icon(Icons.home),
-        ),
+      // if (!isHome)
+      //   IconButton(
+      //     onPressed: () => context.goNamed(AppRoute.home.name),
+      //     icon: Icon(Icons.home),
+      //   ),
     ],
   );
 }

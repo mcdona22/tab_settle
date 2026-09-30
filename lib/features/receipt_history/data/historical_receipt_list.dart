@@ -29,18 +29,27 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18.0),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5.0,
           children: [
+            SizedBox(
+              height: 220.0,
+              child: Image.asset(
+                'assets/graphics/splash-cool.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Divider(indent: 20.0, endIndent: 20.0),
             Text(
-              'My receipt history',
-              style: Theme.of(context).textTheme.displaySmall,
+              'Receipt history',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             // ActionButton(
             //   label: 'Clear Prefs',
             //   onPressed: () async =>
             //       ref.read(receiptHistoryProvider.notifier).clear(),
             // ),
-            Divider(),
+            // Divider(),
             ...storedIds.map(
               (id) => ActionButton(
                 label: id.substring(0, 5),

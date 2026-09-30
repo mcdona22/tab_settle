@@ -48,13 +48,13 @@ class HomePage extends HookConsumerWidget with UiLoggy {
             spacing: 28.0,
             children: [
               _SloganWrap(slogans: slogans),
-              SizedBox(
-                height: 200.0,
-                child: Image.asset(
-                  'assets/graphics/splash-cool.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
+              // SizedBox(
+              //   height: 180.0,
+              //   child: Image.asset(
+              //     'assets/graphics/splash-cool.png',
+              //     fit: BoxFit.contain,
+              //   ),
+              // ),
               Expanded(child: const HistoricalReceiptList()),
               Padding(
                 padding: const EdgeInsets.all(8.0),
