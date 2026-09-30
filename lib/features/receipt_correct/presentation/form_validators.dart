@@ -1,6 +1,10 @@
 abstract class FormValidators {
+  static const isRequired = 'is required';
+  static const notAllowed = 'Not allowed';
+  static const notValid = 'Not valid';
+
   static String? requiredName(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Name cannot be empty';
+    if (value == null || value.trim().isEmpty) return 'Name $isRequired';
     return null;
   }
 
