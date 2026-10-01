@@ -10,14 +10,7 @@ final pages = [
   IntroPageData(
     filename: 'scan.webp',
     title: 'Scan Receipt',
-    text: [
-      'Take a pic of the receipt and let me analyse it for you',
-      'Coming soon...',
-      ''
-          'Activate the camera from within the application',
-      'Add analysis instructions.  E.g. "filter out line items having a price'
-          ' of £0.00"',
-    ],
+    text: ['Take a pic of the receipt and let me analyse it for you'],
   ),
 
   IntroPageData(
@@ -29,11 +22,6 @@ final pages = [
           "layout their receipts in an unusual way",
       "For a number of reasons you may need to edit the breakdown I "
           "produce",
-      "",
-      "NOTE",
-      "You can edit receipt name (how it will appear in the dashboard) but "
-          "you will have to wait for a later release to edit the receipts "
-          "line items",
     ],
   ),
 

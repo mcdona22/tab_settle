@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/app_config.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
+import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/presentation/theme_toggle_action_button.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
@@ -54,18 +55,20 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                       Navigator.pop(context);
                       context.pushNamed(AppRoute.introScreen.name);
                     },
-                    child: Text('Intro Screen'),
+                    child: Text('Show Intro Screen'),
                   ),
                   // DrawerItemWrapper(child: ToggleIntroScreensControl()),
                   // DrawerItemWrapper(child: ToggleThemeMode()),
-                  DrawerItemWrapper(
-                    child: Row(
-                      children: [
-                        ThemeToggleActionButton(),
-                        Text('Light/Dark mode'),
-                      ],
-                    ),
-                  ),
+
+                  // DrawerItemWrapper(
+                  //   child: Row(
+                  //     children: [
+                  //       ThemeToggleActionButton(),
+                  //       Text('Light/Dark mode'),
+                  //     ],
+                  //   ),
+                  // ),
+                  DrawerItemWrapper(child: ThemeToggleActionButton()),
                 ],
               ),
             ),
