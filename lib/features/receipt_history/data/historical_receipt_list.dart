@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/extensions/hardcoded.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
-import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
@@ -29,25 +28,26 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
 
     return Column(
       spacing: 12.0.hardcoded,
-      children: [
-        // Divider(indent: indent, endIndent: indent),
-        // Text('Receipt history', style: Theme.of(context).textTheme.titleLarge),
-        ...storedIds.map(
-          (id) => ActionButton(
-            label: id.substring(0, 5),
-            onPressed: () => context.goNamed(
-              AppRoute.receiptDashboard.name,
-              pathParameters: {'id': id},
-            ),
-          ),
-        ),
-        ...receipts.map(
-          (receipt) => SizedBox(
-            width: double.infinity,
-            child: HistoryTile(receipt: receipt),
-          ),
-        ),
-      ],
+      children:
+          // Divider(indent: indent, endIndent: indent),
+          // Text('Receipt history', style: Theme.of(context).textTheme.titleLarge),
+          // ...storedIds.map(
+          //   (id) => ActionButton(
+          //     label: id.substring(0, 5),
+          //     onPressed: () => context.goNamed(
+          //       AppRoute.receiptDashboard.name,
+          //       pathParameters: {'id': id},
+          //     ),
+          //   ),
+          // ),
+          receipts
+              .map(
+                (receipt) => SizedBox(
+                  width: double.infinity,
+                  child: HistoryTile(receipt: receipt),
+                ),
+              )
+              .toList(),
     );
   }
 }
