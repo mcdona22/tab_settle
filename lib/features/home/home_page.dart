@@ -1,9 +1,10 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/app_config.dart';
+import 'package:tab_settle/core/extensions/hardcoded.dart';
 import 'package:tab_settle/core/presentation/async_value_widget.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
@@ -43,19 +44,26 @@ class HomePage extends HookConsumerWidget with UiLoggy {
       body: SafeArea(
         child: MobileFirstContainer(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 28.0,
+            spacing: 12.0.hardcoded,
+
             children: [
               _SloganWrap(slogans: slogans),
-              // SizedBox(
-              //   height: 180.0,
-              //   child: Image.asset(
-              //     'assets/graphics/splash-cool.png',
-              //     fit: BoxFit.contain,
-              //   ),
-              // ),
-              Expanded(child: const HistoricalReceiptList()),
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 180.0,
+                        child: Image.asset(
+                          'assets/graphics/splash-cool.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: HistoricalReceiptList()),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AsyncValueWidget<XFile?>(
