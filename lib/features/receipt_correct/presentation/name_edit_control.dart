@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/receiptdto_edit_controller.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receiptdto_edit_controller.dart';
 import 'package:tab_settle/features/user_feedback/feedback_service.dart';
 
 class NameEditControl extends HookConsumerWidget with UiLoggy {

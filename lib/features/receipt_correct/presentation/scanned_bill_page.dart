@@ -9,10 +9,10 @@ import 'package:tab_settle/core/presentation/screen_title.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/receipt_dto_overview.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/receiptdto_edit_controller.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_controller.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_overview.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receiptdto_edit_controller.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/scanned_bill_controller.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
 
 class ScannedBillPage extends HookConsumerWidget with UiLoggy {
@@ -33,7 +33,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: createAppBar(context, ScreenTitle(label: 'Final Check')),
+      appBar: createAppBar(context, ScreenTitle(label: 'Check Analysis')),
 
       body: MobileFirstContainer(
         child: Padding(
@@ -45,12 +45,16 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             spacing: colSpacingSmall,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child: ReceiptDtoView(dto: dto)),
+              Expanded(
+                child: ReceiptDtoView(
+                  dto: ref.watch(receiptDtoEditControllerProvider)!,
+                ),
+              ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ActionButton(label: 'Edit'),
+                  // ActionButton(label: 'Edit'),
 
                   ActionButton(
                     label: 'Next',

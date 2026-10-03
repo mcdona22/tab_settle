@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_item_dto.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_item_dto.dart';
 
 part 'receipt_dto.freezed.dart';
 
@@ -87,4 +87,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
 
     return (serviceCharge / baseAmount) * 100;
   }
+
+  double get totalAmountCalculated =>
+      items.fold<double>(0.0, (double sum, item) => sum + item.price);
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
-import 'package:tab_settle/features/bill_analyse/presentation/scanned_bill_page.dart';
 import 'package:tab_settle/features/home/home_page.dart';
 import 'package:tab_settle/features/intro_screens/introductory_page.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/scanned_bill_page.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/receipt_dashboard_shell.dart';
 import 'package:tab_settle/features/receipt_review/receipt_review_page.dart';
 import 'package:tab_settle/main.dart';
@@ -61,7 +61,9 @@ GoRouter routerConfig = GoRouter(
         final xFile = state.extra as XFile;
 
         return MaterialPage(
-            child: ReceiptReviewPage(receiptImage: xFile), key: state.pageKey);
+          child: ReceiptReviewPage(receiptImage: xFile),
+          key: state.pageKey,
+        );
       },
     ),
 

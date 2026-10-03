@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
 import 'package:tab_settle/core/presentation/mobile_first_container.dart';
 import 'package:tab_settle/core/presentation/screen_title.dart';
+import 'package:tab_settle/core/presentation/side_drawer.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt_dashboard/application/receipt_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
@@ -24,7 +25,7 @@ class ReceiptDashboardPage extends HookConsumerWidget with UiLoggy {
         ScreenTitle(label: 'Claim Your Items'),
         // toolbarHeight: 60.0,
       ),
-
+      endDrawer: SideDrawer(),
       body: MobileFirstContainer(
         child: Column(
           children: [

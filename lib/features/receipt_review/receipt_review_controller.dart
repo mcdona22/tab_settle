@@ -1,8 +1,8 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tab_settle/features/bill_analyse/data/receipt_dto.dart';
 import 'package:tab_settle/features/gemini_service/gemini_service_providers.dart';
+import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 
 part 'receipt_review_controller.g.dart';
 

@@ -8,10 +8,10 @@ part 'feedback_service.g.dart';
 
 @Riverpod(keepAlive: false)
 class FeedbackService extends _$FeedbackService with UiLoggy {
-  static const showDuration = 3500;
+  static const showDuration = 4000;
 
   @override
-  void build() => null;
+  void build() {}
 
   BuildContext? get _context => rootNavigatorKey.currentContext;
 
@@ -74,10 +74,10 @@ class FeedbackService extends _$FeedbackService with UiLoggy {
       animationDuration: Duration(milliseconds: (showDuration / 4).toInt()),
       showProgressBar: true,
       dragToClose: true,
-      backgroundColor: colorScheme!.surfaceContainerLow,
-      foregroundColor: colorScheme.onSurface,
+      backgroundColor: colorScheme!.primaryContainer,
+      foregroundColor: colorScheme.onPrimaryContainer,
       pauseOnHover: true,
-      applyBlurEffect: true,
+      // applyBlurEffect: true,
     );
   }
 }

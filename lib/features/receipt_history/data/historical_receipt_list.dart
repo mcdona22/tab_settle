@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:tab_settle/core/extensions/hardcoded.dart';
 import 'package:tab_settle/core/preference_notifier.dart';
-import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
@@ -21,54 +21,33 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const indent = 20.0;
     final receipts = ref.watch(receiptHistoryProvider);
     final handle = ref.watch(preferenceProvider).handle;
-
-    loggy.debug('handle "$handle"');
-
     final storedIds = handle == 'He Dad' ? knownIds : [];
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
-        child: Column(
-          spacing: 5.0,
-          children: [
-            Text(
-              'My receipt history',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            // ActionButton(
-            //   label: 'Clear Prefs',
-            //   onPressed: () async =>
-            //       ref.read(receiptHistoryProvider.notifier).clear(),
-            // ),
-            Divider(),
-            ...storedIds.map(
-              (id) => ActionButton(
-                label: id.substring(0, 5),
-                onPressed: () => context.goNamed(
-                  AppRoute.receiptDashboard.name,
-                  pathParameters: {'id': id},
+    return Column(
+      spacing: 12.0.hardcoded,
+      children:
+          // Divider(indent: indent, endIndent: indent),
+          // Text('Receipt history', style: Theme.of(context).textTheme.titleLarge),
+          // ...storedIds.map(
+          //   (id) => ActionButton(
+          //     label: id.substring(0, 5),
+          //     onPressed: () => context.goNamed(
+          //       AppRoute.receiptDashboard.name,
+          //       pathParameters: {'id': id},
+          //     ),
+          //   ),
+          // ),
+          receipts
+              .map(
+                (receipt) => SizedBox(
+                  width: double.infinity,
+                  child: HistoryTile(receipt: receipt),
                 ),
-              ),
-            ),
-            ...receipts.map(
-              (receipt) => SizedBox(
-                width: double.infinity,
-                child: HistoryTile(receipt: receipt),
-                // child: TextButton(
-                //   child: Text(receipt.title),
-                //   onPressed: () => context.goNamed(
-                //     AppRoute.receiptDashboard.name,
-                //     pathParameters: {'id': receipt.id!},
-                //   ),
-                // ),
-              ),
-            ),
-          ],
-        ),
-      ),
+              )
+              .toList(),
     );
   }
 }
@@ -80,12 +59,20 @@ class HistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(receipt.title),
-      subtitle: Text(formatter().format(receipt.createdAt)),
-      onTap: () => context.goNamed(
-        AppRoute.receiptDashboard.name,
-        pathParameters: {'id': receipt.id!},
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0.hardcoded),
+        color: Theme.of(context).colorScheme.surfaceContainer,
+      ),
+      // color: Colors.black12,
+      child: ListTile(
+        leading: Icon(Icons.receipt_long),
+        title: Text(receipt.title),
+        subtitle: Text(formatter().format(receipt.createdAt)),
+        onTap: () => context.goNamed(
+          AppRoute.receiptDashboard.name,
+          pathParameters: {'id': receipt.id!},
+        ),
       ),
     );
   }

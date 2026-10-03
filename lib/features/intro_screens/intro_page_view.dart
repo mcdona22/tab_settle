@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tab_settle/core/extensions/hardcoded.dart';
 
 class IntroPageView extends StatelessWidget {
   const IntroPageView({
@@ -29,9 +30,9 @@ class IntroPageView extends StatelessWidget {
           flex: 6,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(18.0.hardcoded),
               child: Column(
-                spacing: 12.0,
+                spacing: 12.0.hardcoded,
                 children: text
                     .map((line) => Text(line, style: textTheme.bodyLarge))
                     .toList(),
