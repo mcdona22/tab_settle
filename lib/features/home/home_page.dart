@@ -60,6 +60,13 @@ class HomePage extends HookConsumerWidget with UiLoggy {
                         ),
                       ),
                     ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _PinnedTitleHeaderDelegate(
+                        title: 'Recent Receipts',
+                        height: 48.0,
+                      ),
+                    ),
                     SliverToBoxAdapter(child: HistoricalReceiptList()),
                   ],
                 ),
@@ -115,5 +122,47 @@ class _Slogan extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: children,
     );
+  }
+}
+
+class _PinnedTitleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final String title;
+  final double height;
+
+  _PinnedTitleHeaderDelegate({required this.title, this.height = 48.0});
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final theme = Theme.of(context);
+
+    return Container(
+      height: height,
+      color: theme.colorScheme.surface,
+      // Background prevents scrolled content from showing through
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Text(
+        title,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.primary,
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(covariant _PinnedTitleHeaderDelegate oldDelegate) {
+    return title != oldDelegate.title || height != oldDelegate.height;
   }
 }

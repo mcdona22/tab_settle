@@ -31,7 +31,7 @@ class HistoricalReceiptList extends HookConsumerWidget with UiLoggy {
       spacing: 12.0.hardcoded,
       children: [
         // Divider(indent: indent, endIndent: indent),
-        Text('Receipt history', style: Theme.of(context).textTheme.titleLarge),
+        // Text('Receipt history', style: Theme.of(context).textTheme.titleLarge),
         ...storedIds.map(
           (id) => ActionButton(
             label: id.substring(0, 5),
