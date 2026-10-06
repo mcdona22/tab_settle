@@ -15,9 +15,15 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
   List<Receipt> build() {
     final prefs = ref.watch(sharedPreferencesProvider);
     final rawJson = prefs.getStringList(_key) ?? [];
-    final currentHistory =
-        rawJson.map((item) => Receipt.fromJson(jsonDecode(item))).toList();
+    final currentHistory = rawJson
+        .map((item) => Receipt.fromJson(jsonDecode(item)))
+        .toList();
     return currentHistory;
+  }
+
+  void clearReceiptHistory() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    prefs.remove(_key);
   }
 
   void addVisitedReceipt(Receipt receipt) {
@@ -40,8 +46,9 @@ class ReceiptHistoryNotifier extends _$ReceiptHistoryNotifier with UiLoggy {
     loggy.debug('persisting history');
 
     final prefs = ref.read(sharedPreferencesProvider);
-    final rawJson =
-        list.map((receipt) => jsonEncode(receipt.toJson())).toList();
+    final rawJson = list
+        .map((receipt) => jsonEncode(receipt.toJson()))
+        .toList();
 
     prefs.setStringList(_key, rawJson).then((success) => null);
   }

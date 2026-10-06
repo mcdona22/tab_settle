@@ -5,6 +5,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 1. Standard Pub Meal (UK)
   const ReceiptDto(
     merchantName: 'Toby Carvery Castle View',
+    name: 'Toby Carvery Castle View',
     currency: '£',
     subtotal: 26.52,
     serviceCharge: 0.0,
@@ -32,6 +33,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 2. Coffee Shop with Service Charge
   const ReceiptDto(
     merchantName: 'Nero Roastery',
+    name: 'Nero Roastery',
     currency: '£',
     subtotal: 12.00,
     serviceCharge: 1.50,
@@ -59,6 +61,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 3. Tapas Night (Edge case: Item Discrepancy)
   const ReceiptDto(
     merchantName: 'La Casita Tapas Bar',
+    name: 'La Casita Tapas Bar',
     currency: '£',
     subtotal: 48.50,
     serviceCharge: 5.00,
@@ -93,6 +96,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 4. Large Group Dinner
   const ReceiptDto(
     merchantName: 'The Olive Tree Italian',
+    name: 'The Olive Tree Italian',
     currency: '£',
     subtotal: 112.00,
     serviceCharge: 14.00,
@@ -134,6 +138,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 5. European Travel Expense (EUR Currency)
   const ReceiptDto(
     merchantName: 'Bistro De Paris',
+    name: 'Bistro De Paris',
     currency: '€',
     subtotal: 34.00,
     serviceCharge: 0.0,
@@ -161,6 +166,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 6. US Trip Expense (USD Currency)
   const ReceiptDto(
     merchantName: 'Joe\'s Diner NYC',
+    name: 'Joe\'s Diner NYC',
     currency: '\$',
     subtotal: 28.50,
     serviceCharge: 5.70,
@@ -188,6 +194,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 7. Single Item Quick Purchase
   const ReceiptDto(
     merchantName: 'Greggs Bakery',
+    name: 'Greggs Bakery',
     currency: '£',
     subtotal: 4.10,
     serviceCharge: 0.0,
@@ -215,6 +222,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 8. OCR Parsing Edge Case (Fallback Values Triggered)
   const ReceiptDto(
     merchantName: 'Unknown Merchant',
+    name: 'Unknown Merchant',
     currency: 'GBP',
     subtotal: null,
     serviceCharge: 0.0,
@@ -235,6 +243,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 9. Craft Beer Bar
   const ReceiptDto(
     merchantName: 'The Northern Hop Pub',
+    name: 'The Northern Hop Pub',
     currency: '£',
     subtotal: 21.40,
     serviceCharge: 0.0,
@@ -269,6 +278,7 @@ final stubReceiptDtos = <ReceiptDto>[
   // 10. Asian Cuisine / Dim Sum Shared Lunch
   const ReceiptDto(
     merchantName: 'Lotus Blossom Dim Sum',
+    name: 'Lotus Blossom Dim Sum',
     currency: '£',
     subtotal: 62.00,
     serviceCharge: 6.20,

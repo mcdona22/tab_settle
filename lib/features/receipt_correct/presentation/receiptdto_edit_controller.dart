@@ -14,7 +14,7 @@ class ReceiptDtoEditController extends _$ReceiptDtoEditController with UiLoggy {
 
   void saveName(String name) {
     loggy.debug('saving "$name" in the controller');
-    if (state != null) state = state!.copyWith(merchantName: name);
+    if (state != null) state = state!.copyWith(name: name);
   }
 
   void deleteReceiptItemByIndex(int i) {

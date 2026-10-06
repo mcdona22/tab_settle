@@ -8,6 +8,7 @@ import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/presentation/theme_toggle_action_button.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
+import 'package:tab_settle/features/receipt_history/data/receipt_history_notifier.dart';
 
 class SideDrawer extends HookConsumerWidget with UiLoggy {
   const SideDrawer({super.key});
@@ -69,6 +70,16 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                   //   ),
                   // ),
                   DrawerItemWrapper(child: ThemeToggleActionButton()),
+                  DrawerItemWrapper(
+                    child: ActionButton(
+                      label:
+                          'Clear '
+                          'receipt history',
+                      onPressed: () => ref
+                          .read(receiptHistoryProvider.notifier)
+                          .clearReceiptHistory(),
+                    ),
+                  ),
                 ],
               ),
             ),

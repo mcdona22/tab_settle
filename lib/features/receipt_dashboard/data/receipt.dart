@@ -16,6 +16,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
   const factory Receipt({
     String? id,
     required String title,
+    required String merchantName,
     required double totalAmount,
     required double serviceCharge,
     @TimeStampConverter() required DateTime createdAt,
@@ -31,7 +32,8 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
 
   factory Receipt.fromDto(ReceiptDto dto) {
     return Receipt(
-      title: dto.merchantName,
+      title: dto.name,
+      merchantName: dto.merchantName,
       totalAmount: dto.totalAmount,
 
       createdAt: DateTime.now(),

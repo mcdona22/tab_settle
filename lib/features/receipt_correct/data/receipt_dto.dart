@@ -9,6 +9,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
   const ReceiptDto._();
 
   const factory ReceiptDto({
+    required String name,
     required String merchantName,
     required String currency,
     required double? subtotal,
@@ -27,7 +28,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
         (rawMerchant != null && rawMerchant.trim().isNotEmpty)
         ? rawMerchant.trim()
         : 'Unknown Merchant';
-
+    final String name = merchantName;
     // 2. Currency
     final String? rawCurrency = json['currency'] as String?;
     if (rawCurrency == null || rawCurrency.trim().isEmpty) defaulted = true;
@@ -64,6 +65,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
 
     final dto = ReceiptDto(
       merchantName: merchantName,
+      name: merchantName,
       currency: currency,
       subtotal: subtotal,
       serviceCharge: serviceCharge,
