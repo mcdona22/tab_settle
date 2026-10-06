@@ -75,9 +75,7 @@ void main() {
     bool simulateOffline = false,
   }) {
     return http_testing.MockClient((request) async {
-      if (request.url.toString().startsWith(
-        GeminiServiceHttp.performanceTestEndpoint,
-      )) {
+      if (request.url.toString().endsWith(GeminiServiceHttp.performancePath)) {
         if (simulateOffline) {
           throw const SocketException('mocked no network');
         }
