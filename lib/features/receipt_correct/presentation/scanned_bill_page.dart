@@ -32,7 +32,7 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
     }, const []);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: createAppBar(context, ScreenTitle(label: 'Check Analysis')),
 
       body: MobileFirstContainer(
@@ -50,23 +50,16 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
                   dto: ref.watch(receiptDtoEditControllerProvider)!,
                 ),
               ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // ActionButton(label: 'Edit'),
-
-                  ActionButton(
-                    label: 'Next',
-                    onPressed: () {
-                      final receipt = Receipt.fromDto(
-                        ref.watch(receiptDtoEditControllerProvider)!,
-                      );
-                      _onNext(context, ref, receipt);
-                    },
-                  ),
-                ],
-              ),
+              if (!keyboardIsOpen(context))
+                ActionButton(
+                  label: 'Next',
+                  onPressed: () {
+                    final receipt = Receipt.fromDto(
+                      ref.watch(receiptDtoEditControllerProvider)!,
+                    );
+                    _onNext(context, ref, receipt);
+                  },
+                ),
             ],
           ),
         ),

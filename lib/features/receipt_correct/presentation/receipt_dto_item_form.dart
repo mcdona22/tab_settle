@@ -43,6 +43,7 @@ class ReceiptItemForm extends HookConsumerWidget with UiLoggy {
                     controller: state.nameController,
                     decoration: _inputDecoration('Name'),
                     validator: FormValidators.requiredName,
+                    autofocus: true,
                   ),
                   Row(
                     spacing: 8.0,

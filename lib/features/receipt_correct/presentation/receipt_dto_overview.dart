@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tab_settle/core/presentation/ui_dimensions.dart';
+import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_header.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_items.dart';
@@ -14,7 +15,8 @@ class ReceiptDtoView extends StatelessWidget {
     return Column(
       spacing: kPaddingMedium,
       children: [
-        SizedBox(child: ReceiptDtoHeader(dto: dto)),
+        if (!keyboardIsOpen(context))
+          SizedBox(child: ReceiptDtoHeader(dto: dto)),
         Expanded(child: ReceiptDtoItems(items: dto.items)),
       ],
     );

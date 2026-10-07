@@ -67,3 +67,7 @@ BoxDecoration correctionOutline(BuildContext context) => BoxDecoration(
 );
 
 DateFormat formatter() => DateFormat('dd MMM yy @ HHmm');
+
+bool keyboardIsOpen(BuildContext context) =>
+    MediaQuery.maybeViewInsetsOf(context)?.bottom != 0 ||
+    View.of(context).viewInsets.bottom > 0;
