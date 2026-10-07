@@ -59,12 +59,7 @@ class HistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0.hardcoded),
-        color: Theme.of(context).colorScheme.surfaceContainer,
-      ),
-      // color: Colors.black12,
+    return Card(
       child: ListTile(
         leading: Icon(Icons.receipt_long),
         title: Text(receipt.title),

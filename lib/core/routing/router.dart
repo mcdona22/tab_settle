@@ -72,6 +72,7 @@ GoRouter routerConfig = GoRouter(
       name: AppRoute.checkReceipt.name,
       pageBuilder: (_, state) {
         final dto = state.extra as ReceiptDto;
+        logDebug('ROUTER: the dto has a value of $dto');
         return MaterialPage(child: ScannedBillPage(dto: dto));
       },
     ),

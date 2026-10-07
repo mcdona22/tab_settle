@@ -11,18 +11,18 @@ class NameEditControl extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dto = ref.watch(receiptDtoEditControllerProvider);
-    final merchantName = dto?.merchantName ?? '';
+    final name = dto?.name ?? '';
     loggy.debug('dto is', dto);
-    final textEditController = useTextEditingController(text: merchantName);
+    final textEditController = useTextEditingController(text: name);
     final editMode = useState(false);
     final focusNode = useFocusNode();
 
     useEffect(() {
       if (!editMode.value) {
-        textEditController.text = merchantName;
+        textEditController.text = name;
       }
       return null;
-    }, [merchantName, editMode.value]);
+    }, [name, editMode.value]);
 
     onSave() {
       final feedbackService = ref.read(feedbackServiceProvider.notifier);

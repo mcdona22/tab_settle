@@ -13,7 +13,7 @@ import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
 enum NetworkQuality { strong, poor, offline }
 
 class GeminiServiceHttp with UiLoggy implements IGeminiService {
-  static final performanceTestEndpoint = 'https://www.google.com/generate_204';
+  static const performancePath = 'meta';
   final String baseUrl;
   final http.Client _client;
   final AuthService authService;
@@ -27,7 +27,7 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
   @override
   Future<ReceiptDto> analyseAssetReceipt(XFile xFile) async {
     final networkPerformance = await getNetworkQuality();
-    loggy.debug('Network', networkPerformance);
+    loggy.debug('Network performance $networkPerformance');
     if (networkPerformance != NetworkQuality.strong) {
       throw networkPerformance == NetworkQuality.offline
           ? GeminiOfflineException()
@@ -85,10 +85,11 @@ class GeminiServiceHttp with UiLoggy implements IGeminiService {
   Future<NetworkQuality> getNetworkQuality() async {
     const timeoutDuration = Duration(milliseconds: 3500);
     const strongThresholdMs = 1000;
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final url = Uri.parse('$performanceTestEndpoint?_=$timestamp');
+    // final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final url = Uri.parse('$baseUrl/$performancePath');
     final stopwatch = Stopwatch()..start();
     try {
+      loggy.debug('pinging $url');
       final response = await _client.head(url).timeout(timeoutDuration);
       stopwatch.stop();
       if (response.statusCode == 204 &&
