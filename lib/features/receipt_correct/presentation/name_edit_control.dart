@@ -46,6 +46,7 @@ class NameEditControl extends HookConsumerWidget with UiLoggy {
         Expanded(
           child: TextField(
             controller: textEditController,
+            autofocus: true,
             focusNode: focusNode,
             decoration: InputDecoration(
               labelText: 'Receipt Name',

@@ -10,7 +10,8 @@ import 'package:tab_settle/core/presentation/ui_dimensions.dart';
 import 'package:tab_settle/core/presentation/utils.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/features/receipt_correct/data/receipt_dto.dart';
-import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_overview.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_header.dart';
+import 'package:tab_settle/features/receipt_correct/presentation/receipt_dto_items.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/receiptdto_edit_controller.dart';
 import 'package:tab_settle/features/receipt_correct/presentation/scanned_bill_controller.dart';
 import 'package:tab_settle/features/receipt_dashboard/data/receipt.dart';
@@ -46,9 +47,15 @@ class ScannedBillPage extends HookConsumerWidget with UiLoggy {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: ReceiptDtoView(
-                  dto: ref.watch(receiptDtoEditControllerProvider)!,
+                child: ListView(
+                  children: [
+                    ReceiptDtoHeader(dto: dto),
+                    ReceiptDtoItems(items: dto.items),
+                  ],
                 ),
+                // child: ReceiptDtoView(
+                //   dto: ref.watch(receiptDtoEditControllerProvider)!,
+                // ),
               ),
               if (!keyboardIsOpen(context))
                 ActionButton(
