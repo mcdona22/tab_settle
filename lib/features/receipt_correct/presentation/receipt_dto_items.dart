@@ -41,29 +41,11 @@ class ReceiptDtoItems extends HookConsumerWidget with UiLoggy {
             padding: EdgeInsetsGeometry.symmetric(vertical: kPaddingSmall / 2),
             child: Row(
               children: [
-                Column(
-                  children: [
-                    if (editIndex.value != i)
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () => editIndex.value = i,
-                      ),
-                    // IconButton(
-                    //   onPressed: () => editIndex.value == i
-                    //       ? editIndex.value = _unSelectedIndex
-                    //       : editIndex.value = i,
-                    //   icon: Icon(editIndex.value == i ? Icons.save : Icons.edit),
-                    // ),
-                    if (editIndex.value == i && false)
-                      IconButton(
-                        icon: Icon(Icons.delete, color: colorScheme.error),
-                        onPressed: () {
-                          editIndex.value = _unSelectedIndex;
-                          _removeItemAtIndex(i, items, ref);
-                        },
-                      ),
-                  ],
-                ),
+                if (editIndex.value != i)
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => editIndex.value = i,
+                  ),
 
                 Expanded(
                   child: editIndex.value == i
