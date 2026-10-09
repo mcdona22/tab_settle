@@ -29,6 +29,10 @@ class AuthService with UiLoggy {
     final user = await _ensureAnonymousAuth();
     return await user?.getIdToken();
   }
+
+  Future<void> signOut() async => await auth.signOut();
+
+  bool get authenticated => auth.currentUser != null;
 }
 
 @riverpod

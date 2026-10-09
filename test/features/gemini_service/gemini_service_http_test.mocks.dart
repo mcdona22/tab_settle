@@ -251,6 +251,11 @@ class MockAuthService extends _i1.Mock implements _i9.AuthService {
           as _i3.FirebaseAuth);
 
   @override
+  bool get authenticated =>
+      (super.noSuchMethod(Invocation.getter(#authenticated), returnValue: false)
+          as bool);
+
+  @override
   _i4.Loggy<_i4.UiLoggy> get loggy =>
       (super.noSuchMethod(
             Invocation.getter(#loggy),
@@ -268,4 +273,13 @@ class MockAuthService extends _i1.Mock implements _i9.AuthService {
             returnValue: _i5.Future<String?>.value(),
           )
           as _i5.Future<String?>);
+
+  @override
+  _i5.Future<void> signOut() =>
+      (super.noSuchMethod(
+            Invocation.method(#signOut, []),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
 }
