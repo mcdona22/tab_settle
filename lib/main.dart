@@ -13,6 +13,7 @@ import 'package:tab_settle/core/providers/camera_availability_provider.dart';
 import 'package:tab_settle/core/providers/shared_preferences_provider.dart';
 import 'package:tab_settle/core/routing/router.dart';
 import 'package:tab_settle/core/theme/themes.dart';
+import 'package:tab_settle/features/auth_service.dart';
 import 'package:toastification/toastification.dart';
 
 import 'core/web_cache_stub.dart';
@@ -52,6 +53,9 @@ void main() async {
     ],
   );
   container.read(sharedPreferencesProvider);
+  logDebug('Anonymously authenticating...');
+  await container.read(authServiceProvider).getIdToken();
+  logDebug('Anonymously authenticating... done');
 
   runApp(UncontrolledProviderScope(container: container, child: const App()));
 

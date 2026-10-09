@@ -7,6 +7,7 @@ import 'package:tab_settle/core/preference_notifier.dart';
 import 'package:tab_settle/core/presentation/action_button.dart';
 import 'package:tab_settle/core/presentation/presentation/theme_toggle_action_button.dart';
 import 'package:tab_settle/core/routing/router.dart';
+import 'package:tab_settle/features/auth_service.dart';
 import 'package:tab_settle/features/receipt_dashboard/presentation/widgets/user_handle.dart';
 import 'package:tab_settle/features/receipt_history/data/receipt_history_notifier.dart';
 
@@ -16,6 +17,8 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final handle = ref.watch(preferenceProvider).handle;
+    final authService = ref.watch(authServiceProvider);
     return Drawer(
       elevation: 2.0,
       child: SafeArea(
@@ -70,6 +73,7 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                   //   ),
                   // ),
                   DrawerItemWrapper(child: ThemeToggleActionButton()),
+
                   DrawerItemWrapper(
                     child: ActionButton(
                       label:
@@ -80,6 +84,21 @@ class SideDrawer extends HookConsumerWidget with UiLoggy {
                           .clearReceiptHistory(),
                     ),
                   ),
+
+                  if (handle == 'He Dad')
+                    DrawerItemWrapper(
+                      child: ActionButton(
+                        label: "Log out",
+                        onPressed: authService.authenticated
+                            ? () {
+                                authService.signOut;
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
+                              }
+                            : null,
+                      ),
+                    ),
                 ],
               ),
             ),
