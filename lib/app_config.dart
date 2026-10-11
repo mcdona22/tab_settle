@@ -1,6 +1,6 @@
 abstract class AppConfig {
   static const String appTitle = 'Tab Share';
-  static const String version = '1.0.8 - name edit bug fix';
+  static const String version = '1.0.10 - service wake up fix';
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue:
