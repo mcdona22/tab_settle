@@ -1,6 +1,8 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tab_settle/features/gemini_service/gemini_service_http.dart';
+import 'package:tab_settle/features/gemini_service/gemini_service_providers.dart';
 
 part 'receipt_capture_controller.g.dart';
 
@@ -13,6 +15,15 @@ class ReceiptCaptureController extends _$ReceiptCaptureController with UiLoggy {
 
   void captureImage(ImageSource source) async {
     loggy.debug('Capturing image from ${source.name}');
+    final geminiService = ref.read(geminiServiceProvider);
+    if (geminiService is GeminiServiceHttp) {
+      geminiService.getNetworkQuality().then(
+        (quality) => loggy.debug(
+          'Waking up the backend service, network quality '
+          'currently is $quality',
+        ),
+      );
+    }
     state = AsyncValue.loading();
     final picker = ImagePicker();
 
