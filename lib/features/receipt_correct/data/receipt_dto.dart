@@ -12,6 +12,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
     required String name,
     required String merchantName,
     required String currency,
+    required String receiptDate,
     required double? subtotal,
     required double serviceCharge,
     required double totalAmount,
@@ -36,7 +37,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
         (rawCurrency != null && rawCurrency.trim().isNotEmpty)
         ? rawCurrency.trim()
         : 'GBP';
-
+    final receiptDate = json['receiptDate'];
     final double? subtotal = (json['subtotal'] as num?)?.toDouble();
 
     // 4. Service Charge
@@ -67,6 +68,7 @@ abstract class ReceiptDto with _$ReceiptDto, UiLoggy {
       merchantName: merchantName,
       name: merchantName,
       currency: currency,
+      receiptDate: receiptDate,
       subtotal: subtotal,
       serviceCharge: serviceCharge,
       totalAmount: totalAmount,

@@ -13,6 +13,10 @@ Schema receiptSchema(Ref ref) {
       'currency': Schema.string(
         description: 'ISO currency symbol or code (e.g. GBP, £, USD, EUR).',
       ),
+      'receiptDate': Schema.string(
+        description:
+            'ISO 8601 formatted date extracted from receipt, or system fallback date if unreadable.',
+      ),
       'subtotal': Schema.number(
         description: 'Total before service charge or taxes, if printed.',
       ),
