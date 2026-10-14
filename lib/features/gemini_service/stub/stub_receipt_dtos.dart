@@ -7,6 +7,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Toby Carvery Castle View',
     name: 'Toby Carvery Castle View',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 26.52,
     serviceCharge: 0.0,
     totalAmount: 26.52,
@@ -35,6 +37,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Nero Roastery',
     name: 'Nero Roastery',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 12.00,
     serviceCharge: 1.50,
     totalAmount: 13.50,
@@ -63,6 +67,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'La Casita Tapas Bar',
     name: 'La Casita Tapas Bar',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 48.50,
     serviceCharge: 5.00,
     totalAmount: 53.50,
@@ -98,6 +104,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'The Olive Tree Italian',
     name: 'The Olive Tree Italian',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 112.00,
     serviceCharge: 14.00,
     totalAmount: 126.00,
@@ -140,6 +148,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Bistro De Paris',
     name: 'Bistro De Paris',
     currency: '€',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 34.00,
     serviceCharge: 0.0,
     totalAmount: 34.00,
@@ -168,6 +178,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Joe\'s Diner NYC',
     name: 'Joe\'s Diner NYC',
     currency: '\$',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 28.50,
     serviceCharge: 5.70,
     totalAmount: 34.20,
@@ -196,6 +208,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Greggs Bakery',
     name: 'Greggs Bakery',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 4.10,
     serviceCharge: 0.0,
     totalAmount: 4.10,
@@ -224,6 +238,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Unknown Merchant',
     name: 'Unknown Merchant',
     currency: 'GBP',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: null,
     serviceCharge: 0.0,
     totalAmount: 18.20,
@@ -245,6 +261,7 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'The Northern Hop Pub',
     name: 'The Northern Hop Pub',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
     subtotal: 21.40,
     serviceCharge: 0.0,
     totalAmount: 21.40,
@@ -280,6 +297,8 @@ final stubReceiptDtos = <ReceiptDto>[
     merchantName: 'Lotus Blossom Dim Sum',
     name: 'Lotus Blossom Dim Sum',
     currency: '£',
+    receiptDate: "2026-07-10T14:57:00Z",
+
     subtotal: 62.00,
     serviceCharge: 6.20,
     totalAmount: 68.20,

@@ -19,6 +19,8 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
     required String merchantName,
     required double totalAmount,
     required double serviceCharge,
+
+    @TimeStampConverter() required DateTime receiptDate,
     @TimeStampConverter() required DateTime createdAt,
     @Default([]) List<ReceiptLineItem> items,
   }) = _Receipt;
@@ -35,6 +37,7 @@ abstract class Receipt with _$Receipt, UiLoggy implements AbstractDocument {
       title: dto.name,
       merchantName: dto.merchantName,
       totalAmount: dto.totalAmount,
+      receiptDate: DateTime.parse(dto.receiptDate),
 
       createdAt: DateTime.now(),
       serviceCharge: dto.serviceCharge,

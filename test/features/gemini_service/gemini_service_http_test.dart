@@ -108,6 +108,7 @@ void main() {
         'id': '123',
         'merchantName': 'Coffee Shop',
         'totalAmount': 12.50,
+        'receiptDate': '2026-07-10T14:57:00Z',
         'items': [],
       });
 
